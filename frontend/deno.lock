@@ -2,6 +2,7 @@
   "version": "4",
   "specifiers": {
     "npm:@vitejs/plugin-vue@^5.1.4": "5.1.4_vite@5.4.10_vue@3.5.12__typescript@5.6.3_typescript@5.6.3",
+    "npm:pinia@^2.2.6": "2.2.6_typescript@5.6.3_vue@3.5.12__typescript@5.6.3",
     "npm:typescript@~5.6.2": "5.6.3",
     "npm:vite@^5.4.10": "5.4.10",
     "npm:vue-tsc@^2.1.8": "2.1.10_typescript@5.6.3",
@@ -225,6 +226,9 @@
         "he"
       ]
     },
+    "@vue/devtools-api@6.6.4": {
+      "integrity": "sha512-sGhTPMuXqZ1rVOk32RylztWkfXTRhuS7vgAKv0zjqk8gbsHkJ7xfFf+jbySxt7tWObEJwyKaHMikV/WGDiQm8g=="
+    },
     "@vue/language-core@2.1.10_typescript@5.6.3": {
       "integrity": "sha512-DAI289d0K3AB5TUG3xDp9OuQ71CnrujQwJrQnfuZDwo6eGNf0UoRlPuaVNO+Zrn65PC3j0oB2i7mNmVPggeGeQ==",
       "dependencies": [
@@ -354,6 +358,15 @@
     "picocolors@1.1.1": {
       "integrity": "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="
     },
+    "pinia@2.2.6_typescript@5.6.3_vue@3.5.12__typescript@5.6.3": {
+      "integrity": "sha512-vIsR8JkDN5Ga2vAxqOE2cJj4VtsHnzpR1Fz30kClxlh0yCHfec6uoMeM3e/ddqmwFUejK3NlrcQa/shnpyT4hA==",
+      "dependencies": [
+        "@vue/devtools-api",
+        "typescript",
+        "vue",
+        "vue-demi"
+      ]
+    },
     "postcss@8.4.47": {
       "integrity": "sha512-56rxCq7G/XfB4EkXq9Egn5GCqugWvDFjafDOThIdMBsI15iqPqR5r15TfSr1YPYeEI19YeaXMCbY6u88Y76GLQ==",
       "dependencies": [
@@ -408,6 +421,12 @@
     "vscode-uri@3.0.8": {
       "integrity": "sha512-AyFQ0EVmsOZOlAnxoFOGOq1SQDWAB7C6aqMGS23svWAllfOaxbuFvcT8D1i8z3Gyn8fraVeZNNmN6e9bxxXkKw=="
     },
+    "vue-demi@0.14.10_vue@3.5.12__typescript@5.6.3_typescript@5.6.3": {
+      "integrity": "sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==",
+      "dependencies": [
+        "vue"
+      ]
+    },
     "vue-tsc@2.1.10_typescript@5.6.3": {
       "integrity": "sha512-RBNSfaaRHcN5uqVqJSZh++Gy/YUzryuv9u1aFWhsammDJXNtUiJMNoJ747lZcQ68wUQFx6E73y4FY3D8E7FGMA==",
       "dependencies": [
@@ -433,6 +452,7 @@
     "packageJson": {
       "dependencies": [
         "npm:@vitejs/plugin-vue@^5.1.4",
+        "npm:pinia@^2.2.6",
         "npm:typescript@~5.6.2",
         "npm:vite@^5.4.10",
         "npm:vue-tsc@^2.1.8",
