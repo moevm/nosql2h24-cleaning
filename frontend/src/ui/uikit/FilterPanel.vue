@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import ActionButton from "./ActionButton.vue";
+import DateFilter from "./DateFilter.vue";
+import { defineEmits } from 'vue';
+
+const emit = defineEmits<{
+  (event: 'filter-dates', payload: { startDate: string | null; endDate: string | null }): void;
+}>();
+
+function updateDateFilter(dates: { startDate: string | null; endDate: string | null }) {
+  emit("filter-dates", dates);
+}
+</script>
+
 <template>
   <div class="filter-panel">
     <ActionButton
@@ -12,21 +26,6 @@
     ></ActionButton>
   </div>
 </template>
-
-<script>
-import ActionButton from "./ActionButton.vue";
-import DateFilter from "./DateFilter.vue";
-
-export default {
-  name: "FilterPanel",
-  components: { ActionButton, DateFilter },
-  methods: {
-    updateDateFilter(dates) {
-      this.$emit("filter-dates", dates);
-    }
-  }
-};
-</script>
 
 <style scoped>
 .filter-panel {

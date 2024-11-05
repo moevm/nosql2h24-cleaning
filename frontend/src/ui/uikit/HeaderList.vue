@@ -1,3 +1,20 @@
+<script setup lang="ts">
+import OrderItem from "./OrderItem.vue";
+import { defineProps } from 'vue';
+
+
+const props = defineProps<{
+  title: string;
+  orders: Array<{
+    id: number;
+    date: string;
+    time: string;
+    address: string;
+    price: number;
+  }>;
+}>();
+</script>
+
 <template>
   <div class="header-list">
     <h1>{{ title }}</h1>
@@ -6,27 +23,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import OrderItem from "./OrderItem.vue";
-
-export default {
-  name: "HeaderList",
-  components: {
-    OrderItem
-  },
-  props: {
-    title: {
-      type: String,
-      required: true
-    },
-    orders: {
-      type: Array,
-      required: true
-    }
-  },
-};
-</script>
 
 <style scoped>
 .header-list {

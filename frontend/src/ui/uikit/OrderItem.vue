@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import { defineProps } from 'vue';
+
+const { order } = defineProps<{
+  order: {
+    date: string;
+    time: string;
+    address: string;
+    price: number;
+  };
+}>();
+</script>
+
 <template>
   <div class="order-item">
     <p>Заказ {{ order.date }} в {{ order.time }}</p>
@@ -5,18 +18,6 @@
     <p>{{ order.price }}$</p>
   </div>
 </template>
-
-<script>
-export default {
-  name: "OrderItem",
-  props: {
-    order: {
-      type: Object,
-      required: true
-    }
-  }
-};
-</script>
 
 <style scoped>
 .order-item {

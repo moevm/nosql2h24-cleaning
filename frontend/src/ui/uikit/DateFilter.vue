@@ -1,29 +1,25 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+import { defineEmits } from 'vue';
+
+const emit = defineEmits<{
+  (event: 'filter-dates', payload: { startDate: string | null; endDate: string | null }): void;
+}>();
+
+const startDate = ref<string | null>(null);
+const endDate = ref<string | null>(null);
+
+function updateDateFilter() {
+  emit("filter-dates", { startDate: startDate.value, endDate: endDate.value });
+}
+</script>
+
 <template>
   <div class="date-filter">
     <input type="date" v-model="startDate" placeholder="C" @change="updateDateFilter" />
     <input type="date" v-model="endDate" placeholder="По" @change="updateDateFilter" />
   </div>
 </template>
-
-<script>
-import ActionButton from "./ActionButton.vue";
-
-export default {
-  name: "DateFilter",
-  components: { ActionButton },
-  data() {
-    return {
-      startDate: null,
-      endDate: null
-    };
-  },
-  methods: {
-    updateDateFilter() {
-      this.$emit("filter-dates", { startDate: this.startDate, endDate: this.endDate });
-    }
-  }
-};
-</script>
 
 <style scoped>
 .date-filter {

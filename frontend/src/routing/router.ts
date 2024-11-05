@@ -19,14 +19,14 @@ const routes = [
         name: 'client',
         path: 'client:id(\\d+)',
         component: ClientMainPage
+      },
+      {
+        name: 'orders',
+        path: '/orders',
+        component: OrdersHistoryPage
       }
     ]
-  },
-  {
-    name: 'orders',
-    path: '/orders',
-    component: OrdersHistoryPage
-  },
+  }
 ]
 
 const router = createRouter({
