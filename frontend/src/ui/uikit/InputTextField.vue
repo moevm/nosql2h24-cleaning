@@ -23,6 +23,7 @@ const props = withDefaults(defineProps<{
     variant="solo"
     :type="props.type"
     :label="props.label"
+    clearable
   ></v-text-field>
 </template>
 
