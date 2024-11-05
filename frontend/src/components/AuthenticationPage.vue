@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import ActionButton from '../ui/uikit/ActionButton.vue'
 import InputTextField from '../ui/uikit/InputTextField.vue'
-import { ref, computed } from 'vue'
+import { Ref, ref, computed } from 'vue'
 
-const isRegistrationAuthorization = ref(true)
+const isRegistrationAuthorization: Ref<boolean, boolean> = ref(true)
 
-const handleAuthorizationClick = () => {
-  isRegistrationAuthorization.value = true;
+function handleAuthorizationClick(): void {
+  isRegistrationAuthorization.value = true
 }
 
-const handleRegistrationClick = () => {
-  isRegistrationAuthorization.value = false;
+function handleRegistrationClick(): void {
+  isRegistrationAuthorization.value = false
 }
 
-const actionContainerStyle = computed(() => {
+const actionContainerStyle: any = computed(() => {
   return {
     height: isRegistrationAuthorization.value ? '350px' : '700px'
   }
@@ -134,18 +134,12 @@ const actionContainerStyle = computed(() => {
 #authorization-btn, #registration-btn {
   max-width: 100%;
   width: 47%;
-  font-size: 16px;
-  font-weight: bold;
 }
 .input-field {
   width: 95%;
-  border-radius: 4px;
-  font-weight: bold;
 }
 #submit-btn {
   max-width: 100%;
   width: 95%;
-  font-size: 16px;
-  font-weight: bold;
 }
 </style>

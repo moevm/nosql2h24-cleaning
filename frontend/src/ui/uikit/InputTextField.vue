@@ -1,13 +1,8 @@
 <script setup lang="ts">
-import { defineProps, withDefaults } from 'vue';
+import { defineProps, withDefaults } from 'vue'
+import type TextField from '../model/textfield'
 
-const props = withDefaults(defineProps<{
-  id?: string,
-  class?: string,
-  placeholder?: string,
-  type?: string,
-  label: string
-}>(), {
+const props = withDefaults(defineProps<TextField>(), {
   id: undefined,
   class: undefined,
   placeholder: undefined,
@@ -18,7 +13,7 @@ const props = withDefaults(defineProps<{
 <template>
   <v-text-field
     :id="props.id"
-    :class="props.class"
+    :class="[props.class, 'input-field']"
     :placeholder="props.placeholder"
     variant="solo"
     :type="props.type"
@@ -28,4 +23,8 @@ const props = withDefaults(defineProps<{
 </template>
 
 <style scoped>
+.input-field {
+  border-radius: 4px;
+  font-weight: bold;
+}
 </style>

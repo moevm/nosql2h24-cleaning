@@ -1,0 +1,43 @@
+<script setup lang="ts">
+import { inject, onMounted } from 'vue'
+import { RouteLocationNormalizedLoadedGeneric, useRoute } from 'vue-router'
+
+const route: RouteLocationNormalizedLoadedGeneric = useRoute()
+
+const addSideBarButtons: Function | undefined = inject('addSideBarButtons')
+const setUserCard: Function | undefined = inject('setUserCard')
+
+const clientId: string | string[] = route.params.id
+
+onMounted(() => {
+  addSideBarButtons!(
+    {
+      text: 'Создать новый заказ',
+      type: 'new-order',
+      to: `/cleaning/client${clientId}/new-order`
+    }
+  )
+  addSideBarButtons!(
+    {
+      text: 'История заказов',
+      type: 'history-order',
+      to: `/cleaning/client${clientId}/history-order`
+    }
+  )
+  addSideBarButtons!(
+    {
+      text: 'Мои адреса',
+      type: 'my-addresses',
+      to: `/cleaning/client${clientId}/my-addresses`
+    }
+  )
+  setUserCard!('Иван Иванов', 'example@mail.com')
+})
+</script>
+
+<template>
+  <h1>Главная страница клиента</h1>
+</template>
+
+<style scoped>
+</style>
