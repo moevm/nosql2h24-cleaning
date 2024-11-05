@@ -1,8 +1,10 @@
 package models
 
+import "go.mongodb.org/mongo-driver/v2/bson"
+
 type Consumable struct {
-	ID      string
-	EanCode string
-	Name    string
-	Amount  int
+	ID      bson.ObjectID `bson:"_id,omitempty"`
+	EanCode string        `bson:"ean_code"`
+	Name    string        `bson:"name"`
+	Amount  int           `bson:"amount"`
 }

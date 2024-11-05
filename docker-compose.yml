@@ -16,7 +16,7 @@ services:
     ports:
       - "127.0.0.1:8081:8081"
     env_file:
-      - default.env
+      - .env
     depends_on:
       db:
         condition: service_healthy
@@ -28,7 +28,7 @@ services:
     hostname: mongodb
     image: mongodb/mongodb-community-server:7.0.0-ubi8
     env_file:
-      - default.env
+      - .env
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
