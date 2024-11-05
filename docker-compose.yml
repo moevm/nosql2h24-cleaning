@@ -15,6 +15,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "127.0.0.1:8081:8081"
+    env_file:
+      - default.env
     depends_on:
       db:
         condition: service_healthy
@@ -25,16 +27,22 @@ services:
     container_name: database
     hostname: mongodb
     image: mongodb/mongodb-community-server:7.0.0-ubi8
-    volumes:
-      - mongo-data:/data/db
-    expose:
-      - "27017"
+    env_file:
+      - default.env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGODB_DB}
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 20s
+    expose:
+      - "27017"
+    volumes:
+      - mongo-data:/data/db
     networks:
       - database
 
