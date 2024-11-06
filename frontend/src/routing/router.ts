@@ -2,7 +2,8 @@ import { createWebHistory, createRouter } from 'vue-router'
 import AuthenticationPage from '../components/AuthenticationPage.vue'
 import MainPage from '../components/MainPage.vue'
 import ClientMainPage from '../components/ClientMainPage.vue'
-import OrdersHistoryPage from '../components/OrdersHistoryPage.vue'
+import ClientAddressesPage from '../components/ClientAddressesPage.vue'
+import ClientOrdersHistoryPage from '../components/ClientOrdersHistoryPage.vue'
 
 const routes = [
   {
@@ -18,12 +19,19 @@ const routes = [
       {
         name: 'client',
         path: 'client:id(\\d+)',
-        component: ClientMainPage
-      },
-      {
-        name: 'orders',
-        path: '/orders',
-        component: OrdersHistoryPage
+        component: ClientMainPage,
+        children: [
+          {
+            name: 'client-addresses',
+            path: 'my-addresses',
+            component: ClientAddressesPage
+          },
+          {
+            name: 'client-orders-history',
+            path: 'history-order',
+            component: ClientOrdersHistoryPage
+          }
+        ]
       }
     ]
   }

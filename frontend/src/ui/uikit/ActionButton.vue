@@ -5,6 +5,8 @@ import type Button from '../model/button'
 const props = withDefaults(defineProps<Button>(), {
   id: undefined,
   class: undefined,
+  color: undefined,
+  variant: undefined,
   isActive: true,
   type: undefined,
   to: undefined,
@@ -16,9 +18,9 @@ const props = withDefaults(defineProps<Button>(), {
   <v-btn
     :id="props.id"
     :class="[props.class, { 'inactive-btn': props.isActive === false }, 'btn']"
-    color="white"
+    :color="props.color"
     rounded="xl"
-    variant="outlined"
+    :variant="props.variant"
     :type="props.type"
     :text="props.text"
     :to="props.to"

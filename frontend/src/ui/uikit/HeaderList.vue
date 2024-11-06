@@ -1,58 +1,62 @@
 <script setup lang="ts">
-import OrderItem from "./OrderItem.vue";
 import { defineProps } from 'vue';
 
-
 const props = defineProps<{
-  title: string;
-  orders: Array<{
-    id: number;
-    date: string;
-    time: string;
-    address: string;
-    price: number;
-  }>;
+  title?: string;
+  height?: string;
+  width?: string;
+  items: any;
 }>();
 </script>
 
 <template>
-  <div class="header-list">
-    <h1>{{ title }}</h1>
-    <div class="orders-list">
-      <OrderItem v-for="order in orders" :key="order.id" :order="order" />
+  <div
+    class="header-container"
+    :style="{
+      height: props.height, 
+      width: props.width 
+    }"
+  > <h1>{{ props.title }}</h1>
+    <div class="items-container">
+      <slot
+        name="items"
+        v-for="item in props.items"
+        :key="item.id"
+        :item="item"
+      ></slot>
     </div>
   </div>
 </template>
 
 <style scoped>
-.header-list {
+.header-container {
   display: flex;
   flex-direction: column;
-  height: 90vh;
-  box-sizing: border-box;
-  padding-left: 10px;
-  padding-right: 10px;
+  text-align: center;
+  height: 100%;
+  width: 95%;
+  background-color: white;
   border: 2px solid grey;
   border-radius: 25px;
-  text-align: center;
 }
-
-.title {
-  flex-shrink: 0;
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
-.orders-list {
-  display: grid;
+.items-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-content: flex-start;
+  flex-wrap: wrap;
   gap: 10px;
-  flex-grow: 1;
+  padding-left: 10px;
+  padding-right: 10px;
   overflow-y: scroll;
   scrollbar-width: none;
 }
-
-.orders-list::-webkit-scrollbar {
+.items-container::-webkit-scrollbar {
   width: 0px;
   background: transparent;
+}
+h1 {
+  font-size: 42px;
+  font-weight: bold;
 }
 </style>

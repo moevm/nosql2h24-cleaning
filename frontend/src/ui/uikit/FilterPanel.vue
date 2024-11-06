@@ -13,34 +13,28 @@ function updateDateFilter(dates: { startDate: string | null; endDate: string | n
 </script>
 
 <template>
-  <div class="filter-panel">
+  <div class="filter-panel-container">
     <ActionButton
       id="list-filters-btn"
+      color="#394cc2"
       :text="'Все'"
     ></ActionButton>
     <DateFilter @filter-dates="updateDateFilter" />
     <ActionButton
       @click="updateDateFilter"
       id="search-btn"
+      color="#394cc2"
       :text="'Поиск'"
     ></ActionButton>
   </div>
 </template>
 
 <style scoped>
-.filter-panel {
+.filter-panel-container {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  height: 8%;
   gap: 10px;
-  margin-bottom: 10px;
-}
-.btn {
-  font-size: 16px;
-  background-color: #3846c0;
-  color: black;
-  padding-left: 20px;
-  padding-right: 20px;
-  height: 40px;
 }
 </style>

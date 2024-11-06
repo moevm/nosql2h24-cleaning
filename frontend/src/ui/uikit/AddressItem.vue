@@ -2,29 +2,33 @@
 import { defineProps } from 'vue';
 
 const props = defineProps<{
-  order: {
-    date: string;
-    time: string;
+  address: {
+    id: string;
     address: string;
-    price: number;
   };
 }>();
 </script>
 
 <template>
-  <div class="order-item">
-    <p>Заказ {{ props.order.date }} в {{ props.order.time }}</p>
-    <p>{{ props.order.address }}</p>
-    <p>{{ props.order.price }}$</p>
+  <div class="address-item">
+    <p>{{ props.address.address }}</p>
   </div>
 </template>
 
 <style scoped>
-.order-item {
+.address-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: top;
+  align-items: center;
+  width: 49%;
   border: 3px solid #3846c0;
-  width: 100%;
   border-radius: 15px;
   padding: 10px;
   text-align: left;
+}
+p {
+  font-size: 32px;
+  font-weight: bold;
 }
 </style>

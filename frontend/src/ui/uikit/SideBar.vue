@@ -16,6 +16,8 @@ const userCard: {
       <ActionButton
         v-for="button in sideBarButtons"
         id="new-btns"
+        color="white"
+        variant="outlined"
         :type="button.type"
         :text="button.text"
         :to="button.to"
@@ -28,6 +30,8 @@ const userCard: {
       </div>
       <ActionButton
         id="exit-btn"
+        color="white"
+        variant="outlined"
         type="exit"
         text="Выход"
         to="/login"

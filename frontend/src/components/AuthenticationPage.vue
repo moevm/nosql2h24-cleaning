@@ -29,6 +29,8 @@ const actionContainerStyle: any = computed(() => {
       <div class="action-container-btns">
         <ActionButton
           id="authorization-btn"
+          color="white"
+          variant="outlined"
           :isActive="isRegistrationAuthorization"
           type="authorization"
           text="Авторизация"
@@ -36,6 +38,8 @@ const actionContainerStyle: any = computed(() => {
         ></ActionButton>
         <ActionButton
           id="registration-btn"
+          color="white"
+          variant="outlined"
           :isActive="!isRegistrationAuthorization"
           type="registration"
           text="Регистрация"
@@ -88,6 +92,8 @@ const actionContainerStyle: any = computed(() => {
         ></InputTextField>
         <ActionButton
           id="submit-btn"
+          color="white"
+          variant="outlined"
           type="submit"
           :text="isRegistrationAuthorization ? 'Войти' : 'Зарегистрироваться'"
         ></ActionButton>
