@@ -54,6 +54,19 @@ func (r *UserRepo) GetUserById(ctx context.Context, id string) (*models.User, er
 	return &user, nil
 }
 
+func (r *UserRepo) GetUserByEmail(ctx context.Context, email string) (*models.User, error) {
+	filter := bson.D{{Key: "email", Value: email}}
+
+	var user models.User
+	if err := r.collection.FindOne(ctx, filter).Decode(&user); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, repository.ErrNotFound
+		}
+		return nil, err
+	}
+	return &user, nil
+}
+
 func (r *UserRepo) UpdateUser(ctx context.Context, user *models.User) error {
 	update := bson.D{
 		{Key: "$set", Value: user},
