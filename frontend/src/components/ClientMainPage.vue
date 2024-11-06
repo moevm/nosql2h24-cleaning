@@ -40,7 +40,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>Главная страница клиента</h1>
+  <RouterView />
 </template>
 
 <style scoped>

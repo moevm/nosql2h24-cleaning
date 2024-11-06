@@ -3,7 +3,7 @@ import AuthenticationPage from '../components/AuthenticationPage.vue'
 import MainPage from '../components/MainPage.vue'
 import ClientMainPage from '../components/ClientMainPage.vue'
 import ClientAddressesPage from '../components/ClientAddressesPage.vue'
-import OrdersHistoryPage from '../components/OrdersHistoryPage.vue'
+import ClientOrdersHistoryPage from '../components/ClientOrdersHistoryPage.vue'
 
 const routes = [
   {
@@ -25,6 +25,11 @@ const routes = [
             name: 'client-addresses',
             path: 'my-addresses',
             component: ClientAddressesPage
+          },
+          {
+            name: 'client-orders-history',
+            path: 'history-order',
+            component: ClientOrdersHistoryPage
           }
         ]
       }

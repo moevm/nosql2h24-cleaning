@@ -1,18 +1,29 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import HeaderList from '../ui/uikit/HeaderList.vue'
+import AddressItem from '../ui/uikit/AddressItem.vue'
 
+const address = ref([
+  {id: 1, address: "г. Москва, ул. Пушкина, д. 228, кв. 228, п. 7, э. 4"},
+  {id: 2, address: "г. Москва, ул. Пушкина, д. 228, кв. 228, п. 7, э. 4"},
+  {id: 3, address: "г. Москва, ул. Пушкина, д. 228, кв. 228, п. 7, э. 4"},
+  {id: 4, address: "г. Москва, ул. Пушкина, д. 228, кв. 228, п. 7, э. 4"},
+  {id: 5, address: "г. Москва, ул. Пушкина, д. 228, кв. 228, п. 7, э. 4"}
+]) // TODO DB request
 </script>
 
 <template>
   <div class="container">
-    <div class="my-addresses-container">
-      <h1>
-        Мои адреса
-      </h1>
-      <div class="addresses-container">
-        <div class="address-card">
-        </div>
-      </div>
-    </div>
+    <HeaderList
+      title="Мои адреса" 
+      :items="address"
+      height="100%"
+      width="95%"
+    >
+      <template #items="{ item }">
+        <AddressItem :address="item" />
+      </template>
+    </HeaderList>
   </div>
 </template>
 
@@ -30,41 +41,5 @@
   gap: 20px;
   padding-top: 20px;
   padding-bottom: 20px;
-}
-.my-addresses-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  width: 95%;
-  background-color: white;
-  border: 2px solid gray;
-  border-radius: 20px;
-}
-.addresses-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-content: flex-start;
-  flex-wrap: wrap;
-  height: 100%;
-  width: 100%;
-  gap: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-.address-card {
-  display: flex;
-  flex-direction: row;
-  justify-content: top;
-  align-items: center;
-  height: 20%;
-  width: 49%;
-  border: 3px solid #394cc2;
-  border-radius: 20px;
-}
-h1 {
-  font-size: 42px;
-  font-weight: bold;
 }
 </style>
