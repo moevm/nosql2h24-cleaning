@@ -6,13 +6,6 @@ const props = defineProps<{
   height?: string;
   width?: string;
   items: any;
-  // orders: Array<{
-  //   id: number;
-  //   date: string;
-  //   time: string;
-  //   address: string;
-  //   price: number;
-  // }>;
 }>();
 </script>
 
