@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject, onMounted } from 'vue'
-import { RouteLocationNormalizedLoadedGeneric, useRoute } from 'vue-router'
+import { RouteLocationNormalizedLoadedGeneric, RouterView, useRoute } from 'vue-router'
 
 const route: RouteLocationNormalizedLoadedGeneric = useRoute()
 
@@ -36,7 +36,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>Главная страница клиента</h1>
+  <RouterView/>
 </template>
 
 <style scoped>
