@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from 'vue-router'
 import AuthenticationPage from '../components/AuthenticationPage.vue'
 import MainPage from '../components/MainPage.vue'
 import ClientMainPage from '../components/ClientMainPage.vue'
+import ClientAddressesPage from '../components/ClientAddressesPage.vue'
 
 const routes = [
   {
@@ -17,7 +18,14 @@ const routes = [
       {
         name: 'client',
         path: 'client:id(\\d+)',
-        component: ClientMainPage
+        component: ClientMainPage,
+        children: [
+          {
+            name: 'client-addresses',
+            path: 'my-addresses',
+            component: ClientAddressesPage
+          }
+        ]
       }
     ]
   }
