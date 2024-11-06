@@ -3,6 +3,7 @@ import AuthenticationPage from '../components/AuthenticationPage.vue'
 import MainPage from '../components/MainPage.vue'
 import ClientMainPage from '../components/ClientMainPage.vue'
 import ClientAddressesPage from '../components/ClientAddressesPage.vue'
+import OrdersHistoryPage from '../components/OrdersHistoryPage.vue'
 
 const routes = [
   {
