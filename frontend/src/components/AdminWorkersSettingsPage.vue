@@ -66,37 +66,31 @@ function closeDialog(): void {
     >
       <template #body>
         <InputTextField
-          class="dialog-text-field"
           placeholder="Введите имя"
           type="text"
           label="Имя"
         ></InputTextField>
         <InputTextField
-          class="dialog-text-field"
           placeholder="Введите фамилию"
           type="text"
           label="Фамилия"
         ></InputTextField>
         <InputTextField
-          class="dialog-text-field"
           placeholder="Введите отчество"
           type="text"
           label="Отчество"
         ></InputTextField>
         <InputTextField
-          class="dialog-text-field"
           placeholder="Введите телефон"
           type="phonenumber"
           label="Номер телефона"
         ></InputTextField>
         <InputTextField
-          class="dialog-text-field"
           placeholder="Введите почту"
           type="email"
           label="Почта"
         ></InputTextField>
         <InputTextField
-          class="dialog-text-field"
           placeholder="Введите пароль"
           type="password"
           label="Пароль"

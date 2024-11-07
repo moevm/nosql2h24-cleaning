@@ -5,11 +5,10 @@ import InputTextField from './InputTextField.vue'
 import Dialog from './Dialog.vue'
 
 const props = defineProps<{
-  worker: {
+  service: {
     id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
+    name: string;
+    price: string;
   }
 }>()
 
@@ -25,10 +24,10 @@ function closeDialog(): void {
 </script>
 
 <template>
-  <div class="worker-item">
-    <p>{{ props.worker.firstName }} {{ props.worker.lastName }}</p>
-    <p>{{ props.worker.email }}</p>
-    <div class="worker-edit">
+  <div class="service-item">
+    <p>{{ props.service.name }}</p>
+    <p>{{ props.service.price }}</p>
+    <div class="service-edit">
       <ActionButton
         text="Редактировать"
         type="edit"
@@ -46,34 +45,28 @@ function closeDialog(): void {
     >
       <template #body>
         <InputTextField
-          placeholder="Введите имя"
+          placeholder="Введите название"
           type="text"
-          label="Имя"
+          label="Название услуги"
         ></InputTextField>
         <InputTextField
-          placeholder="Введите фамилию"
+          placeholder="Введите стоимость"
           type="text"
-          label="Фамилия"
+          label="Стоимость услуги"
         ></InputTextField>
         <InputTextField
-          placeholder="Введите отчество"
+          placeholder="Введите количество"
           type="text"
-          label="Отчество"
+          label="Количество исполнителей"
         ></InputTextField>
         <InputTextField
-          placeholder="Введите телефон"
-          type="phonenumber"
-          label="Номер телефона"
+          type="text"
+          label="Описание"
         ></InputTextField>
         <InputTextField
-          placeholder="Введите почту"
-          type="email"
-          label="Почта"
-        ></InputTextField>
-        <InputTextField
-          placeholder="Введите пароль"
-          type="password"
-          label="Пароль"
+          placeholder="eancode, name, count;"
+          type="text"
+          label="Рассходники"
         ></InputTextField>
       </template>
       <template #footer>
@@ -105,7 +98,7 @@ function closeDialog(): void {
 </template>
 
 <style scoped>
-.worker-item {
+.service-item {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -115,7 +108,7 @@ function closeDialog(): void {
   padding: 10px;
   text-align: left;
 }
-.worker-edit {
+.service-edit {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;

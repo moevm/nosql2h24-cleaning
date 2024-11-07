@@ -6,6 +6,7 @@ import ClientAddressesPage from '../components/ClientAddressesPage.vue'
 import ClientOrdersHistoryPage from '../components/ClientOrdersHistoryPage.vue'
 import AdminMainPage from '../components/AdminMainPage.vue'
 import AdminWorkersSettingsPage from '../components/AdminWorkersSettingsPage.vue'
+import AdminServicesSettingsPage from '../components/AdminServicesSettingsPage.vue'
 
 const routes = [
   {
@@ -44,6 +45,11 @@ const routes = [
             name: 'admin-workers-settings',
             path: 'workers',
             component: AdminWorkersSettingsPage
+          },
+          {
+            name: 'admin-services-settings',
+            path: 'services',
+            component: AdminServicesSettingsPage
           }
         ]
       }
