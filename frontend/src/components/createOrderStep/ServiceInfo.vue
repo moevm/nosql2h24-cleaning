@@ -7,7 +7,7 @@
       width="95%"
       >
       <template #items="{ item }">
-        <ServiceItem :service="item" />
+        <ServiceCardItem :service="item" />
       </template>
     </HeaderList>
   </div>
@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import HeaderList from "../../ui/uikit/HeaderList.vue"
-import ServiceItem from "../../ui/uikit/ServiceItem.vue"
+import ServiceCardItem from "../../ui/uikit/ServiceCardItem.vue"
 
 const services = ref([
   { name: "Уборка балкона", price: 10 },
