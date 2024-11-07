@@ -13,6 +13,7 @@ import (
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/config"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/auth"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/middlewares"
+	v1users "github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/v1/users"
 	mongorepo "github.com/moevm/nosql2h24-cleaning/cleaning/internal/repository/mongo"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/services"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/services/jwt"
@@ -45,13 +46,18 @@ func Run(cfg *config.Config) {
 
 	// create services
 	jwt := jwt.New(cfg.Auth.Secret)
+	hasher := hasher.New(10)
 	authService := services.NewAuthService(
 		logger,
 		jwt,
-		hasher.New(10),
+		hasher,
 		userRepo,
 	)
-
+	userService := services.NewUserService(
+		logger,
+		hasher,
+		userRepo,
+	)
 	// setup router
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
@@ -70,7 +76,7 @@ func Run(cfg *config.Config) {
 		r.Route("/v1", func(r chi.Router) {
 			r.Use(middlewares.NewAuthMiddleware(jwt).JWT)
 			// TODO: Add v1 routes
-
+			r.Mount("/users", v1users.New(userService).Routes())
 			// hardcoded to test
 			r.Get("/secret", func(w http.ResponseWriter, r *http.Request) {
 				id := r.Context().Value(middlewares.UserID).(string)

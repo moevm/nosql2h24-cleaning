@@ -67,6 +67,28 @@ func (r *UserRepo) GetUserByEmail(ctx context.Context, email string) (*models.Us
 	return &user, nil
 }
 
+// TODO: third argument query
+func (r *UserRepo) GetUsers(ctx context.Context, userType string) ([]*models.User, error) {
+	filter := bson.D{{Key: "user_type", Value: userType}}
+
+	cursor, err := r.collection.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	users := make([]*models.User, 0)
+	for cursor.Next(ctx) {
+		var user models.User
+		if err := cursor.Decode(&user); err != nil {
+			return nil, err
+		}
+		users = append(users, &user)
+	}
+
+	return users, nil
+}
+
 func (r *UserRepo) UpdateUser(ctx context.Context, user *models.User) error {
 	update := bson.D{
 		{Key: "$set", Value: user},
