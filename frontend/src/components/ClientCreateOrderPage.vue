@@ -1,157 +1,45 @@
 <template>
-  <div class="container">
-    <h1 class="title">Контактная информация</h1>
-    <v-form
-      class="action-container-form"
-      validate-on="submit lazy"
-      @submit.prevent="submitForm"
-    >
-      <!-- Имя и Фамилия -->
-      <div class="input-row">
-        <InputTextField
-          class="input-field"
-          placeholder="Ваше имя"
-          type="text"
-        />
-        <InputTextField
-          class="input-field"
-          placeholder="Ваша фамилия"
-          type="text"
-        />
-      </div>
-
-      <!-- Номер телефона -->
-      <div class="input-row">
-        <InputTextField
-          class="input-field full-width"
-          placeholder="Номер телефона"
-          type="tel"
-        />
-      </div>
-
-      <!-- Адрес и кнопка "Мои адреса" -->
-      <div class="input-row address-row">
-        <InputTextField
-          class="input-field full-width"
-          placeholder="Адрес"
-          type="text"
-        />
-        <ActionButton
-          id="my-address-btn"
-          color="primary"
-          variant="outlined"
-          text="Мои адреса"
-        />
-      </div>
-
-      <!-- Квартира, Подъезд, Этаж, Домофон -->
-      <div class="input-row">
-        <InputTextField
-          class="input-field"
-          placeholder="Квартира"
-          type="text"
-        />
-        <InputTextField
-          class="input-field"
-          placeholder="Подъезд"
-          type="text"
-        />
-        <InputTextField
-          class="input-field"
-          placeholder="Этаж"
-          type="text"
-        />
-        <InputTextField
-          class="input-field"
-          placeholder="Домофон"
-          type="text"
-        />
-      </div>
-
-      <!-- Дата и Время -->
-      <div class="input-row">
-        <InputTextField
-          class="input-field"
-          placeholder="Дата"
-          type="date"
-        />
-        <InputTextField
-          class="input-field"
-          placeholder="Время"
-          type="time"
-        />
-      </div>
-    </v-form>
+  <div>
+    <component :is="currentStepComponent" @change-step="changeStep" />
     <ActionButton
       id="next-btn"
-      color="primary"
-      variant="contained"
+      variant="text"
       text="Далее"
-      @click="submitForm"
+      :onClick="changeStep"
     />
   </div>
 </template>
 
-<script setup lang="ts">
-function submitForm(): void {
-  console.log("Форма отправлена");
-}
+<script setup>
+import { ref, computed } from 'vue';
+import Step1 from './createOrderStep/ContactInfo.vue';
+import Step2 from './createOrderStep/AppartmentInfo.vue';
+import Step3 from './createOrderStep/ServiceInfo.vue';
+
+const currentStep = ref(1);
+
+const steps = {
+  1: Step1,
+  2: Step2,
+  3: Step3,
+};
+
+const currentStepComponent = computed(() => steps[currentStep.value]);
+
+const changeStep = () => {
+  if (currentStep >= 3) {
+    // create order
+    // redirect to order history
+  } else {
+    currentStep.value += 1;
+  }
+};
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 80%;
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-
-.title {
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.input-row {
-  display: flex;
+.div {
   width: 1000px;
-  height: 50px;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.input-field {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid grey;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.full-width {
-  flex: 1;
-}
-
-.address-row {
-  display: flex;
-}
-
-#my-address-btn {
-  width: 150px;
-  padding: 10px 15px;
-  font-size: 14px;
-  border-radius: 8px;
-  background-color: #394cc2;
-  cursor: pointer;
-}
-
-.button-row {
-  text-align: center;
+  height: 100%;  
 }
 
 #next-btn {
