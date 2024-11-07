@@ -8,7 +8,7 @@ import (
 
 type UserCredentials struct {
 	Email    string `json:"email" bson:"email"`
-	Password string `json:"password" bson:"password"`
+	Password string `json:"password,omitempty" bson:"password"`
 }
 
 type UserInfo struct {
