@@ -17,8 +17,8 @@ onMounted(() => {
   addSideBarButtons!(
     {
       text: 'Создать новый заказ',
-      type: 'new-order',
-      to: `/cleaning/client${clientId}/new-order`
+      type: 'create-order',
+      to: `/cleaning/client${clientId}/create-order`
     }
   )
   addSideBarButtons!(
