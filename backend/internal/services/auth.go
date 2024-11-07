@@ -98,7 +98,7 @@ func (r *AuthService) Login(ctx context.Context, user *models.User) (*models.Tok
 		l.Info("invalid password")
 		return nil, ErrIncorrectPassword
 	}
-	return r.generateJWT(ctx, user)
+	return r.generateJWT(ctx, userFromDB)
 }
 
 func (r *AuthService) Logout(ctx context.Context, refreshToken string) error {

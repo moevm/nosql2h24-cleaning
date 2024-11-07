@@ -12,6 +12,7 @@ type (
 	Config struct {
 		HTTP    ConfigHTTP    `yaml:"http"`
 		MongoDB ConfigMongoDB `yaml:"mongodb"`
+		Auth    ConfigAuth    `yaml:"auth"`
 	}
 
 	ConfigHTTP struct {
@@ -25,6 +26,10 @@ type (
 		DB       string `yaml:"database" env:"MONGODB_DB"`
 		Hostname string `yaml:"hostname" env:"MONGODB_HOST"`
 		Port     int    `yaml:"port" env:"MONGODB_PORT"`
+	}
+
+	ConfigAuth struct {
+		Secret string `yaml:"secret_key" env:"SECRET_KEY"`
 	}
 )
 

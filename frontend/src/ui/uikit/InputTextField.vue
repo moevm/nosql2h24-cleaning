@@ -16,6 +16,7 @@ const props = withDefaults(defineProps<TextField>(), {
     :class="[props.class, 'input-field']"
     :placeholder="props.placeholder"
     variant="solo"
+    rounded="xl"
     :type="props.type"
     :label="props.label"
     clearable

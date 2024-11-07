@@ -28,14 +28,14 @@ provide('userCard', userCard)
 </script>
 
 <template>
-  <div class="container">
+  <div class="page-container">
     <SideBar />
     <RouterView />
   </div>
 </template>
 
 <style scoped>
-.container {
+.page-container {
   display: flex;
   height: 100vh;
 }
