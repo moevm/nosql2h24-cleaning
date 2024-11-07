@@ -4,6 +4,9 @@ import MainPage from '../components/MainPage.vue'
 import ClientMainPage from '../components/ClientMainPage.vue'
 import ClientAddressesPage from '../components/ClientAddressesPage.vue'
 import ClientOrdersHistoryPage from '../components/ClientOrdersHistoryPage.vue'
+import AdminMainPage from '../components/AdminMainPage.vue'
+import AdminWorkersSettingsPage from '../components/AdminWorkersSettingsPage.vue'
+import AdminServicesSettingsPage from '../components/AdminServicesSettingsPage.vue'
 
 const routes = [
   {
@@ -30,6 +33,23 @@ const routes = [
             name: 'client-orders-history',
             path: 'history-order',
             component: ClientOrdersHistoryPage
+          }
+        ]
+      },
+      {
+        name: 'admin',
+        path: 'admin',
+        component: AdminMainPage,
+        children: [
+          {
+            name: 'admin-workers-settings',
+            path: 'workers',
+            component: AdminWorkersSettingsPage
+          },
+          {
+            name: 'admin-services-settings',
+            path: 'services',
+            component: AdminServicesSettingsPage
           }
         ]
       }
