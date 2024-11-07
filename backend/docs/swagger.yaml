@@ -1,4 +1,110 @@
+definitions:
+  auth.RegisterResponse:
+    properties:
+      id:
+        type: string
+    type: object
+  httputil.HTTPError:
+    properties:
+      error:
+        example: password field is empty
+        type: string
+      status:
+        example: bad request
+        type: string
+    type: object
+  models.NewUser:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      patronymic:
+        type: string
+      phone_number:
+        type: string
+      surname:
+        type: string
+    type: object
+  models.UserCredentials:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /api/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: If user exist in database set jwt cookie
+      parameters:
+      - description: User credentials
+        in: body
+        name: Creds
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserCredentials'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Set cookie with jwt
+      tags:
+      - Auth
+  /api/auth/logout:
+    post:
+      description: If cookie exist, remove it
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Remove cookie with jwt
+      tags:
+      - Auth
+  /api/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Create user in database
+      parameters:
+      - description: New user info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.NewUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Create user
+      tags:
+      - Auth
 swagger: "2.0"
