@@ -4,14 +4,15 @@ import HeaderList from '../ui/uikit/HeaderList.vue'
 import PanelContainer from '../ui/uikit/PanelContainer.vue'
 import ActionButton from '../ui/uikit/ActionButton.vue'
 import InputTextField from '../ui/uikit/InputTextField.vue'
+import MainContainer from '../ui/uikit/MainContainer.vue'
 
 const workers = ref([]) // TODO DB request
 </script>
 
 <template>
-  <div class="container">
+  <MainContainer>
     <PanelContainer
-      width="60%"
+      width="45%"
     >
       <ActionButton
         text="Создать"
@@ -43,22 +44,8 @@ const workers = ref([]) // TODO DB request
       width="95%"
     >
     </HeaderList>
-  </div>
+  </MainContainer>
 </template>
 
 <style scoped>
-.container {
-  max-width: 100%;
-  max-height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 80%;
-  background-color: white;
-  gap: 20px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
 </style>

@@ -5,6 +5,7 @@ import HeaderList from '../ui/uikit/HeaderList.vue'
 import OrderItem from '../ui/uikit/OrderItem.vue'
 import ActionButton from '../ui/uikit/ActionButton.vue'
 import DateFilter from '../ui/uikit/DateFilter.vue'
+import MainContainer from '../ui/uikit/MainContainer.vue'
 
 const orders = ref([
   { id: 1, date: "28.02.2024", time: "10:00", address: "г. Москва, ул. Пушкина, д. 228, кв. 228, п. 7, э. 4", price: 37 },
@@ -22,7 +23,7 @@ const orders = ref([
 </script>
 
 <template>
-  <div class="container">
+  <MainContainer>
     <PanelContainer>
       <ActionButton
         text="Все"
@@ -44,11 +45,11 @@ const orders = ref([
         <OrderItem :order="item" />
       </template>
     </HeaderList>
-  </div>
+  </MainContainer>
 </template>
 
 <style scoped>
-.container {
+/* .container {
   max-width: 100%;
   max-height: 100%;
   display: flex;
@@ -61,5 +62,5 @@ const orders = ref([
   gap: 20px;
   padding-top: 20px;
   padding-bottom: 20px;
-}
+} */
 </style>
