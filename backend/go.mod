@@ -4,6 +4,7 @@ go 1.23.1
 
 require (
 	github.com/go-chi/chi/v5 v5.1.0
+	github.com/go-chi/render v1.0.3
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/swaggo/http-swagger v1.3.4
@@ -16,6 +17,7 @@ require (
 require (
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
+	github.com/ajg/form v1.5.1 // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/jsonreference v0.21.0 // indirect
 	github.com/go-openapi/spec v0.21.0 // indirect
