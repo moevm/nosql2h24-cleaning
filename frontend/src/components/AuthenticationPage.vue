@@ -55,7 +55,6 @@ const actionContainerStyle: any = computed(() => {
           <InputTextField
             class="input-field"
             placeholder="Введите имя"
-            :required="true"
             type="text"
             label="Имя"
           ></InputTextField>

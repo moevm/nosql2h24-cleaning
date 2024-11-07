@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
-import HeaderList from '../ui/uikit/HeaderList.vue'
-import PanelContainer from '../ui/uikit/PanelContainer.vue'
-import ActionButton from '../ui/uikit/ActionButton.vue'
-import InputTextField from '../ui/uikit/InputTextField.vue'
-import MainContainer from '../ui/uikit/MainContainer.vue'
-import Dialog from '../ui/uikit/Dialog.vue'
-import WorkerItem from '../ui/uikit/WorkerItem.vue'
+import { Ref, ref, defineProps } from 'vue'
+import ActionButton from './ActionButton.vue'
+import InputTextField from './InputTextField.vue'
+import Dialog from './Dialog.vue'
 
-const workers = ref([
-  {id: 1, firstName: "Иван", lastName: "Иванов", email: "example@mail.com"},
-  {id: 2, firstName: "Иван", lastName: "Иванов", email: "example@mail.com"}
-]) // TODO DB request
+const props = defineProps<{
+  worker: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  }
+}>()
+
 const isDialogVisible: Ref<boolean> = ref(false)
 
 function openDialog(): void {
@@ -24,42 +25,21 @@ function closeDialog(): void {
 </script>
 
 <template>
-  <MainContainer>
-    <PanelContainer
-      height="10%"
-      width="95%"
-    >
+  <div class="worker-item">
+    <p>{{ props.worker.firstName }} {{ props.worker.lastName }}</p>
+    <p>{{ props.worker.email }}</p>
+    <div class="worker-edit">
       <ActionButton
-        text="Создать"
-        type="create"
+        text="Редактировать"
+        type="edit"
         color="#394cc2"
+        variant="flat"
         @click="openDialog"
       ></ActionButton>
-      <v-form
-        class="search-form"
-        validate-on="submit lazy"
-        @submit.prevent="">
-        <InputTextField
-          label="Имя"
-          type="first-name-search"
-          placeholder="Введите имя"
-        ></InputTextField>
-        <InputTextField
-          label="Фамилия"
-          type="last-name-search"
-          placeholder="Введите фамилию"
-        ></InputTextField>
-        <ActionButton
-          text="Поиск"
-          type="create"
-          variant="flat"
-          color="#394cc2"
-        ></ActionButton>
-      </v-form>
-    </PanelContainer>
-    <!-- Dialog to add worker -->
+    </div>
+    <!-- Dialog to edit worker -->
     <Dialog
-      title="Создание исполнителя"
+      title="Редактирование исполнителя"
       :visible="isDialogVisible"
       dialogMaxWidth="30%"
       @update:visible="closeDialog"
@@ -111,35 +91,43 @@ function closeDialog(): void {
           @click="closeDialog"
         ></ActionButton>
         <ActionButton
-          text="Создать"
-          type="create"
+          text="Удалить"
+          type="delete"
+          variant="flat"
+          color="#f65858"
+          @click="closeDialog"
+        ></ActionButton>
+        <ActionButton
+          text="Подтвердить"
+          type="submit"
           variant="flat"
           color="#394cc2"
           @click="closeDialog"
         ></ActionButton>
       </template>
     </Dialog>
-    <!-------------------------->
-    <HeaderList
-      title="Исполнители" 
-      :items="workers"
-      height="100%"
-      width="95%"
-    >
-      <template #items="{ item }">
-        <WorkerItem :worker="item" />
-      </template>
-    </HeaderList>
-  </MainContainer>
+  </div>
 </template>
 
 <style scoped>
-.search-form {
+.worker-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 49%;
+  border: 3px solid #3846c0;
+  border-radius: 15px;
+  padding: 10px;
+  text-align: left;
+}
+.worker-edit {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  width: 50%;
-  height: 100%;
-  gap: 10px;
+  justify-content: flex-end;
+  width: 100%;
+}
+p {
+  font-size: 32px;
+  font-weight: bold;
 }
 </style>
