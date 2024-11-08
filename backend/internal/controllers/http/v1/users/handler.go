@@ -6,12 +6,17 @@ import (
 )
 
 type Handler struct {
-	service *services.UserService
+	userService    *services.UserService
+	addressService *services.AddressService
 }
 
-func New(service *services.UserService) *Handler {
+func New(
+	userService *services.UserService,
+	addressService *services.AddressService,
+) *Handler {
 	return &Handler{
-		service: service,
+		userService:    userService,
+		addressService: addressService,
 	}
 }
 
@@ -25,6 +30,16 @@ func (h *Handler) Routes() chi.Router {
 		r.Get("/", h.GetUser)
 		r.Put("/", h.UpdateUser)
 		r.Delete("/", h.DeleteUser)
+
+		r.Get("/addresses", h.GetAddresses)
+		r.Post("/addresses", h.PostAddress)
+
+		r.Route("/addresses/{address_id}", func(r chi.Router) {
+			r.Get("/", h.GetAddress)
+			r.Put("/", h.PutAddress)
+			r.Delete("/", h.DeleteAddress)
+		})
 	})
+
 	return router
 }
