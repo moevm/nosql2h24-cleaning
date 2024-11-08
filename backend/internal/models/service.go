@@ -7,12 +7,12 @@ import (
 )
 
 type Service struct {
-	ID              bson.ObjectID `bson:"_id,omitempty"`
-	Name            string        `bson:"name"`
-	Price           float64       `bson:"price"`
-	WorkersQuantity int           `bson:"workers_quantity"`
-	Description     string        `bson:"description"`
-	Consumables     []Consumable  `bson:"consumables,omitempty"`
-	CreatedAt       time.Time     `bson:"created_at"`
-	UpdatedAt       time.Time     `bson:"updated_at,omitempty"`
+	ID              bson.ObjectID `json:"id" bson:"_id,omitempty"`
+	Name            string        `json:"name" bson:"name"`
+	Price           float64       `json:"price" bson:"price"`
+	WorkersQuantity int           `json:"workers_quantity" bson:"workers_quantity"`
+	Description     string        `json:"description" bson:"description"`
+	Consumables     []Consumable  `json:"consumables,omitempty" bson:"consumables,omitempty"`
+	CreatedAt       time.Time     `json:"created_at" bson:"created_at"`
+	UpdatedAt       time.Time     `json:"updated_at,omitempty" bson:"updated_at,omitempty"`
 }

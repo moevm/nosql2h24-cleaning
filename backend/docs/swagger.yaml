@@ -14,9 +14,9 @@ definitions:
         type: string
       city:
         type: string
-      createdAt:
+      created_at:
         type: string
-      doorNumber:
+      door_number:
         type: string
       entrance:
         type: string
@@ -26,7 +26,18 @@ definitions:
         type: string
       street:
         type: string
-      updatedAt:
+      updated_at:
+        type: string
+    type: object
+  models.Consumable:
+    properties:
+      amount:
+        type: integer
+      ean_code:
+        type: string
+      id:
+        type: string
+      name:
         type: string
     type: object
   models.NewUser:
@@ -43,6 +54,27 @@ definitions:
         type: string
       surname:
         type: string
+    type: object
+  models.Service:
+    properties:
+      consumables:
+        items:
+          $ref: '#/definitions/models.Consumable'
+        type: array
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      updated_at:
+        type: string
+      workers_quantity:
+        type: integer
     type: object
   models.User:
     properties:
@@ -155,6 +187,145 @@ paths:
       summary: Create user with user_type=CLIENT
       tags:
       - Auth
+  /api/v1/services:
+    get:
+      description: Get array of services info from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Service'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Get array of services info
+      tags:
+      - Services
+    post:
+      consumes:
+      - application/json
+      description: Creates new service & returns it's id
+      parameters:
+      - description: Service info
+        in: body
+        name: service
+        required: true
+        schema:
+          $ref: '#/definitions/models.Service'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.CreateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Creates new service
+      tags:
+      - Services
+  /api/v1/services/{id}:
+    delete:
+      description: Delete service from database
+      parameters:
+      - description: Service id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Deletes service
+      tags:
+      - Services
+    get:
+      description: Get service from database
+      parameters:
+      - description: Service id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Service'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Get service info
+      tags:
+      - Services
+    put:
+      consumes:
+      - application/json
+      description: Update service info in database, if exist
+      parameters:
+      - description: Service id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Service info
+        in: body
+        name: service
+        required: true
+        schema:
+          $ref: '#/definitions/models.Service'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Update service info
+      tags:
+      - Services
   /api/v1/users:
     get:
       description: Get list of users from database

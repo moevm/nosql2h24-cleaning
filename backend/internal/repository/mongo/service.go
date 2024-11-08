@@ -54,6 +54,27 @@ func (r *ServiceRepo) GetService(ctx context.Context, id string) (*models.Servic
 	return &service, nil
 }
 
+// TODO: add second arg for search query
+func (r *ServiceRepo) GetServices(ctx context.Context) ([]*models.Service, error) {
+	filter := bson.D{}
+
+	cursor, err := r.collection.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	services := make([]*models.Service, 0)
+	for cursor.Next(ctx) {
+		var service models.Service
+		if err := cursor.Decode(&service); err != nil {
+			return nil, err
+		}
+		services = append(services, &service)
+	}
+	return services, nil
+}
+
 func (r *ServiceRepo) UpdateService(ctx context.Context, service *models.Service) error {
 	update := bson.D{
 		{Key: "$set", Value: service},
