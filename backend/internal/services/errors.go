@@ -10,7 +10,7 @@ var (
 	// User errors
 	ErrUserAlreadyExist = errors.New("user already exist")
 	ErrUserNotFound     = errors.New("user not found")
-
+	ErrAddressNotFound  = errors.New("address not found")
 	// Orders errors
 	// Service errors
 	ErrServiceAlreadyExist = errors.New("service already exist")
