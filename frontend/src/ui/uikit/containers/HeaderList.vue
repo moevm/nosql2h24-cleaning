@@ -25,6 +25,9 @@ const props = defineProps<{
         :item="item"
       ></slot>
     </div>
+    <slot
+      name="bottom"
+    ></slot>
   </div>
 </template>
 
@@ -42,7 +45,7 @@ const props = defineProps<{
 .items-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-content: flex-start;
   flex-wrap: wrap;
   gap: 10px;

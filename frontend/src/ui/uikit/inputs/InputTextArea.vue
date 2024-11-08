@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { defineProps, withDefaults } from 'vue'
-import type TextField from '../model/textfield'
+import type TextArea from '../../model/textarea'
 
-const props = withDefaults(defineProps<TextField>(), {
+const props = withDefaults(defineProps<TextArea>(), {
   id: undefined,
   class: undefined,
   placeholder: undefined,
@@ -11,21 +11,25 @@ const props = withDefaults(defineProps<TextField>(), {
 </script>
 
 <template>
-  <v-text-field
+  <v-textarea
     :id="props.id"
     :class="[props.class, 'input-field']"
     :placeholder="props.placeholder"
-    variant="solo"
+    variant="outlined"
     rounded="xl"
     :type="props.type"
     :label="props.label"
+    :rows="props.rows"
+    :row-height="props.rowHeight"
+    :maxlength="props.maxLength"
     clearable
-  ></v-text-field>
+    no-resize
+    counter
+  ></v-textarea>
 </template>
 
 <style scoped>
 .input-field {
-  border-radius: 4px;
   font-weight: bold;
 }
 </style>

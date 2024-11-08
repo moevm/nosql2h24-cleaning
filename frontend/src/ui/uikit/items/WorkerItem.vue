@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Ref, ref, defineProps } from 'vue'
-import ActionButton from './ActionButton.vue'
-import InputTextField from './InputTextField.vue'
-import Dialog from './Dialog.vue'
+import ActionButton from '../ActionButton.vue'
+import InputTextField from '../inputs//InputTextField.vue'
+import Dialog from '../Dialog.vue'
 
 const props = defineProps<{
   worker: {

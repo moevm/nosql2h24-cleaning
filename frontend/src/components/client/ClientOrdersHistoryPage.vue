@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import PanelContainer from '../ui/uikit/PanelContainer.vue'
-import HeaderList from '../ui/uikit/HeaderList.vue'
-import OrderItem from '../ui/uikit/OrderItem.vue'
-import ActionButton from '../ui/uikit/ActionButton.vue'
-import DateFilter from '../ui/uikit/DateFilter.vue'
-import MainContainer from '../ui/uikit/MainContainer.vue'
+import PanelContainer from '../../ui/uikit/containers/PanelContainer.vue'
+import HeaderList from '../../ui/uikit/containers/HeaderList.vue'
+import OrderItem from '../../ui/uikit/items/OrderItem.vue'
+import ActionButton from '../../ui/uikit/ActionButton.vue'
+import DateFilter from '../../ui/uikit/DateFilter.vue'
+import MainContainer from '../../ui/uikit/containers/MainContainer.vue'
 
 const orders = ref([
   { id: 1, date: "28.02.2024", time: "10:00", address: "г. Москва, ул. Пушкина, д. 228, кв. 228, п. 7, э. 4", price: 37 },

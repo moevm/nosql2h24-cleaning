@@ -1,13 +1,13 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import AuthenticationPage from '../components/AuthenticationPage.vue'
 import MainPage from '../components/MainPage.vue'
-import ClientMainPage from '../components/ClientMainPage.vue'
-import ClientAddressesPage from '../components/ClientAddressesPage.vue'
-import ClientOrdersHistoryPage from '../components/ClientOrdersHistoryPage.vue'
-import ClientCreateOrderPage from '../components/ClientCreateOrderPage.vue'
-import AdminMainPage from '../components/AdminMainPage.vue'
-import AdminWorkersSettingsPage from '../components/AdminWorkersSettingsPage.vue'
-import AdminServicesSettingsPage from '../components/AdminServicesSettingsPage.vue'
+import ClientMainPage from '../components/client/ClientMainPage.vue'
+import ClientAddressesPage from '../components/client/ClientAddressesPage.vue'
+import ClientOrdersHistoryPage from '../components/client/ClientOrdersHistoryPage.vue'
+import ClientCreateOrderPage from '../components/client/ClientCreateOrderPage.vue'
+import AdminMainPage from '../components/admin/AdminMainPage.vue'
+import AdminWorkersSettingsPage from '../components/admin/AdminWorkersSettingsPage.vue'
+import AdminServicesSettingsPage from '../components/admin/AdminServicesSettingsPage.vue'
 
 const routes = [
   {

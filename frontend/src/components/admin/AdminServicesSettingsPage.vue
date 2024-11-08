@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, Ref } from 'vue'
-import MainContainer from '../ui/uikit/MainContainer.vue'
-import PanelContainer from '../ui/uikit/PanelContainer.vue'
-import HeaderList from '../ui/uikit/HeaderList.vue'
-import ActionButton from '../ui/uikit/ActionButton.vue'
-import InputTextField from '../ui/uikit/InputTextField.vue'
-import Dialog from '../ui/uikit/Dialog.vue'
-import ServiceItem from '../ui/uikit/ServiceItem.vue'
+import MainContainer from '../../ui/uikit/containers/MainContainer.vue'
+import PanelContainer from '../../ui/uikit/containers/PanelContainer.vue'
+import HeaderList from '../../ui/uikit/containers/HeaderList.vue'
+import ActionButton from '../../ui/uikit/ActionButton.vue'
+import InputTextField from '../../ui/uikit/inputs/InputTextField.vue'
+import Dialog from '../../ui/uikit/Dialog.vue'
+import ServiceItem from '../../ui/uikit/items/ServiceItem.vue'
 
 const services = ref([
   {id: 1, name: "Уборка", price: "10$"},
@@ -37,7 +37,7 @@ function closeDialog(): void {
         @click="openDialog"
       ></ActionButton>
     </PanelContainer>
-    <!-- Dialog to add worker -->
+    <!-- Dialog to add services -->
     <Dialog
       title="Добавление услуги"
       :visible="isDialogVisible"
@@ -87,7 +87,7 @@ function closeDialog(): void {
         ></ActionButton>
       </template>
     </Dialog>
-    <!-------------------------->
+    <!-- -------------------- -->
     <HeaderList
       title="Услуги" 
       :items="services"
@@ -95,7 +95,10 @@ function closeDialog(): void {
       width="95%"
     >
      <template #items="{ item }">
-        <ServiceItem :service="item"/>
+        <ServiceItem
+          :isAdmin="true"
+          :service="item">
+        </ServiceItem>
       </template>
     </HeaderList>
   </MainContainer>

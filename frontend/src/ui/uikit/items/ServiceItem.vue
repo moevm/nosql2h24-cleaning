@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { Ref, ref, defineProps } from 'vue'
-import ActionButton from './ActionButton.vue'
-import InputTextField from './InputTextField.vue'
-import Dialog from './Dialog.vue'
+import ActionButton from '../ActionButton.vue'
+import InputTextField from '../inputs/InputTextField.vue'
+import Dialog from '../Dialog.vue'
 
 const props = defineProps<{
+  isAdmin: boolean;
   service: {
     id: string;
     name: string;
@@ -29,16 +30,25 @@ function closeDialog(): void {
     <p>{{ props.service.price }}</p>
     <div class="service-edit">
       <ActionButton
+        v-if="props.isAdmin"
         text="Редактировать"
         type="edit"
         color="#394cc2"
         variant="flat"
         @click="openDialog"
       ></ActionButton>
+      <ActionButton
+        v-else
+        text="Добавить"
+        type="add"
+        color="#394cc2"
+        variant="flat"
+      ></ActionButton>
     </div>
-    <!-- Dialog to edit worker -->
+    <!-- Dialog to edit service -->
     <Dialog
-      title="Редактирование исполнителя"
+      v-if="props.isAdmin"
+      title="Редактирование услуги"
       :visible="isDialogVisible"
       dialogMaxWidth="30%"
       @update:visible="closeDialog"

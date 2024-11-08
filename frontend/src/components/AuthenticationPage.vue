@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ActionButton from '../ui/uikit/ActionButton.vue'
-import InputTextField from '../ui/uikit/InputTextField.vue'
+import InputTextField from '../ui/uikit/inputs/InputTextField.vue'
 import { Ref, ref, computed } from 'vue'
 
 const isRegistrationAuthorization: Ref<boolean, boolean> = ref(true)

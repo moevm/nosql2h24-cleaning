@@ -1,144 +1,116 @@
-<template v-if="step == 1">
-  <div class="container">
-    <h1 class="title">Контактная информация</h1>
+<script setup lang="ts">
+import ActionButton from '../../ui/uikit/ActionButton.vue'
+import InputTextField from '../../ui/uikit/inputs/InputTextField.vue'
+</script>
+
+<template>
+  <div class="contact-info-container">
+    <h1>Контактная информация</h1>
     <v-form
-      class="action-container-form"
+      class="contact-info-container-form"
       validate-on="submit lazy" 
     >
-
       <div class="input-row">
         <InputTextField
-          class="input-field"
-          placeholder="Ваше имя"
+          placeholder="Введите имя"
           type="text"
           label="Имя"
-        />
+        ></InputTextField>
         <InputTextField
-          class="input-field"
-          placeholder="Ваша фамилия"
+          placeholder="Введите фамилию"
           type="text"
           label="Фамилия"
-        />
+        ></InputTextField>
       </div>
-
-      <div class="input-row">
         <InputTextField
-          class="input-field full-width"
-          placeholder="Номер телефона"
+          placeholder="Введите номер телефона"
           type="text"
           label="Номер телефона"
-        />
-      </div>
-
-      <div class="input-row address-row">
+        ></InputTextField>
+      <div class="input-row">
         <InputTextField
-          class="input-field full-width"
-          placeholder="Адрес"
+          placeholder="Введите адрес"
           type="text"
           label="Адрес"
-        />
+        ></InputTextField>
         <ActionButton
           id="my-address-btn"
           text="Мои адреса"
-          variant="text"
-        />
+          type="my-address"
+          variant="flat"
+          color="#394cc2"
+        ></ActionButton>
       </div>
-
       <div class="input-row">
         <InputTextField
-          class="input-field"
-          placeholder="Квартира"
+          placeholder="Введите квартиру"
           type="text"
           label="Квартира"
-        />
+        ></InputTextField>
         <InputTextField
-          class="input-field"
-          placeholder="Подъезд"
+          placeholder="Введите подъезд"
           type="text"
           label="Подъезд"
-        />
+        ></InputTextField>
         <InputTextField
-          class="input-field"
-          placeholder="Этаж"
+          placeholder="Введите этаж"
           type="text"
           label="Этаж"
-        />
+        ></InputTextField>
         <InputTextField
-          class="input-field"
-          placeholder="Домофон"
+          placeholder="Введите домофон"
           type="text"
           label="Домофон"
-        />
+        ></InputTextField>
       </div>
-
       <div class="input-row">
         <InputTextField
-          class="input-field"
-          placeholder="Дата"
+          placeholder="Введите дату"
           type="date"
           label="Дата"
-        />
+        ></InputTextField>
         <InputTextField
-          class="input-field"
-          placeholder="Время"
+          placeholder="Введите время"
           type="string"
           label="Время"
-        />
+        ></InputTextField>
       </div>
     </v-form>
   </div>
 </template>
 
-<script setup lang="ts">
-import ActionButton from '../../ui/uikit/ActionButton.vue'
-import InputTextField from '../../ui/uikit/InputTextField.vue'
-</script>
-
-
 <style scoped>
-.container {
+.contact-info-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  max-width: 100%;
-  height: 450px;
+  text-align: center;
+  height: auto;
+  width: 95%;
+  background-color: white;
   border: 2px solid grey;
   border-radius: 25px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  padding-left: 15px;
-  padding-right: 15px;
 }
-
+.contact-info-container-form {
+  max-height: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .input-row {
   display: flex;
-  width: 1000px;
-  height: 50px;
+  flex-direction: row;
+  align-items: flex-start;
   gap: 10px;
-  margin-bottom: 15px;
 }
-
-.full-width {
-  flex: 1;
-}
-
-.address-row {
-  display: flex;
-}
-
 #my-address-btn {
-  width: 150px;
-  height: 56px;
-  padding: 10px 15px;
-  font-size: 14px;
-  background-color: #394cc2;
-  color: white;
-  cursor: pointer;
+  height: 72%;
 }
-
 h1 {
   font-size: 42px;
   font-weight: bold;
+  margin-bottom: 10px;
 }
 </style>

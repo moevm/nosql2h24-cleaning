@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue'
-import HeaderList from '../ui/uikit/HeaderList.vue'
-import PanelContainer from '../ui/uikit/PanelContainer.vue'
-import ActionButton from '../ui/uikit/ActionButton.vue'
-import InputTextField from '../ui/uikit/InputTextField.vue'
-import MainContainer from '../ui/uikit/MainContainer.vue'
-import Dialog from '../ui/uikit/Dialog.vue'
-import WorkerItem from '../ui/uikit/WorkerItem.vue'
+import HeaderList from '../../ui/uikit/containers/HeaderList.vue'
+import PanelContainer from '../../ui/uikit/containers/PanelContainer.vue'
+import ActionButton from '../../ui/uikit/ActionButton.vue'
+import InputTextField from '../../ui/uikit/inputs/InputTextField.vue'
+import MainContainer from '../../ui/uikit/containers/MainContainer.vue'
+import Dialog from '../../ui/uikit/Dialog.vue'
+import WorkerItem from '../../ui/uikit/items/WorkerItem.vue'
 
 const workers = ref([
   {id: 1, firstName: "Иван", lastName: "Иванов", email: "example@mail.com"},
@@ -113,7 +113,7 @@ function closeDialog(): void {
         ></ActionButton>
       </template>
     </Dialog>
-    <!-------------------------->
+    <!-- -------------------- -->
     <HeaderList
       title="Исполнители" 
       :items="workers"
