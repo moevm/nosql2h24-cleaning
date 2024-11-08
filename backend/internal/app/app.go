@@ -13,6 +13,7 @@ import (
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/config"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/auth"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/middlewares"
+	v1services "github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/v1/services"
 	v1users "github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/v1/users"
 	mongorepo "github.com/moevm/nosql2h24-cleaning/cleaning/internal/repository/mongo"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/services"
@@ -43,7 +44,7 @@ func Run(cfg *config.Config) {
 	// create repositories
 	db := client.Database(cfg.MongoDB.DB)
 	userRepo := mongorepo.NewUserRepo(db)
-
+	serviceRepo := mongorepo.NewServiceRepo(db)
 	// create services
 	jwt := jwt.New(cfg.Auth.Secret)
 	hasher := hasher.New(10)
@@ -57,6 +58,10 @@ func Run(cfg *config.Config) {
 		logger,
 		hasher,
 		userRepo,
+	)
+	service := services.NewService(
+		logger,
+		serviceRepo,
 	)
 	// setup router
 	router := chi.NewRouter()
@@ -77,6 +82,7 @@ func Run(cfg *config.Config) {
 			r.Use(middlewares.NewAuthMiddleware(jwt).JWT)
 			// TODO: Add v1 routes
 			r.Mount("/users", v1users.New(userService).Routes())
+			r.Mount("/services", v1services.New(service).Routes())
 			// hardcoded to test
 			r.Get("/secret", func(w http.ResponseWriter, r *http.Request) {
 				id := r.Context().Value(middlewares.UserID).(string)

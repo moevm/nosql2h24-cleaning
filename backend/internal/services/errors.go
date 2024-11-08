@@ -13,4 +13,6 @@ var (
 
 	// Orders errors
 	// Service errors
+	ErrServiceAlreadyExist = errors.New("service already exist")
+	ErrServiceNotFound     = errors.New("service not found")
 )
