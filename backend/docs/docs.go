@@ -876,9 +876,15 @@ const docTemplate = `{
         },
         "models.Consumable": {
             "type": "object",
+            "required": [
+                "amount",
+                "ean_code",
+                "name"
+            ],
             "properties": {
                 "amount": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 1
                 },
                 "ean_code": {
                     "type": "string"
@@ -893,6 +899,13 @@ const docTemplate = `{
         },
         "models.NewUser": {
             "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password",
+                "phone_number",
+                "surname"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -916,6 +929,12 @@ const docTemplate = `{
         },
         "models.Service": {
             "type": "object",
+            "required": [
+                "consumables",
+                "name",
+                "price",
+                "workers_quantity"
+            ],
             "properties": {
                 "consumables": {
                     "type": "array",
@@ -948,6 +967,13 @@ const docTemplate = `{
         },
         "models.User": {
             "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password",
+                "phone_number",
+                "surname"
+            ],
             "properties": {
                 "addresses": {
                     "type": "array",
@@ -989,6 +1015,10 @@ const docTemplate = `{
         },
         "models.UserCredentials": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string"

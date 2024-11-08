@@ -7,15 +7,15 @@ import (
 )
 
 type UserCredentials struct {
-	Email    string `json:"email" bson:"email"`
-	Password string `json:"password,omitempty" bson:"password"`
+	Email    string `json:"email" bson:"email" validate:"required,email"`
+	Password string `json:"password,omitempty" bson:"password" validate:"required"`
 }
 
 type UserInfo struct {
-	Name        string `json:"name" bson:"name"`
-	Surname     string `json:"surname" bson:"surname"`
+	Name        string `json:"name" bson:"name" validate:"required"`
+	Surname     string `json:"surname" bson:"surname" validate:"required"`
 	Patronymic  string `json:"patronymic,omitempty" bson:"patronymic,omitempty"`
-	PhoneNumber string `json:"phone_number" bson:"phone_number"`
+	PhoneNumber string `json:"phone_number" bson:"phone_number" validate:"required"`
 }
 
 type User struct {

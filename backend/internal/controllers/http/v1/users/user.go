@@ -9,6 +9,7 @@ import (
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/models"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/services"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/httputil"
+	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/validate"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
@@ -64,6 +65,11 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	user.ID = _id
+
+	if err := validate.Validate.Struct(user); err != nil {
+		render.Render(w, r, httputil.NewError(http.StatusBadRequest, err))
+		return
+	}
 
 	if err := h.userService.UpdateUser(r.Context(), &user); err != nil {
 		if errors.Is(err, services.ErrUserNotFound) {
