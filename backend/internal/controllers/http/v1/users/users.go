@@ -29,7 +29,7 @@ func (h *Handler) GetUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	users, err := h.service.GetUsers(r.Context(), user_type)
+	users, err := h.userService.GetUsers(r.Context(), user_type)
 	if err != nil {
 		if errors.Is(err, services.ErrUserNotFound) {
 			render.Render(w, r, httputil.NewError(http.StatusNotFound, err))
@@ -59,7 +59,7 @@ func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	user.UserType = "WORKER"
 
-	id, err := h.service.CreateUser(r.Context(), &user)
+	id, err := h.userService.CreateUser(r.Context(), &user)
 	if err != nil {
 		if errors.Is(err, services.ErrUserNotFound) {
 			render.Render(w, r, httputil.NewError(http.StatusNotFound, err))

@@ -24,7 +24,7 @@ import (
 // @Router       /api/v1/users/{id} [get]
 func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	user, err := h.service.GetUserById(r.Context(), id)
+	user, err := h.userService.GetUserById(r.Context(), id)
 	if err != nil {
 		if errors.Is(err, services.ErrUserNotFound) {
 			render.Render(w, r, httputil.NewError(http.StatusNotFound, err))
@@ -65,7 +65,7 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	user.ID = _id
 
-	if err := h.service.UpdateUser(r.Context(), &user); err != nil {
+	if err := h.userService.UpdateUser(r.Context(), &user); err != nil {
 		if errors.Is(err, services.ErrUserNotFound) {
 			render.Render(w, r, httputil.NewError(http.StatusNotFound, err))
 			return
@@ -95,7 +95,7 @@ func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.service.DeleteUser(r.Context(), id); err != nil {
+	if err := h.userService.DeleteUser(r.Context(), id); err != nil {
 		if errors.Is(err, services.ErrUserNotFound) {
 			render.Render(w, r, httputil.NewError(http.StatusNotFound, err))
 			return

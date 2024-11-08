@@ -9,6 +9,7 @@ import (
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/repository"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type UserRepo struct {
@@ -132,5 +133,166 @@ func (r *UserRepo) DeleteUser(ctx context.Context, id string) error {
 		return repository.ErrNotFound
 	}
 
+	return nil
+}
+
+// Operations with user addresses
+func (r *UserRepo) CreateAddress(ctx context.Context, userID string, address *models.Address) (string, error) {
+	_id, err := bson.ObjectIDFromHex(userID)
+	if err != nil {
+		return "", repository.ErrInvalidArgument
+	}
+	address.ID = bson.NewObjectID()
+	address.CreatedAt = time.Now()
+
+	update := bson.D{
+		bson.E{
+			Key: "$push",
+			Value: bson.D{
+				{Key: "addresses", Value: address},
+			},
+		},
+		bson.E{
+			Key: "$currentDate",
+			Value: bson.D{
+				{Key: "updated_at", Value: true},
+			},
+		},
+	}
+
+	res, err := r.collection.UpdateByID(ctx, _id, update, options.Update().SetUpsert(true))
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return "", repository.ErrNotFound
+		}
+		return "", err
+	}
+	if res.ModifiedCount == 0 {
+		return "", repository.ErrNotFound
+	}
+	return address.ID.Hex(), nil
+}
+
+func (r *UserRepo) GetAddress(ctx context.Context, userID, addressID string) (*models.Address, error) {
+	user_id, userErr := bson.ObjectIDFromHex(userID)
+	address_id, addressErr := bson.ObjectIDFromHex(addressID)
+	if userErr != nil || addressErr != nil {
+		return nil, repository.ErrInvalidArgument
+	}
+
+	filter := bson.D{
+		{Key: "_id", Value: user_id},
+		{Key: "addresses._id", Value: address_id},
+	}
+	projection := bson.D{
+		{Key: "addresses", Value: bson.D{
+			{Key: "$elemMatch", Value: bson.D{
+				{Key: "_id", Value: address_id},
+			}},
+		}},
+	}
+
+	var user models.User
+	if err := r.collection.FindOne(
+		ctx,
+		filter,
+		options.FindOne().SetProjection(projection),
+	).Decode(&user); err != nil {
+		return nil, err
+	}
+
+	if len(user.Addresses) == 0 {
+		return nil, repository.ErrNotFound
+	}
+	return user.Addresses[0], nil
+}
+
+func (r *UserRepo) GetAddresses(ctx context.Context, userID string) ([]*models.Address, error) {
+	_id, err := bson.ObjectIDFromHex(userID)
+	if err != nil {
+		return nil, repository.ErrInvalidArgument
+	}
+
+	filter := bson.D{
+		{Key: "_id", Value: _id},
+	}
+	projection := bson.D{
+		{Key: "addresses", Value: 1},
+	}
+
+	var user models.User
+	if err := r.collection.FindOne(
+		ctx,
+		filter,
+		options.FindOne().SetProjection(projection),
+	).Decode(&user); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, repository.ErrNotFound
+		}
+		return nil, err
+	}
+
+	return user.Addresses, nil
+}
+
+func (r *UserRepo) UpdateAddress(ctx context.Context, userID string, address *models.Address) error {
+	_id, err := bson.ObjectIDFromHex(userID)
+	if err != nil {
+		return repository.ErrInvalidArgument
+	}
+	address.UpdatedAt = time.Now()
+
+	filter := bson.D{
+		{Key: "_id", Value: _id},
+		{Key: "addresses._id", Value: address.ID},
+	}
+	update := bson.D{
+		{Key: "$set", Value: bson.D{
+			{Key: "addresses.$", Value: address},
+		}},
+	}
+
+	res, err := r.collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return repository.ErrNotFound
+		}
+		return err
+	}
+	if res.ModifiedCount == 0 {
+		return repository.ErrNotFound
+	}
+
+	return nil
+}
+
+func (r *UserRepo) DeleteAddress(ctx context.Context, userID string, addressID string) error {
+	user_id, userErr := bson.ObjectIDFromHex(userID)
+	address_id, addressErr := bson.ObjectIDFromHex(addressID)
+	if userErr != nil || addressErr != nil {
+		return repository.ErrInvalidArgument
+	}
+
+	filter := bson.D{
+		{Key: "_id", Value: user_id},
+	}
+	update := bson.D{
+		{Key: "$pull", Value: bson.D{
+			{Key: "addresses", Value: bson.D{
+				{Key: "_id", Value: address_id},
+			}},
+		}},
+	}
+
+	res, err := r.collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return repository.ErrNotFound
+		}
+		return err
+	}
+	if res.ModifiedCount == 0 {
+		return repository.ErrNotFound
+	}
 	return nil
 }

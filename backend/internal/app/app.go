@@ -28,7 +28,7 @@ import (
 func Run(cfg *config.Config) {
 	docs.SwaggerInfo.Version = "v0.5.0"
 	// init logger
-	logger := zap.Must(zap.NewDevelopment())
+	logger := zap.Must(zap.NewDevelopment(zap.AddStacktrace(zap.PanicLevel)))
 
 	// connect to database
 	client, err := mongo.Connect(
@@ -59,6 +59,10 @@ func Run(cfg *config.Config) {
 		hasher,
 		userRepo,
 	)
+	addressService := services.NewAddressService(
+		logger,
+		userRepo,
+	)
 	service := services.NewService(
 		logger,
 		serviceRepo,
@@ -81,7 +85,7 @@ func Run(cfg *config.Config) {
 		r.Route("/v1", func(r chi.Router) {
 			r.Use(middlewares.NewAuthMiddleware(jwt).JWT)
 			// TODO: Add v1 routes
-			r.Mount("/users", v1users.New(userService).Routes())
+			r.Mount("/users", v1users.New(userService, addressService).Routes())
 			r.Mount("/services", v1services.New(service).Routes())
 			// hardcoded to test
 			r.Get("/secret", func(w http.ResponseWriter, r *http.Request) {
