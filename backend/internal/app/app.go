@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/docs"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/config"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/auth"
@@ -69,6 +70,11 @@ func Run(cfg *config.Config) {
 	)
 	// setup router
 	router := chi.NewRouter()
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+	}))
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
 
