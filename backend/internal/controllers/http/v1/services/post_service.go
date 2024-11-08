@@ -7,6 +7,7 @@ import (
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/models"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/types"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/httputil"
+	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/validate"
 )
 
 // Create new service
@@ -26,6 +27,12 @@ func (h *Hander) PostService(w http.ResponseWriter, r *http.Request) {
 		render.Render(w, r, httputil.NewError(http.StatusBadRequest, err))
 		return
 	}
+
+	if err := validate.Validate.Struct(service); err != nil {
+		render.Render(w, r, httputil.NewError(http.StatusBadRequest, err))
+		return
+	}
+
 	id, err := h.service.CreateService(r.Context(), &service)
 	if err != nil {
 		render.Render(w, r, httputil.NewError(http.StatusInternalServerError, err))

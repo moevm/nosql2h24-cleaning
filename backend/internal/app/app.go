@@ -22,6 +22,7 @@ import (
 	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/hasher"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/httpserver"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/mongo"
+	_ "github.com/moevm/nosql2h24-cleaning/cleaning/pkg/validate"
 	httpSwagger "github.com/swaggo/http-swagger"
 	"go.uber.org/zap"
 )

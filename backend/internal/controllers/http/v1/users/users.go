@@ -9,6 +9,7 @@ import (
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/services"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/types"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/httputil"
+	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/validate"
 )
 
 // Get users
@@ -58,6 +59,11 @@ func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	user.UserType = "WORKER"
+
+	if err := validate.Validate.Struct(user); err != nil {
+		render.Render(w, r, httputil.NewError(http.StatusBadRequest, err))
+		return
+	}
 
 	id, err := h.userService.CreateUser(r.Context(), &user)
 	if err != nil {

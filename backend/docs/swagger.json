@@ -865,9 +865,15 @@
         },
         "models.Consumable": {
             "type": "object",
+            "required": [
+                "amount",
+                "ean_code",
+                "name"
+            ],
             "properties": {
                 "amount": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 1
                 },
                 "ean_code": {
                     "type": "string"
@@ -882,6 +888,13 @@
         },
         "models.NewUser": {
             "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password",
+                "phone_number",
+                "surname"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -905,6 +918,12 @@
         },
         "models.Service": {
             "type": "object",
+            "required": [
+                "consumables",
+                "name",
+                "price",
+                "workers_quantity"
+            ],
             "properties": {
                 "consumables": {
                     "type": "array",
@@ -937,6 +956,13 @@
         },
         "models.User": {
             "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password",
+                "phone_number",
+                "surname"
+            ],
             "properties": {
                 "addresses": {
                     "type": "array",
@@ -978,6 +1004,10 @@
         },
         "models.UserCredentials": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string"

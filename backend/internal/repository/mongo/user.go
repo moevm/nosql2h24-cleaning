@@ -17,8 +17,18 @@ type UserRepo struct {
 }
 
 func NewUserRepo(db *mongo.Database) *UserRepo {
+	collection := db.Collection(UsersCollection)
+	// create unique constraint
+	collection.Indexes().CreateOne(
+		context.Background(),
+		mongo.IndexModel{
+			Keys:    bson.D{{Key: "email", Value: 1}},
+			Options: options.Index().SetUnique(true),
+		},
+	)
+
 	return &UserRepo{
-		collection: db.Collection(UsersCollection),
+		collection: collection,
 	}
 }
 
