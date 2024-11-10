@@ -5,9 +5,9 @@ interface Address {
   building: string;
   entrance: string;
   floor: string;
-  doorNumber: string;
-  createdAt: Date;
-  updatedAt?: Date;
+  door_number: string;
+  created_at: Date;
+  updated_at?: Date;
 }
 
 export default Address;

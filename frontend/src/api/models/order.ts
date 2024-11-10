@@ -3,21 +3,21 @@ import StatusLog from "./statuslog";
 
 interface Order {
   id: string;
-  userId: string;
+  user_id: string;
   address: Address;
-  dateTime: Date;
+  date_time: Date;
   price: number;
-  numberOfRooms: number;
-  numberOfBathrooms: number;
+  number_of_rooms: number;
+  number_of_bathrooms: number;
   pollution: number;
   area: number;
   comment: string;
-  statusLogs: StatusLog[];
+  status_logs: StatusLog[];
   services: string[];
-  requiredWorkers: number;
+  required_workers: number;
   workers: string[];
-  createdAt: Date;
-  updatedAt?: Date;
+  created_at: Date;
+  updated_at?: Date;
 }
 
 export default Order;

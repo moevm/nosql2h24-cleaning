@@ -4,11 +4,11 @@ interface Service {
     id: string;
     name: string;
     price: number;
-    workersQuantity: number;
+    workers_quantity: number;
     description: string;
     consumables: Consumable[];
-    createdAt: Date;
-    updatedAt?: Date
+    created_at: Date;
+    updated_at?: Date
   }
 
 export default Service;

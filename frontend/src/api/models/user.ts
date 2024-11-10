@@ -9,7 +9,7 @@ export interface UserInfo {
   name: string;
   surname: string;
   patronymic?: string;
-  phoneNumber: string;
+  phone_number: string;
 }
 
 export interface User {
@@ -19,11 +19,11 @@ export interface User {
   name: string;
   surname: string;
   patronymic?: string;
-  phoneNumber: string;
+  phone_number: string;
   addresses?: Address[];
-  userType: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  user_type: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export interface NewUser {
@@ -32,5 +32,5 @@ export interface NewUser {
   name: string;
   surname: string;
   patronymic?: string;
-  phoneNumber: string;
+  phone_number: string;
 }

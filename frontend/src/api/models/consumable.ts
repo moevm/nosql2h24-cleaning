@@ -1,6 +1,6 @@
 interface Consumable {
   id: string;
-  eanCode: string;
+  ean_code: string;
   name: string;
   amount: number;
 }

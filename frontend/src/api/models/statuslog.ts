@@ -1,8 +1,8 @@
 interface StatusLog {
   id: string;
-  prevStatus: string;
-  newStatus: string;
-  createdAt: Date;
+  prev_status: string;
+  new_status: string;
+  created_at: Date;
 }
 
 export default StatusLog;
