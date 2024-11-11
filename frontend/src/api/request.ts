@@ -1,7 +1,25 @@
-import Address from "./models/address";
-import { getClientAddressesPath, createNewAddressPath } from "./endpoint";
+import axios from 'axios'
+import { NewUser } from './models/user'
+import Address from './models/address'
+import {
+  getRegisterPath,
+  getLogoutPath,
+  getLoginPath,
+  getClientAddressesPath,
+  createNewAddressPath 
+} from './endpoint'
 
-const baseURL = 'http://localhost:8081/api/v1';
+const baseURL = 'http://localhost:8081/api'
+
+export async function postRegister (data: NewUser): Promise<void> {
+  return axios.post(baseURL + getRegisterPath, data)
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error)
+  })
+}
 
 export async function getClientAddresses(id: number): Promise<Address[]> {
   try {
