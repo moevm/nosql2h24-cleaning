@@ -2,16 +2,14 @@
 import { defineProps } from 'vue'
 
 const props = defineProps<{
-  address: {
-    id: string;
-    address: string;
-  }
+  address: string;
+  // id: string; раскомментировать после добавления авторизации
 }>()
 </script>
 
 <template>
   <div class="address-item">
-    <p>{{ props.address.address }}</p>
+    <p>{{ props.address }}</p>
   </div>
 </template>
 
