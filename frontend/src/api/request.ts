@@ -38,7 +38,7 @@ export function createWorkerUser(newWorker: User): Promise<{ id: string }> {
   })
 }
 
-export function getUserInfo(id: number): Promise<User> {
+export function getUserInfo(id: string): Promise<User> {
   return axios.get<User>(baseURL + getUserInfoPath(id))
   .then((response) => {
     return response.data
@@ -49,7 +49,7 @@ export function getUserInfo(id: number): Promise<User> {
   })
 }
 
-export function updateUser(id: number, newUserData: User): Promise<any> {
+export function updateUser(id: string, newUserData: User): Promise<any> {
   return axios.put<User>(baseURL + updateUserPath(id), newUserData)
   .then((response) => {
     return response.data
@@ -60,7 +60,7 @@ export function updateUser(id: number, newUserData: User): Promise<any> {
   })
 }
 
-export function deleteUser(id: number): Promise<any> {
+export function deleteUser(id: string): Promise<any> {
   return axios.delete(baseURL + deleteUserPath(id))
   .then((response) => {
     return response.data
@@ -71,7 +71,7 @@ export function deleteUser(id: number): Promise<any> {
   })
 }
 
-export function getClientAddress(id: number, address_id: number): Promise<Address> {
+export function getClientAddress(id: string, address_id: string): Promise<Address> {
   return axios.get<Address>(baseURL + getClientAddressPath(id, address_id))
   .then((response) => {
     return response.data
@@ -82,7 +82,7 @@ export function getClientAddress(id: number, address_id: number): Promise<Addres
   })
 }
 
-export function updateClientAddress(id: number, address_id: number, newAddress: Address): Promise<any> {
+export function updateClientAddress(id: string, address_id: string, newAddress: Address): Promise<any> {
   return axios.put<Address>(baseURL + updateClientAddressPath(id, address_id), newAddress)
   .then((response) => {
     return response.data
@@ -93,7 +93,7 @@ export function updateClientAddress(id: number, address_id: number, newAddress: 
   })
 }
 
-export function deleteClientAddress(id: number, address_id: number): Promise<any> {
+export function deleteClientAddress(id: string, address_id: string): Promise<any> {
   return axios.delete(baseURL + deleteClientAddressPath(id, address_id))
   .then((response) => {
     return response.data
@@ -104,7 +104,7 @@ export function deleteClientAddress(id: number, address_id: number): Promise<any
   })
 }
 
-export function getClientAddresses(id: number): Promise<Address[]> {
+export function getClientAddresses(id: string): Promise<Address[]> {
   return axios.get<Address[]>(baseURL + getClientAddressesPath(id))
   .then((response) => {
     return response.data
@@ -115,7 +115,7 @@ export function getClientAddresses(id: number): Promise<Address[]> {
   })
 }
 
-export function createNewAddress(id: number, addressData: Address): Promise<any> {
+export function createNewAddress(id: string, addressData: Address): Promise<any> {
   return axios.post(baseURL + createNewAddressPath(id), addressData)
   .then((response) => {
     return response.data
