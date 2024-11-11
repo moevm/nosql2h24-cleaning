@@ -38,41 +38,43 @@ function formatAddress(item: any): string {
 }
 
 async function fetchClientAddresses(clientId: number) {
-  try {
-    const response = await getClientAddresses(clientId)
+  getClientAddresses(clientId)
+  .then((response) => {
     addresses.value = response
-  } catch (error) {
+  })
+  .catch((error) => {
     console.error("Failed to fetch client addresses:", error)
-  }
+  })
 }
 
 async function addNewAddress(clientId: number) {
   closeDialog()
-  try {
-    const addressData: Address = {
-      id: clientId.toString(),
-      city: newAddress.value.city,
-      street: newAddress.value.street,
-      building: newAddress.value.building,
-      entrance: newAddress.value.entrance,
-      floor: newAddress.value.floor,
-      door_number: newAddress.value.door_number,
-      created_at: new Date(),
-      updated_at: new Date()
-    };
-    addresses.value.push(addressData);
-    const newAddressId = await createNewAddress(clientId, addressData);
+  const addressData: Address = {
+    id: clientId.toString(),
+    city: newAddress.value.city,
+    street: newAddress.value.street,
+    building: newAddress.value.building,
+    entrance: newAddress.value.entrance,
+    floor: newAddress.value.floor,
+    door_number: newAddress.value.door_number,
+    created_at: new Date(),
+    updated_at: new Date()
+  };
+  addresses.value.push(addressData);
 
+  createNewAddress(clientId, addressData)
+  .then((newAddressId) => {
     /* раскомментировать после добавления авторизации
     addresses.value.push({
       ...addressData, 
       id: newAddressId
     });
     */
-  } catch (error) {
-    console.error("Failed to add new address:", error);
+  })
+  .catch((error) => {
+    console.error("Failed to createNewAddress:", error)
     // addresses.value.pop() раскомментировать после добавления авторизации
-  }
+  })
 }
 </script>
 
