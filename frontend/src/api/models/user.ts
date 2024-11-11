@@ -26,11 +26,11 @@ export interface User {
   updated_at?: Date;
 }
 
-export interface NewUser {
-  email: string;
-  password?: string;
-  name: string;
-  surname: string;
-  patronymic?: string;
-  phone_number: string;
+export type NewUser = {
+  email: string,
+  name: string,
+  password: string,
+  patronymic: string,
+  phone_number: string,
+  surname: string
 }
