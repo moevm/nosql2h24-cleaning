@@ -50,7 +50,7 @@
             "surname": "Сидоров",
             "patronymic": "Петрович",
             "email": "admin@mail.ru",
-            "password": "$2a$10$6sFtN2w5AFCsIjIj6LRt9uBHRGJHiAOAyJlAalnENRRCA6VkL6jnq",
+            "password": "$2a$10$cHfplFCb7OJ72ccGZLZhRuqY/3CYBJ1FvSKVQg709I4wlhCYC0bT2",
             "phone_number": "+7 (888) 123-66-96",
             "user_type": "ADMIN",
             "created_at": "2021-03-19T10:00:00.000Z"
