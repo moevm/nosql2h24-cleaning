@@ -136,7 +136,7 @@ func Run(cfg *config.Config) {
 
 		// route v1
 		r.Route("/v1", func(r chi.Router) {
-			r.Use(middlewares.NewAuthMiddleware(jwt).JWT)
+			// r.Use(middlewares.NewAuthMiddleware(jwt).JWT)
 			// TODO: Add v1 routes
 			r.Mount("/users", v1users.New(userService, addressService).Routes())
 			r.Mount("/services", v1services.New(service).Routes())
