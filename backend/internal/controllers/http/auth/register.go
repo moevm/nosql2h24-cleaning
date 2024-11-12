@@ -22,21 +22,18 @@ import (
 // @Failure      500  {object}  httputil.HTTPError
 // @Router       /api/auth/register [post]
 func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
-	var creds models.UserCredentials
-	if err := render.DecodeJSON(r.Body, &creds); err != nil {
+	var user models.User
+	if err := render.DecodeJSON(r.Body, &user); err != nil {
 		render.Render(w, r, httputil.NewError(http.StatusBadRequest, err))
 		return
 	}
 
-	if err := validate.Validate.Struct(creds); err != nil {
+	if err := validate.Validate.Struct(user); err != nil {
 		render.Render(w, r, httputil.NewError(http.StatusBadRequest, err))
 		return
 	}
 
-	id, err := h.auth.Register(r.Context(), &models.User{
-		UserCredentials: creds,
-		UserType:        "CLIENT",
-	})
+	id, err := h.auth.Register(r.Context(), &user)
 	if err != nil {
 		render.Render(w, r, httputil.NewError(http.StatusInternalServerError, err))
 		return

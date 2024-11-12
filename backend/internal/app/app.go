@@ -1,11 +1,15 @@
 package app
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -16,6 +20,7 @@ import (
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/middlewares"
 	v1services "github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/v1/services"
 	v1users "github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/v1/users"
+	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/models"
 	mongorepo "github.com/moevm/nosql2h24-cleaning/cleaning/internal/repository/mongo"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/services"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/services/jwt"
@@ -25,10 +30,13 @@ import (
 	_ "github.com/moevm/nosql2h24-cleaning/cleaning/pkg/validate"
 	httpSwagger "github.com/swaggo/http-swagger"
 	"go.uber.org/zap"
+	"golang.org/x/sync/errgroup"
 )
 
+const Version = "v0.5.0"
+
 func Run(cfg *config.Config) {
-	docs.SwaggerInfo.Version = "v0.5.0"
+	docs.SwaggerInfo.Version = Version
 	// init logger
 	logger := zap.Must(zap.NewDevelopment(zap.AddStacktrace(zap.PanicLevel)))
 
@@ -47,6 +55,44 @@ func Run(cfg *config.Config) {
 	db := client.Database(cfg.MongoDB.DB)
 	userRepo := mongorepo.NewUserRepo(db)
 	serviceRepo := mongorepo.NewServiceRepo(db)
+	orderRepo := mongorepo.NewOrderRepo(db)
+
+	// load dump
+	// bad practice, but it's just a prototype
+	// my last brain cell is dying
+	if file, err := os.OpenFile("/dump/dump.json", os.O_RDONLY, 0666); err == nil {
+		defer file.Close()
+		logger.Info("app - Run - loading dump")
+
+		data, _ := io.ReadAll(file)
+
+		var dump models.Dump
+		if err := json.Unmarshal(data, &dump); err != nil {
+			logger.Error("app - Run - unmarshal dump failed", zap.Any("error", err))
+		}
+		logger.Info("dump", zap.Any("dump.Users", dump.Users))
+		logger.Info("dump", zap.Any("dump.Orders", dump.Orders))
+		logger.Info("dump", zap.Any("dump.Services", dump.Services))
+		// insert dump
+		eg := errgroup.Group{}
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+
+		eg.Go(func() error {
+			return userRepo.InsertMany(ctx, dump.Users)
+		})
+		eg.Go(func() error {
+			return serviceRepo.InsertMany(ctx, dump.Services)
+		})
+		eg.Go(func() error {
+			return orderRepo.InsertMany(ctx, dump.Orders)
+		})
+
+		if err := eg.Wait(); err != nil {
+			logger.Error("app - Run - loading dump failed", zap.Any("error", err))
+		}
+		cancel()
+	}
+
 	// create services
 	jwt := jwt.New(cfg.Auth.Secret)
 	hasher := hasher.New(10)

@@ -13,4 +13,6 @@ FROM scratch AS release
 COPY --from=builder /bin/app /app
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
+COPY /dump /dump
+
 CMD ["/app"]

@@ -32,6 +32,18 @@ func NewUserRepo(db *mongo.Database) *UserRepo {
 	}
 }
 
+func (r *UserRepo) InsertMany(ctx context.Context, users []models.User) error {
+	val, err := r.collection.EstimatedDocumentCount(ctx)
+	if err != nil {
+		return err
+	}
+	if val != 0 {
+		return repository.ErrNotEmpty
+	}
+	_, err = r.collection.InsertMany(ctx, users)
+	return err
+}
+
 func (r *UserRepo) CreateUser(ctx context.Context, user *models.User) (string, error) {
 	user.CreatedAt = time.Now()
 

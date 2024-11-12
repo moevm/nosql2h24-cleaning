@@ -58,6 +58,9 @@ func (r *AuthService) Register(ctx context.Context, user *models.User) (string, 
 	}
 	user.Password = hash
 
+	// On registration user is always a client
+	user.UserType = "CLIENT"
+
 	id, err := r.repo.CreateUser(ctx, user)
 	if err != nil {
 		if errors.Is(err, repository.ErrAlreadyExist) {
