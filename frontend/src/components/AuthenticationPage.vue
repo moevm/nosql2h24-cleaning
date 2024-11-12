@@ -45,7 +45,7 @@ const actionContainerStyle: any = computed(() => {
 })
 
 function handleSubmit(): void {
-  loading.value = true
+  loading.value = false
   if (isRegistrationAuthorization.value) {
     postLogin({
       email: email.value,
