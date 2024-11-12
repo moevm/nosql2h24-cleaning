@@ -74,7 +74,7 @@ func (r *AuthService) Register(ctx context.Context, user *models.User) (string, 
 	return id, nil
 }
 
-func (r *AuthService) Login(ctx context.Context, user *models.User) (*models.Token, error) {
+func (r *AuthService) Login(ctx context.Context, user *models.User) (*models.User, *models.Token, error) {
 	l := r.log.With(
 		zap.Any("operation", "AuthService.Login"),
 		zap.Any("email", user.Email),
@@ -84,21 +84,28 @@ func (r *AuthService) Login(ctx context.Context, user *models.User) (*models.Tok
 	if err != nil {
 		if errors.Is(err, repository.ErrNotFound) {
 			l.Info(err.Error())
-			return nil, ErrUserNotFound
+			return nil, nil, ErrUserNotFound
 		}
 
 		l.Error(
 			"failed to get user",
 			zap.Any("error", err),
 		)
-		return nil, err
+		return nil, nil, err
 	}
 
 	if !r.hasher.Compare(user.Password, userFromDB.Password) {
 		l.Info("invalid password")
-		return nil, ErrIncorrectPassword
+		return nil, nil, ErrIncorrectPassword
 	}
-	return r.generateJWT(ctx, userFromDB)
+	token, err := r.generateJWT(ctx, userFromDB)
+	if err != nil {
+		l.Error("failed to generate jwt")
+		return nil, nil, err
+	}
+	// Do not return password hash
+	userFromDB.Password = ""
+	return userFromDB, token, nil
 }
 
 func (r *AuthService) Logout(ctx context.Context, refreshToken string) error {

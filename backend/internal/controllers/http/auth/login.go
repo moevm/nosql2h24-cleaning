@@ -16,7 +16,7 @@ import (
 // @Tags         Auth
 // @Accept       json
 // @Param		 Creds body models.UserCredentials true "User credentials"
-// @Success      200
+// @Success      200  {object} models.User
 // @Failure      400  {object}  httputil.HTTPError
 // @Failure      500  {object}  httputil.HTTPError
 // @Router       /api/auth/login [post]
@@ -30,7 +30,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		render.Render(w, r, httputil.NewError(http.StatusBadRequest, err))
 		return
 	}
-	token, err := h.auth.Login(r.Context(), &models.User{
+	user, token, err := h.auth.Login(r.Context(), &models.User{
 		UserCredentials: creds,
 	})
 	if err != nil {
@@ -45,4 +45,5 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		MaxAge:   7 * 24 * 60 * 60, // 7 days
 		HttpOnly: true,
 	})
+	render.JSON(w, r, user)
 }

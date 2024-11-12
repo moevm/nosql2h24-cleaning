@@ -9,7 +9,7 @@ import (
 
 type AuthService interface {
 	Register(ctx context.Context, user *models.User) (string, error)
-	Login(ctx context.Context, user *models.User) (*models.Token, error)
+	Login(ctx context.Context, user *models.User) (*models.User, *models.Token, error)
 	Logout(ctx context.Context, refreshToken string) error
 }
 
