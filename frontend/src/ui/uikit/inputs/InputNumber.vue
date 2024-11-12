@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<NumberField>(), {
     :min="props.min"
     :max="props.max"
     :step="props.step"
-    variant="outlined"
+    variant="solo"
     control-variant="split"
   ></v-number-input>
 </template>
