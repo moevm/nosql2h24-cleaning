@@ -11,13 +11,17 @@ import (
 
 const mongodb_uri = "mongodb://%s:%s@%s:%d"
 
+func MongoURI(user, password, hostname string, port int) string {
+	return fmt.Sprintf(mongodb_uri, user, password, hostname, port)
+}
+
 func Connect(
 	user string,
 	password string,
 	hostname string,
 	port int,
 ) (*mongo.Client, error) {
-	uri := fmt.Sprintf(mongodb_uri, user, password, hostname, port)
+	uri := MongoURI(user, password, hostname, port)
 
 	client, err := mongo.Connect(options.Client().ApplyURI(uri))
 	if err != nil {

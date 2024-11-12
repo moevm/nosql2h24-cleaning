@@ -21,6 +21,18 @@ func NewServiceRepo(db *mongo.Database) *ServiceRepo {
 	}
 }
 
+func (r *ServiceRepo) InsertMany(ctx context.Context, services []models.Service) error {
+	val, err := r.collection.EstimatedDocumentCount(ctx)
+	if err != nil {
+		return err
+	}
+	if val != 0 {
+		return repository.ErrNotEmpty
+	}
+	_, err = r.collection.InsertMany(ctx, services)
+	return err
+}
+
 func (r *ServiceRepo) CreateService(ctx context.Context, service *models.Service) (string, error) {
 	service.CreatedAt = time.Now()
 

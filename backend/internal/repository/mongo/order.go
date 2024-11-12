@@ -21,6 +21,18 @@ func NewOrderRepo(db *mongo.Database) *OrderRepo {
 	}
 }
 
+func (r *OrderRepo) InsertMany(ctx context.Context, orders []models.Order) error {
+	val, err := r.collection.EstimatedDocumentCount(ctx)
+	if err != nil {
+		return err
+	}
+	if val != 0 {
+		return repository.ErrNotEmpty
+	}
+	_, err = r.collection.InsertMany(ctx, orders)
+	return err
+}
+
 func (r *OrderRepo) CreateOrder(ctx context.Context, order *models.Order) (string, error) {
 	order.CreatedAt = time.Now()
 
