@@ -3,9 +3,11 @@ import ActionButton from '../ui/uikit/ActionButton.vue'
 import InputTextField from '../ui/uikit/inputs/InputTextField.vue'
 import { postRegister, postLogin } from '../api/request'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../store/user'
 import { Ref, ref, computed } from 'vue'
 
 const router = useRouter()
+const userStore = useUserStore()
 const isRegistrationAuthorization: Ref<boolean> = ref(true)
 const loading: Ref<boolean> = ref(false)
 
@@ -48,10 +50,21 @@ function handleSubmit(): void {
     postLogin({
       email: email.value,
       password: password.value
-    }).then((success) => {
+    }).then((user) => {
       defaultUserData()
+      userStore.setUser(user)
       loading.value = false
-      router.push('/cleaning/')
+      // switch(user.user_type) {
+      //   case 'CLIENT':
+      //     router.push(`/cleaning/client${user.id}`)
+      //     break
+      //   case 'WORKER':
+      //     router.push(`/cleaning/worker${user.id}`)
+      //     break
+      //   case 'ADMIN':
+      //     router.push(`/cleaning/admin`)
+      //     break
+      // }
     }).catch((error) => {
       loading.value = false
     })

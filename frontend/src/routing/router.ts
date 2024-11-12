@@ -22,7 +22,7 @@ const routes = [
     children: [
       {
         name: 'client',
-        path: 'client:id(\\d+)',
+        path: 'client:id([a-fA-F0-9]+)',
         component: ClientMainPage,
         children: [
           {

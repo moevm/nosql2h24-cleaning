@@ -1,12 +1,12 @@
 import axios from 'axios'
 import {
   UserRegisterData,
-  UserLoginData
+  UserLoginData,
+  User
 } from './models/user'
 import Address from './models/address'
 import {
   getRegisterPath,
-  getLogoutPath,
   getLoginPath,
   getClientAddressesPath,
   createNewAddressPath 
@@ -24,9 +24,10 @@ export async function postRegister (data: UserRegisterData): Promise<void> {
   })
 }
 
-export async function postLogin (data: UserLoginData): Promise<void> {
+export async function postLogin (data: UserLoginData): Promise<User> {
   return axios.post(baseURL + getLoginPath, data)
   .then((response) => {
+    console.log(response.data)
     return Promise.resolve(response.data)
   })
   .catch((error) => {
@@ -34,10 +35,9 @@ export async function postLogin (data: UserLoginData): Promise<void> {
   })
 }
 
-export async function getUser(id: string): Promise<void> {
-  return axios.get(baseURL + `/v1/users/${id}`)
-  .then((response) => {})
-}
+// export async function getUser(id: string): Promise<void> {
+//   return axios.get(baseURL + `/v1/users/${id}`)
+// }
 
 export async function getClientAddresses(id: number): Promise<Address[]> {
   try {
