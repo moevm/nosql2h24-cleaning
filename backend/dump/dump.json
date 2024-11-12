@@ -6,6 +6,7 @@
             "surname": "Гоген",
             "patronymic": "Елисеевич",
             "email": "phill@mail.ru",
+            "password": "$2a$10$hZxnc1XMWvz6HJnN8sFrhOTPgBoBOuiX0.QpDg3v9udR0kcqviojO",
             "addresses": [
                 {
                     "id": "fa26c4a64672e9b383565ed3",
@@ -38,16 +39,18 @@
             "surname": "Петров",
             "patronymic": "Иванович",
             "email": "andrey@mail.ru",
+            "password": "$2a$10$dC8NSVsldxLdQbSzW9DPCO4LWoP1ZJDzdH0tbW5aPdUG.XOyIe596",
             "phone_number": "+7 (999) 010-10-22",
             "user_type": "WORKER",
             "created_at": "2021-03-20T12:13:00.000Z"
         },
         {
-            "id": "5ed3fa26c4a64672e9b383565",
+            "id": "5ed3a26c4a64672e9b383565",
             "name": "Иван",
             "surname": "Сидоров",
             "patronymic": "Петрович",
             "email": "admin@mail.ru",
+            "password": "$2a$10$6sFtN2w5AFCsIjIj6LRt9uBHRGJHiAOAyJlAalnENRRCA6VkL6jnq",
             "phone_number": "+7 (888) 123-66-96",
             "user_type": "ADMIN",
             "created_at": "2021-03-19T10:00:00.000Z"
@@ -65,13 +68,13 @@
                     "id": "a64672e9b383565ed3fa26c4",
                     "name": "Утюг",
                     "ean_code": "1234567890123",
-                    "quantity": 1
+                    "amount": 1
                 },
                 {
                     "id": "fa26c4a64672e9b383565ed3",
                     "name": "Гладильная доска",
                     "ean_code": "9134567890124",
-                    "quantity": 1
+                    "amount": 1
                 }
             ],
             "created_at": "2021-03-23T10:00:00.000Z"
@@ -87,13 +90,13 @@
                     "id": "b383565ed3fa26c4a64672e9",
                     "name": "Пылесос",
                     "ean_code": "2345678901234",
-                    "quantity": 1
+                    "amount": 1
                 },
                 {
                     "id": "c4a64672e9b383565ed3fa26",
                     "name": "Моющее средство",
                     "ean_code": "3456789012345",
-                    "quantity": 1
+                    "amount": 1
                 }
             ],
             "created_at": "2021-03-25T08:00:00.000Z"
@@ -109,7 +112,7 @@
                     "id": "d3fa26c4a64672e9b38356ed",
                     "name": "Моющее средство",
                     "ean_code": "3456789012345",
-                    "quantity": 1
+                    "amount": 1
                 }
             ],
             "created_at": "2021-03-25T15:00:00.000Z"

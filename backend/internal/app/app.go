@@ -67,8 +67,12 @@ func Run(cfg *config.Config) {
 		data, _ := io.ReadAll(file)
 
 		var dump models.Dump
-		json.Unmarshal(data, &dump)
-
+		if err := json.Unmarshal(data, &dump); err != nil {
+			logger.Error("app - Run - unmarshal dump failed", zap.Any("error", err))
+		}
+		logger.Info("dump", zap.Any("dump.Users", dump.Users))
+		logger.Info("dump", zap.Any("dump.Orders", dump.Orders))
+		logger.Info("dump", zap.Any("dump.Services", dump.Services))
 		// insert dump
 		eg := errgroup.Group{}
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
