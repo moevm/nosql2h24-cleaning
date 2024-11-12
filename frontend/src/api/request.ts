@@ -1,5 +1,8 @@
 import axios from 'axios'
-import { NewUser } from './models/user'
+import {
+  UserRegisterData,
+  UserLoginData
+} from './models/user'
 import Address from './models/address'
 import {
   getRegisterPath,
@@ -11,7 +14,7 @@ import {
 
 const baseURL = 'http://localhost:8081/api'
 
-export async function postRegister (data: NewUser): Promise<void> {
+export async function postRegister (data: UserRegisterData): Promise<void> {
   return axios.post(baseURL + getRegisterPath, data)
   .then((response) => {
     return Promise.resolve(response.data)
@@ -19,6 +22,21 @@ export async function postRegister (data: NewUser): Promise<void> {
   .catch((error) => {
     return Promise.reject(error)
   })
+}
+
+export async function postLogin (data: UserLoginData): Promise<void> {
+  return axios.post(baseURL + getLoginPath, data)
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error)
+  })
+}
+
+export async function getUser(id: string): Promise<void> {
+  return axios.get(baseURL + `/v1/users/${id}`)
+  .then((response) => {})
 }
 
 export async function getClientAddresses(id: number): Promise<Address[]> {

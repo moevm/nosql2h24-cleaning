@@ -1,8 +1,8 @@
 import Address from "./address";
 
-export interface UserCredentials {
+export type UserLoginData = {
   email: string;
-  password?: string;
+  password: string;
 }
 
 export interface UserInfo {
@@ -26,7 +26,7 @@ export interface User {
   updated_at?: Date;
 }
 
-export type NewUser = {
+export type UserRegisterData = {
   email: string,
   name: string,
   password: string,
