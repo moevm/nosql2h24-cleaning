@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { inject, onMounted } from 'vue'
 import { RouterView } from 'vue-router'
+import { useUserStore } from '../../store/user';
+import { getUsers } from '../../api/request';
 
+const userStore = useUserStore()
+const user = userStore.getUser()
 const addSideBarButtons: Function | undefined = inject('addSideBarButtons')
 const setUserCard: Function | undefined = inject('setUserCard')
 
@@ -34,7 +38,11 @@ onMounted(() => {
       to: `/cleaning/admin/statistics`
     }
   )
-  setUserCard!('Иван Иванов', 'example@mail.com')
+  setUserCard!(`${user?.name} ${user?.surname}`, `${user?.email}`)
+  
+  getUsers('CLIENT').then((users) => {
+    console.log(users)
+  })
 })
 </script>
 
