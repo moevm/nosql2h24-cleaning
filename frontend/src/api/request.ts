@@ -8,6 +8,7 @@ import Address from './models/address'
 import {
   getRegisterPath,
   getLoginPath,
+  getUsersPath,
   getClientAddressesPath,
   createNewAddressPath 
 } from './endpoint'
@@ -35,9 +36,16 @@ export async function postLogin (data: UserLoginData): Promise<User> {
   })
 }
 
-// export async function getUser(id: string): Promise<void> {
-//   return axios.get(baseURL + `/v1/users/${id}`)
-// }
+export async function getUsers(type: string): Promise<void> {
+  const params = {type: type}
+  return axios.get(baseURL + getUsersPath, {params: params})
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error)
+  })
+}
 
 export async function getClientAddresses(id: number): Promise<Address[]> {
   try {

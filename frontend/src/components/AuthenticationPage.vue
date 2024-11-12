@@ -54,17 +54,17 @@ function handleSubmit(): void {
       defaultUserData()
       userStore.setUser(user)
       loading.value = false
-      // switch(user.user_type) {
-      //   case 'CLIENT':
-      //     router.push(`/cleaning/client${user.id}`)
-      //     break
-      //   case 'WORKER':
-      //     router.push(`/cleaning/worker${user.id}`)
-      //     break
-      //   case 'ADMIN':
-      //     router.push(`/cleaning/admin`)
-      //     break
-      // }
+      switch(user.user_type) {
+        case 'CLIENT':
+          router.push(`/cleaning/client${user.id}`)
+          break
+        case 'WORKER':
+          router.push(`/cleaning/worker${user.id}`)
+          break
+        case 'ADMIN':
+          router.push(`/cleaning/admin`)
+          break
+      }
     }).catch((error) => {
       loading.value = false
     })
