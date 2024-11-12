@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import ActionButton from '../ui/uikit/ActionButton.vue'
 import InputTextField from '../ui/uikit/inputs/InputTextField.vue'
+import { postRegister, postLogin } from '../api/request'
+import { useRouter } from 'vue-router'
 import { Ref, ref, computed } from 'vue'
-import { postRegister } from '../api/request'
 
+const router = useRouter()
 const isRegistrationAuthorization: Ref<boolean> = ref(true)
 const loading: Ref<boolean> = ref(false)
 
@@ -12,14 +14,25 @@ const email: Ref<string> = ref('')
 const name: Ref<string> = ref('')
 const password: Ref<string> = ref('')
 const patronymic: Ref<string> = ref('')
-const phone_number: Ref<string> = ref('')
+const phoneNumber: Ref<string> = ref('')
 const surname: Ref<string> = ref('')
 
+function defaultUserData(): void {
+  email.value = ''
+  name.value = ''
+  password.value = ''
+  patronymic.value = ''
+  phoneNumber.value = ''
+  surname.value = ''
+}
+
 function handleAuthorizationClick(): void {
+  defaultUserData()
   isRegistrationAuthorization.value = true
 }
 
 function handleRegistrationClick(): void {
+  defaultUserData()
   isRegistrationAuthorization.value = false
 }
 
@@ -32,17 +45,27 @@ const actionContainerStyle: any = computed(() => {
 function handleSubmit(): void {
   loading.value = true
   if (isRegistrationAuthorization.value) {
-    // login
+    postLogin({
+      email: email.value,
+      password: password.value
+    }).then((success) => {
+      defaultUserData()
+      loading.value = false
+      router.push('/cleaning/')
+    }).catch((error) => {
+      loading.value = false
+    })
   } else {
     postRegister({
       email: email.value,
       name: name.value,
       password: password.value,
       patronymic: patronymic.value,
-      phone_number: phone_number.value,
+      phone_number: phoneNumber.value,
       surname: surname.value
     }).then((success) => {
-      console.log(success) // login success
+      defaultUserData()
+      isRegistrationAuthorization.value = true
       loading.value = false
     }).catch((error) => {
       loading.value = false
@@ -105,7 +128,7 @@ function handleSubmit(): void {
             label="Отчество"
           ></InputTextField>
           <InputTextField
-            v-model="phone_number"
+            v-model="phoneNumber"
             class="input-field"
             placeholder="Введите телефон"
             type="phonenumber"
