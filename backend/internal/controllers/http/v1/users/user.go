@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
+	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/middlewares"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/models"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/services"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/httputil"
@@ -25,6 +26,9 @@ import (
 // @Router       /api/v1/users/{id} [get]
 func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
+	if id == "me" {
+		id = r.Context().Value(middlewares.UserID).(string)
+	}
 	user, err := h.userService.GetUserById(r.Context(), id)
 	if err != nil {
 		if errors.Is(err, services.ErrUserNotFound) {
