@@ -92,7 +92,7 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 // @Accept       json
 // @Produce      json
 // @Param id path string true "User id"
-// @Success      200
+// @Success      204
 // @Failure      400  {object}  httputil.HTTPError
 // @Failure      404  {object}  httputil.HTTPError
 // @Failure      500  {object}  httputil.HTTPError
@@ -113,4 +113,5 @@ func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		render.Render(w, r, httputil.NewError(http.StatusInternalServerError, err))
 		return
 	}
+	render.Status(r, http.StatusNoContent)
 }

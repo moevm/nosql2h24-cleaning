@@ -16,7 +16,7 @@ import (
 // @Tags         Services
 // @Produce      json
 // @Param id path string true "Service id"
-// @Success      200
+// @Success      204
 // @Failure      404  {object}  httputil.HTTPError
 // @Failure      500  {object}  httputil.HTTPError
 // @Router       /api/v1/services/{id} [delete]
@@ -30,4 +30,5 @@ func (h *Hander) DeleteService(w http.ResponseWriter, r *http.Request) {
 		}
 		render.Render(w, r, httputil.NewError(http.StatusInternalServerError, err))
 	}
+	render.Status(r, http.StatusNoContent)
 }

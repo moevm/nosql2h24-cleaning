@@ -10,7 +10,7 @@ type Handler struct {
 	addressService *services.AddressService
 }
 
-func New(
+func NewHandler(
 	userService *services.UserService,
 	addressService *services.AddressService,
 ) *Handler {
