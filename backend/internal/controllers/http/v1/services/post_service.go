@@ -17,7 +17,7 @@ import (
 // @Accept       json
 // @Produce      json
 // @Param service body models.Service true "Service info"
-// @Success      200  {object}  types.CreateResponse
+// @Success      201  {object}  types.CreateResponse
 // @Failure      400  {object}  httputil.HTTPError
 // @Failure      500  {object}  httputil.HTTPError
 // @Router       /api/v1/services [post]
@@ -38,5 +38,6 @@ func (h *Hander) PostService(w http.ResponseWriter, r *http.Request) {
 		render.Render(w, r, httputil.NewError(http.StatusInternalServerError, err))
 		return
 	}
+	render.Status(r, http.StatusCreated)
 	render.JSON(w, r, types.CreateResponse{ID: id})
 }

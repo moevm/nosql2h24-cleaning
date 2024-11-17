@@ -9,7 +9,7 @@ type Hander struct {
 	service *services.Service
 }
 
-func New(service *services.Service) *Hander {
+func NewHandler(service *services.Service) *Hander {
 	return &Hander{
 		service: service,
 	}

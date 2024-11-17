@@ -18,6 +18,7 @@ import (
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/config"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/auth"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/middlewares"
+	v1orders "github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/v1/orders"
 	v1services "github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/v1/services"
 	v1users "github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/v1/users"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/models"
@@ -111,6 +112,10 @@ func Run(cfg *config.Config) {
 		logger,
 		userRepo,
 	)
+	orderService := services.NewOrderService(
+		logger,
+		orderRepo,
+	)
 	service := services.NewService(
 		logger,
 		serviceRepo,
@@ -138,8 +143,9 @@ func Run(cfg *config.Config) {
 		r.Route("/v1", func(r chi.Router) {
 			r.Use(middlewares.NewAuthMiddleware(jwt).JWT)
 			// TODO: Add v1 routes
-			r.Mount("/users", v1users.New(userService, addressService).Routes())
-			r.Mount("/services", v1services.New(service).Routes())
+			r.Mount("/users", v1users.NewHandler(userService, addressService).Routes())
+			r.Mount("/orders", v1orders.NewHandler(orderService).Routes())
+			r.Mount("/services", v1services.NewHandler(service).Routes())
 			// hardcoded to test
 			r.Get("/secret", func(w http.ResponseWriter, r *http.Request) {
 				id := r.Context().Value(middlewares.UserID).(string)

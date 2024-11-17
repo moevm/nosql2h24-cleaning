@@ -7,8 +7,8 @@ import (
 )
 
 type StatusLog struct {
-	ID         bson.ObjectID `bson:"_id,omitempty"`
-	PrevStatus string        `bson:"prev_status"`
-	NewStatus  string        `bson:"new_status"`
-	CreatedAt  time.Time     `bson:"created_at"`
+	ID         bson.ObjectID `json:"id" bson:"_id,omitempty"`
+	PrevStatus string        `json:"prev_status" bson:"prev_status"`
+	NewStatus  string        `json:"new_status" bson:"new_status"`
+	CreatedAt  time.Time     `json:"created_at" bson:"created_at"`
 }

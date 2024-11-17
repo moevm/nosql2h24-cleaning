@@ -66,6 +66,49 @@ definitions:
     - phone_number
     - surname
     type: object
+  models.Order:
+    properties:
+      address:
+        $ref: '#/definitions/models.Address'
+      area:
+        type: number
+      comment:
+        type: string
+      created_at:
+        type: string
+      date_time:
+        type: string
+      id:
+        type: string
+      number_of_bathrooms:
+        type: integer
+      number_of_rooms:
+        type: integer
+      pollution:
+        type: integer
+      price:
+        type: number
+      required_workers:
+        type: integer
+      services:
+        items:
+          type: string
+        type: array
+      status:
+        type: string
+      status_log:
+        items:
+          $ref: '#/definitions/models.StatusLog'
+        type: array
+      updated_at:
+        type: string
+      user_id:
+        type: string
+      workers:
+        items:
+          type: string
+        type: array
+    type: object
   models.Service:
     properties:
       consumables:
@@ -91,6 +134,17 @@ definitions:
     - name
     - price
     - workers_quantity
+    type: object
+  models.StatusLog:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      new_status:
+        type: string
+      prev_status:
+        type: string
     type: object
   models.User:
     properties:
@@ -214,6 +268,170 @@ paths:
       summary: Create user with user_type=CLIENT
       tags:
       - Auth
+  /api/v1/orders:
+    get:
+      consumes:
+      - application/json
+      description: Get all orders
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        type: string
+      - collectionFormat: csv
+        description: Workers ID
+        in: query
+        items:
+          type: string
+        name: workers_id
+        type: array
+      - collectionFormat: csv
+        description: Statuses
+        in: query
+        items:
+          type: string
+        name: statuses
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Order'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Get orders
+      tags:
+      - Orders
+    post:
+      consumes:
+      - application/json
+      description: Create order
+      parameters:
+      - description: Order
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.Order'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/types.CreateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Create order
+      tags:
+      - Orders
+  /api/v1/orders/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete order by id
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Delete order
+      tags:
+      - Orders
+    get:
+      consumes:
+      - application/json
+      description: Get order by id
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Order'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Get order
+      tags:
+      - Orders
+    put:
+      consumes:
+      - application/json
+      description: Update order by id
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Order
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.Order'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Update order
+      tags:
+      - Orders
   /api/v1/services:
     get:
       description: Get array of services info from database
@@ -247,8 +465,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/types.CreateResponse'
         "400":
@@ -274,8 +492,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "204":
+          description: No Content
         "404":
           description: Not Found
           schema:
@@ -398,8 +616,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/types.CreateResponse'
         "400":
@@ -427,8 +645,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "204":
+          description: No Content
         "400":
           description: Bad Request
           schema:
@@ -556,8 +774,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/types.CreateResponse'
         "400":
@@ -592,8 +810,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "204":
+          description: No Content
         "400":
           description: Bad Request
           schema:
