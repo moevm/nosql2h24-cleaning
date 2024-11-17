@@ -10,7 +10,7 @@ import { getClientAddresses, createNewAddress } from '../../api/request'
 import Address from '../../api/models/address'
 
 onMounted(() => {
-  fetchClientAddresses(10)
+  fetchClientAddresses("10")
 })
 
 const addresses = ref<Address[]>([])
@@ -37,42 +37,44 @@ function formatAddress(item: any): string {
   return `${item.city}, ${item.street}, ${item.building}, Подъезд ${item.entrance}, Этаж ${item.floor}, Квартира ${item.door_number}`;
 }
 
-async function fetchClientAddresses(clientId: number) {
-  try {
-    const response = await getClientAddresses(clientId)
+async function fetchClientAddresses(clientId: string) {
+  getClientAddresses(clientId)
+  .then((response) => {
     addresses.value = response
-  } catch (error) {
+  })
+  .catch((error) => {
     console.error("Failed to fetch client addresses:", error)
-  }
+  })
 }
 
-async function addNewAddress(clientId: number) {
+async function addNewAddress(clientId: string) {
   closeDialog()
-  try {
-    const addressData: Address = {
-      id: clientId.toString(),
-      city: newAddress.value.city,
-      street: newAddress.value.street,
-      building: newAddress.value.building,
-      entrance: newAddress.value.entrance,
-      floor: newAddress.value.floor,
-      door_number: newAddress.value.door_number,
-      created_at: new Date(),
-      updated_at: new Date()
-    };
-    addresses.value.push(addressData);
-    const newAddressId = await createNewAddress(clientId, addressData);
+  const addressData: Address = {
+    id: clientId.toString(),
+    city: newAddress.value.city,
+    street: newAddress.value.street,
+    building: newAddress.value.building,
+    entrance: newAddress.value.entrance,
+    floor: newAddress.value.floor,
+    door_number: newAddress.value.door_number,
+    created_at: new Date(),
+    updated_at: new Date()
+  };
+  addresses.value.push(addressData);
 
+  createNewAddress(clientId, addressData)
+  .then((newAddressId) => {
     /* раскомментировать после добавления авторизации
     addresses.value.push({
       ...addressData, 
       id: newAddressId
     });
     */
-  } catch (error) {
-    console.error("Failed to add new address:", error);
+  })
+  .catch((error) => {
+    console.error("Failed to createNewAddress:", error)
     // addresses.value.pop() раскомментировать после добавления авторизации
-  }
+  })
 }
 </script>
 
