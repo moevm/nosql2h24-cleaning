@@ -10,8 +10,14 @@ import {
   getLoginPath,
   getUserInfoPath,
   getUsersPath,
+  updateUserPath,
+  deleteUserPath,
   getClientAddressesPath,
-  createNewAddressPath 
+  createNewAddressPath,
+  getClientAddressPath,
+  updateClientAddressPath,
+  createWorkerUserPath,
+  deleteClientAddressPath
 } from './endpoint'
 
 const baseURL = 'http://localhost:8080/api'
@@ -57,7 +63,40 @@ export async function getUsers(type: string) : Promise<User[]> {
   })
 }
 
-export async function getClientAddresses(id: number): Promise<Address[]> {
+export function createWorkerUser(newWorker: User): Promise<{ id: string }> {
+  return axios.post(baseURL + createWorkerUserPath, newWorker)
+  .then((response) => {
+    return response.data
+  })
+  .catch((error) => {
+    console.error('Error HTTP:', error);
+    throw error;
+  })
+}
+
+export function updateUser(id: string, newUserData: User): Promise<any> {
+  return axios.put<User>(baseURL + updateUserPath(id), newUserData)
+  .then((response) => {
+    return response.data
+  })
+  .catch((error) => {
+    console.error('Error HTTP:', error);
+    throw error;
+  })
+}
+
+export function deleteUser(id: string): Promise<any> {
+  return axios.delete(baseURL + deleteUserPath(id))
+  .then((response) => {
+    return response.data
+  })
+  .catch((error) => {
+    console.error('Error HTTP:', error);
+    throw error;
+  })
+}
+
+export async function getClientAddresses(id: string): Promise<Address[]> {
   try {
     const response = await fetch(baseURL+getClientAddressesPath(id), {
       method: 'GET',
@@ -78,7 +117,7 @@ export async function getClientAddresses(id: number): Promise<Address[]> {
   }
 }
 
-export async function createNewAddress(id: number, addressData: Address): Promise<Address> {
+export async function createNewAddress(id: string, addressData: Address): Promise<Address> {
   try {
     const response = await fetch(baseURL+createNewAddressPath(id), {
       method: 'POST',
@@ -99,4 +138,37 @@ export async function createNewAddress(id: number, addressData: Address): Promis
     console.error('Error request:', error);
     throw error;
   }
+}
+
+export function getClientAddress(id: string, address_id: string): Promise<Address> {
+  return axios.get<Address>(baseURL + getClientAddressPath(id, address_id))
+  .then((response) => {
+    return response.data
+  })
+  .catch((error) => {
+    console.error('Error HTTP:', error);
+    throw error;
+  })
+}
+
+export function updateClientAddress(id: string, address_id: string, newAddress: Address): Promise<any> {
+  return axios.put<Address>(baseURL + updateClientAddressPath(id, address_id), newAddress)
+  .then((response) => {
+    return response.data
+  })
+  .catch((error) => {
+    console.error('Error HTTP:', error);
+    throw error;
+  })
+}
+
+export function deleteClientAddress(id: string, address_id: string): Promise<any> {
+  return axios.delete(baseURL + deleteClientAddressPath(id, address_id))
+  .then((response) => {
+    return response.data
+  })
+  .catch((error) => {
+    console.error('Error HTTP:', error);
+    throw error;
+  })
 }
