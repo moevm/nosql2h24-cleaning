@@ -621,7 +621,26 @@ paths:
       - description: specifying user_type
         in: query
         name: type
-        required: true
+        type: string
+      - description: user name
+        in: query
+        name: name
+        type: string
+      - description: user surname
+        in: query
+        name: surname
+        type: string
+      - description: user email
+        in: query
+        name: email
+        type: string
+      - description: created_at begin (string RFC3339)
+        in: query
+        name: created_at_begin
+        type: string
+      - description: created_at end (string RFC3339)
+        in: query
+        name: created_at_end
         type: string
       produces:
       - application/json
