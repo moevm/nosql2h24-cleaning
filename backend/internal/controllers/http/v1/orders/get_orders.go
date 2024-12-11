@@ -25,7 +25,7 @@ func (h *Handler) GetOrders(w http.ResponseWriter, r *http.Request) {
 	userID := query.Get("user_id")
 	workersID := query["workers_id"]
 	statuses := query["statuses"]
-	orders, err := h.service.GetOrders(r.Context(), types.SearchParams{
+	orders, err := h.service.GetOrders(r.Context(), types.OrderFilters{
 		UserID:    userID,
 		WorkersID: workersID,
 		Statuses:  statuses,

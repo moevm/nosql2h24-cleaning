@@ -111,7 +111,7 @@ func (r *OrderRepo) GetUserOrders(ctx context.Context, userID string) ([]*models
 	return orders, nil
 }
 
-func (r *OrderRepo) GetOrders(ctx context.Context, query types.SearchParams) ([]*models.Order, error) {
+func (r *OrderRepo) GetOrders(ctx context.Context, query types.OrderFilters) ([]*models.Order, error) {
 	filter := bson.D{}
 
 	// Not sure if this is the best way to handle this
