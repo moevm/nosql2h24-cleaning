@@ -32,16 +32,39 @@ func NewUserRepo(db *mongo.Database) *UserRepo {
 	}
 }
 
-func (r *UserRepo) InsertMany(ctx context.Context, users []models.User) error {
-	val, err := r.collection.EstimatedDocumentCount(ctx)
+func (r *UserRepo) ImportUsers(ctx context.Context, users []models.User) error {
+	count, err := r.collection.EstimatedDocumentCount(ctx)
 	if err != nil {
 		return err
 	}
-	if val != 0 {
-		return repository.ErrNotEmpty
+	if count != 0 {
+		return repository.ErrAlreadyExist
 	}
 	_, err = r.collection.InsertMany(ctx, users)
 	return err
+}
+
+func (r *UserRepo) ExportUsers(ctx context.Context) ([]models.User, error) {
+	cursor, err := r.collection.Find(ctx, bson.D{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	users := make([]models.User, 0)
+	for cursor.Next(ctx) {
+		var user models.User
+		if err := cursor.Decode(&user); err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	return users, nil
+}
+
+func (r *UserRepo) Drop(ctx context.Context) error {
+	return r.collection.Drop(ctx)
 }
 
 func (r *UserRepo) CreateUser(ctx context.Context, user *models.User) (string, error) {

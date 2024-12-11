@@ -21,16 +21,38 @@ func NewServiceRepo(db *mongo.Database) *ServiceRepo {
 	}
 }
 
-func (r *ServiceRepo) InsertMany(ctx context.Context, services []models.Service) error {
-	val, err := r.collection.EstimatedDocumentCount(ctx)
+func (r *ServiceRepo) ImportServices(ctx context.Context, services []models.Service) error {
+	count, err := r.collection.EstimatedDocumentCount(ctx)
 	if err != nil {
 		return err
 	}
-	if val != 0 {
-		return repository.ErrNotEmpty
+	if count != 0 {
+		return repository.ErrAlreadyExist
 	}
 	_, err = r.collection.InsertMany(ctx, services)
 	return err
+}
+
+func (r *ServiceRepo) ExportServices(ctx context.Context) ([]models.Service, error) {
+	cursor, err := r.collection.Find(ctx, bson.D{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	services := make([]models.Service, 0)
+	for cursor.Next(ctx) {
+		var service models.Service
+		if err := cursor.Decode(&service); err != nil {
+			return nil, err
+		}
+		services = append(services, service)
+	}
+	return services, nil
+}
+
+func (r *ServiceRepo) Drop(ctx context.Context) error {
+	return r.collection.Drop(ctx)
 }
 
 func (r *ServiceRepo) CreateService(ctx context.Context, service *models.Service) (string, error) {
