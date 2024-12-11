@@ -6,6 +6,8 @@ import ActionButton from '../ActionButton.vue'
 import InputTextField from '../inputs//InputTextField.vue'
 import Dialog from '../Dialog.vue'
 
+const emit = defineEmits(['update-worker']);
+
 const props = defineProps<{
   worker: {
     id: string;
@@ -36,6 +38,7 @@ async function handleUpdateWorker() {
     await updateUser(props.worker.id, workerData as User);
     console.log('User updated successfully');
     closeDialog();
+    emit('update-worker')
   } catch (error) {
     console.error('Error updating user:', error);
   }
@@ -46,6 +49,7 @@ async function handleDeleteWorker() {
     await deleteUser(props.worker.id);
     console.log('User deleted successfully');
     closeDialog();
+    emit('update-worker');
   } catch (error) {
     console.error('Error deleting user:', error);
   }

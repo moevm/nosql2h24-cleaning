@@ -197,7 +197,7 @@ onMounted(() => {
       width="95%"
     >
       <template #items="{ item }">
-        <WorkerItem :worker="item" />
+        <WorkerItem :worker="item" @update-worker="fetchWorkersList" />
       </template>
     </HeaderList>
   </MainContainer>
