@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { inject, onMounted } from 'vue'
+import { inject, ref, onMounted } from 'vue'
 import {
   RouteLocationNormalizedLoadedGeneric,
   useRoute, 
   RouterView 
 } from 'vue-router'
+import { getUserInfo } from '../../api/request'
 
 const route: RouteLocationNormalizedLoadedGeneric = useRoute()
 
@@ -35,7 +36,13 @@ onMounted(() => {
       to: `/cleaning/client${clientId}/my-addresses`
     }
   )
-  setUserCard!('Иван Иванов', 'example@mail.com')
+  getUserInfo('me').then((user) => {
+    setUserCard!(`${user.name} ${user.surname}`, `${user.email}`)
+  })
+  .catch((error) => {
+    console.error("Failed to fetch user info:", error)
+  })
+
 })
 </script>
 
