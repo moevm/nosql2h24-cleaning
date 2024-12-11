@@ -22,16 +22,38 @@ func NewOrderRepo(db *mongo.Database) *OrderRepo {
 	}
 }
 
-func (r *OrderRepo) InsertMany(ctx context.Context, orders []models.Order) error {
-	val, err := r.collection.EstimatedDocumentCount(ctx)
+func (r *OrderRepo) ImportOrders(ctx context.Context, orders []models.Order) error {
+	count, err := r.collection.EstimatedDocumentCount(ctx)
 	if err != nil {
 		return err
 	}
-	if val != 0 {
-		return repository.ErrNotEmpty
+	if count != 0 {
+		return repository.ErrAlreadyExist
 	}
 	_, err = r.collection.InsertMany(ctx, orders)
 	return err
+}
+
+func (r *OrderRepo) ExportOrders(ctx context.Context) ([]models.Order, error) {
+	cursor, err := r.collection.Find(ctx, bson.D{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	orders := make([]models.Order, 0)
+	for cursor.Next(ctx) {
+		var order models.Order
+		if err := cursor.Decode(&order); err != nil {
+			return nil, err
+		}
+		orders = append(orders, order)
+	}
+	return orders, nil
+}
+
+func (r *OrderRepo) Drop(ctx context.Context) error {
+	return r.collection.Drop(ctx)
 }
 
 func (r *OrderRepo) CreateOrder(ctx context.Context, order *models.Order) (string, error) {

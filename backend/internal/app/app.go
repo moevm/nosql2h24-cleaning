@@ -2,14 +2,12 @@ package app
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -18,10 +16,10 @@ import (
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/config"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/auth"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/middlewares"
+	v1dumps "github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/v1/dumps"
 	v1orders "github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/v1/orders"
 	v1services "github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/v1/services"
 	v1users "github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/v1/users"
-	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/models"
 	mongorepo "github.com/moevm/nosql2h24-cleaning/cleaning/internal/repository/mongo"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/services"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/services/jwt"
@@ -31,7 +29,6 @@ import (
 	_ "github.com/moevm/nosql2h24-cleaning/cleaning/pkg/validate"
 	httpSwagger "github.com/swaggo/http-swagger"
 	"go.uber.org/zap"
-	"golang.org/x/sync/errgroup"
 )
 
 const Version = "v0.5.0"
@@ -58,42 +55,6 @@ func Run(cfg *config.Config) {
 	serviceRepo := mongorepo.NewServiceRepo(db)
 	orderRepo := mongorepo.NewOrderRepo(db)
 
-	// load dump
-	// bad practice, but it's just a prototype
-	// my last brain cell is dying
-	if file, err := os.OpenFile("/dump/dump.json", os.O_RDONLY, 0666); err == nil {
-		defer file.Close()
-		logger.Info("app - Run - loading dump")
-
-		data, _ := io.ReadAll(file)
-
-		var dump models.Dump
-		if err := json.Unmarshal(data, &dump); err != nil {
-			logger.Error("app - Run - unmarshal dump failed", zap.Any("error", err))
-		}
-		logger.Info("dump", zap.Any("dump.Users", dump.Users))
-		logger.Info("dump", zap.Any("dump.Orders", dump.Orders))
-		logger.Info("dump", zap.Any("dump.Services", dump.Services))
-		// insert dump
-		eg := errgroup.Group{}
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-
-		eg.Go(func() error {
-			return userRepo.InsertMany(ctx, dump.Users)
-		})
-		eg.Go(func() error {
-			return serviceRepo.InsertMany(ctx, dump.Services)
-		})
-		eg.Go(func() error {
-			return orderRepo.InsertMany(ctx, dump.Orders)
-		})
-
-		if err := eg.Wait(); err != nil {
-			logger.Error("app - Run - loading dump failed", zap.Any("error", err))
-		}
-		cancel()
-	}
-
 	// create services
 	jwt := jwt.New(cfg.Auth.Secret)
 	hasher := hasher.New(10)
@@ -116,10 +77,29 @@ func Run(cfg *config.Config) {
 		logger,
 		orderRepo,
 	)
+	dumpService := services.NewDumpService(
+		logger,
+		userRepo,
+		orderRepo,
+		serviceRepo,
+	)
 	service := services.NewService(
 		logger,
 		serviceRepo,
 	)
+
+	// load dump
+	// bad practice, but it's just a prototype
+	// my last brain cell is dying
+	if file, err := os.OpenFile("/dump/dump.json", os.O_RDONLY, 0666); err == nil {
+		logger.Info("app - Run - loading dump")
+		data, _ := io.ReadAll(file)
+		if err := dumpService.Import(context.Background(), data, false); err != nil {
+			logger.Error("app - Run - dumpService.Import", zap.Any("error", err))
+		}
+		file.Close()
+	}
+
 	// setup router
 	router := chi.NewRouter()
 	router.Use(cors.Handler(cors.Options{
@@ -146,6 +126,7 @@ func Run(cfg *config.Config) {
 			r.Mount("/users", v1users.NewHandler(userService, addressService).Routes())
 			r.Mount("/orders", v1orders.NewHandler(orderService).Routes())
 			r.Mount("/services", v1services.NewHandler(service).Routes())
+			r.Mount("/dumps", v1dumps.NewHandler(dumpService).Routes())
 			// hardcoded to test
 			r.Get("/secret", func(w http.ResponseWriter, r *http.Request) {
 				id := r.Context().Value(middlewares.UserID).(string)
