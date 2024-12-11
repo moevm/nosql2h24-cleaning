@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
+import { onMounted, Ref, ref } from 'vue'
+import { getUsers, updateUser } from '../../api/request'
+import { User } from '../../api/models/user'
 import HeaderList from '../../ui/uikit/containers/HeaderList.vue'
 import PanelContainer from '../../ui/uikit/containers/PanelContainer.vue'
 import ActionButton from '../../ui/uikit/ActionButton.vue'
@@ -8,10 +10,7 @@ import MainContainer from '../../ui/uikit/containers/MainContainer.vue'
 import Dialog from '../../ui/uikit/Dialog.vue'
 import WorkerItem from '../../ui/uikit/items/WorkerItem.vue'
 
-const workers = ref([
-  {id: 1, firstName: "Иван", lastName: "Иванов", email: "example@mail.com"},
-  {id: 2, firstName: "Иван", lastName: "Иванов", email: "example@mail.com"}
-]) // TODO DB request
+const workers = ref<{ id: string, name: string, surname: string, email:string }[]>([]);
 const isDialogVisible: Ref<boolean> = ref(false)
 
 function openDialog(): void {
@@ -21,6 +20,25 @@ function openDialog(): void {
 function closeDialog(): void {
   isDialogVisible.value = false
 }
+
+async function fetchWorkersList() {
+  try {
+    const response = await getUsers('WORKER');
+    workers.value = response.map(user => ({
+      id: user.id,
+      name: user.name,
+      surname: user.surname,
+      email: user.email
+    }));
+  } catch (error) {
+    console.error("Failed to fetch workers list:", error);
+  }
+}
+
+onMounted(() => {
+  fetchWorkersList()
+})
+
 </script>
 
 <template>
