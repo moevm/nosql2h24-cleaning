@@ -10,15 +10,22 @@ import MainContainer from '../../ui/uikit/containers/MainContainer.vue'
 import Dialog from '../../ui/uikit/Dialog.vue'
 import WorkerItem from '../../ui/uikit/items/WorkerItem.vue'
 
-const workers = ref<{ id: string, name: string, surname: string, email:string }[]>([]);
+const workers = ref<{ 
+  id: string;
+  name: string;
+  surname: string;
+  patronymic: string;
+  email: string;
+  phone_number: string;
+}[]>([]);
 
 const newWorker = ref<UserRegisterData>({
-  email: '',
   name: '',
-  password: '',
+  surname: '',
   patronymic: '',
+  email: '',
   phone_number: '',
-  surname: ''
+  password: '',
 });
 
 const isDialogVisible: Ref<boolean> = ref(false)
@@ -38,7 +45,9 @@ async function fetchWorkersList() {
       id: user.id,
       name: user.name,
       surname: user.surname,
-      email: user.email
+      patronymic: user.patronymic,
+      email: user.email,
+      phone_number: user.phone_number
     }));
   } catch (error) {
     console.error("Failed to fetch workers list:", error);
