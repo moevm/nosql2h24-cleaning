@@ -6,13 +6,14 @@ import (
 
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/models"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/repository"
+	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/types"
 	"go.uber.org/zap"
 )
 
 type UserRepo interface {
 	CreateUser(ctx context.Context, user *models.User) (string, error)
 	GetUserById(ctx context.Context, id string) (*models.User, error)
-	GetUsers(ctx context.Context, userType string) ([]*models.User, error)
+	GetUsers(ctx context.Context, filters types.UserFilters) ([]*models.User, error)
 	UpdateUser(ctx context.Context, user *models.User) error
 	DeleteUser(ctx context.Context, id string) error
 }
@@ -111,12 +112,12 @@ func (r *UserService) GetUserById(ctx context.Context, id string) (*models.User,
 	return user, nil
 }
 
-func (r *UserService) GetUsers(ctx context.Context, userType string) ([]*models.User, error) {
+func (r *UserService) GetUsers(ctx context.Context, filters types.UserFilters) ([]*models.User, error) {
 	l := r.log.With(
 		zap.Any("operation", "UserService.GetUserById"),
 	)
 
-	users, err := r.repo.GetUsers(ctx, userType)
+	users, err := r.repo.GetUsers(ctx, filters)
 	if err != nil {
 		l.Error("get users failed", zap.Any("error", err))
 		return nil, err

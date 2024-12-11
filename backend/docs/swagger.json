@@ -650,8 +650,37 @@
                         "type": "string",
                         "description": "specifying user_type",
                         "name": "type",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "user name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "user surname",
+                        "name": "surname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "user email",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_at begin (string RFC3339)",
+                        "name": "created_at_begin",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_at end (string RFC3339)",
+                        "name": "created_at_end",
+                        "in": "query"
                     }
                 ],
                 "responses": {
