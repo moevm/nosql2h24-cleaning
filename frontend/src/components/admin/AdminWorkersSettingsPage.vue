@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, Ref, ref } from 'vue'
-import { getUsers, updateUser } from '../../api/request'
-import { User } from '../../api/models/user'
+import { createWorkerUser, getUsers, updateUser } from '../../api/request'
+import { User, UserRegisterData } from '../../api/models/user'
 import HeaderList from '../../ui/uikit/containers/HeaderList.vue'
 import PanelContainer from '../../ui/uikit/containers/PanelContainer.vue'
 import ActionButton from '../../ui/uikit/ActionButton.vue'
@@ -11,6 +11,16 @@ import Dialog from '../../ui/uikit/Dialog.vue'
 import WorkerItem from '../../ui/uikit/items/WorkerItem.vue'
 
 const workers = ref<{ id: string, name: string, surname: string, email:string }[]>([]);
+
+const newWorker = ref<UserRegisterData>({
+  email: '',
+  name: '',
+  password: '',
+  patronymic: '',
+  phone_number: '',
+  surname: ''
+});
+
 const isDialogVisible: Ref<boolean> = ref(false)
 
 function openDialog(): void {
@@ -32,6 +42,39 @@ async function fetchWorkersList() {
     }));
   } catch (error) {
     console.error("Failed to fetch workers list:", error);
+  }
+}
+
+async function fetchCreateUser(workerData: UserRegisterData) {
+      const userPayload: Partial<User> = {
+        ...workerData,
+        user_type: 'WORKER',
+      };
+
+      try {
+        const response = await createWorkerUser(userPayload as User);
+        console.log('Created User ID:', response.id);
+      } catch (error) {
+        console.error('Error HTTP:', error);
+        throw error;
+      }
+    }
+
+async function handleCreateWorkerUser() {
+  closeDialog();
+  try {
+    await fetchCreateUser(newWorker.value);
+    newWorker.value = {
+      email: '',
+      name: '',
+      password: '',
+      patronymic: '',
+      phone_number: '',
+      surname: ''
+    };
+    fetchWorkersList()
+  } catch (error) {
+    console.error('Error creating user:', error);
   }
 }
 
@@ -84,31 +127,37 @@ onMounted(() => {
     >
       <template #body>
         <InputTextField
+          v-model="newWorker.name"
           placeholder="Введите имя"
           type="text"
           label="Имя"
         ></InputTextField>
         <InputTextField
+          v-model="newWorker.surname"
           placeholder="Введите фамилию"
           type="text"
           label="Фамилия"
         ></InputTextField>
         <InputTextField
+          v-model="newWorker.patronymic"
           placeholder="Введите отчество"
           type="text"
           label="Отчество"
         ></InputTextField>
         <InputTextField
+          v-model="newWorker.phone_number"
           placeholder="Введите телефон"
           type="phonenumber"
           label="Номер телефона"
         ></InputTextField>
         <InputTextField
+          v-model="newWorker.email"
           placeholder="Введите почту"
           type="email"
           label="Почта"
         ></InputTextField>
         <InputTextField
+          v-model="newWorker.password"
           placeholder="Введите пароль"
           type="password"
           label="Пароль"
@@ -127,7 +176,7 @@ onMounted(() => {
           type="create"
           variant="flat"
           color="#394cc2"
-          @click="closeDialog"
+          @click="handleCreateWorkerUser"
         ></ActionButton>
       </template>
     </Dialog>
