@@ -7,6 +7,8 @@ import (
 
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/models"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/repository"
+	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/types"
+	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/mongo/search"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
@@ -113,11 +115,17 @@ func (r *UserRepo) GetUserByEmail(ctx context.Context, email string) (*models.Us
 	return &user, nil
 }
 
-// TODO: third argument query
-func (r *UserRepo) GetUsers(ctx context.Context, userType string) ([]*models.User, error) {
-	filter := bson.D{{Key: "user_type", Value: userType}}
-
-	cursor, err := r.collection.Find(ctx, filter)
+func (r *UserRepo) GetUsers(ctx context.Context, filters types.UserFilters) ([]*models.User, error) {
+	filter := search.Filter{}
+	filter.AddEqual("user_type", filters.UserType)
+	filter.AddRegex("name", filters.Name)
+	filter.AddRegex("surname", filters.Surname)
+	filter.AddRegex("email", filters.Email)
+	filter.AddTimeIterval("created_at", search.TimeInterval{
+		Begin: filters.CreatedAtBegin,
+		End:   filters.CreatedAtEnd,
+	})
+	cursor, err := r.collection.Find(ctx, filter.ToBson())
 	if err != nil {
 		return nil, err
 	}
