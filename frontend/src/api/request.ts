@@ -172,3 +172,13 @@ export function deleteClientAddress(id: string, address_id: string): Promise<any
     throw error;
   })
 }
+
+export async function filterWorkers(name: string, surname: string): Promise<User[]> {
+  return axios.get(baseURL + getUsersPath, { params: { type: 'WORKER', name: name, surname: surname } })
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error)
+  })
+}

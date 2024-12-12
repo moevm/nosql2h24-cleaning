@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, Ref, ref } from 'vue'
-import { createWorkerUser, getUsers, updateUser } from '../../api/request'
+import { createWorkerUser, getUsers } from '../../api/request'
 import { User, UserRegisterData } from '../../api/models/user'
 import HeaderList from '../../ui/uikit/containers/HeaderList.vue'
 import PanelContainer from '../../ui/uikit/containers/PanelContainer.vue'
@@ -9,8 +9,9 @@ import InputTextField from '../../ui/uikit/inputs/InputTextField.vue'
 import MainContainer from '../../ui/uikit/containers/MainContainer.vue'
 import Dialog from '../../ui/uikit/Dialog.vue'
 import WorkerItem from '../../ui/uikit/items/WorkerItem.vue'
+import { filterWorkers } from '../../api/request'
 
-const workers = ref<{ 
+const workers = ref<{
   id: string;
   name: string;
   surname: string;
@@ -18,6 +19,9 @@ const workers = ref<{
   email: string;
   phone_number: string;
 }[]>([]);
+
+const searchName = ref<string>('');
+const searchSurname = ref<string>('');
 
 const newWorker = ref<UserRegisterData>({
   name: '',
@@ -39,19 +43,19 @@ function closeDialog(): void {
 }
 
 async function fetchWorkersList() {
-    await getUsers('WORKER').then((response) => { 
-      workers.value = response.map(user => ({
-        id: user.id,
-        name: user.name,
-        surname: user.surname,
-        patronymic: user.patronymic,
-        email: user.email,
-        phone_number: user.phone_number
-      }));
-    }).catch ((error) => {
-      console.error("Failed to fetch workers list:", error)
-    })
-  }
+  await getUsers('WORKER').then((response) => { 
+    workers.value = response.map(user => ({
+      id: user.id,
+      name: user.name,
+      surname: user.surname,
+      patronymic: user.patronymic,
+      email: user.email,
+      phone_number: user.phone_number
+    }));
+  }).catch ((error) => {
+    console.error("Failed to fetch workers list:", error)
+  })
+}
 
 async function fetchCreateUser(workerData: UserRegisterData) {
   const userPayload: Partial<User> = {
@@ -83,6 +87,23 @@ async function handleCreateWorkerUser() {
   }
 }
 
+function handleSearch(): void {
+  filterWorkers(searchName.value, searchSurname.value)
+  .then((response) => {
+    workers.value = response.map(user => ({
+      id: user.id,
+      name: user.name,
+      surname: user.surname,
+      patronymic: user.patronymic,
+      email: user.email,
+      phone_number: user.phone_number
+    }));
+    console.log('Filtered workers:', workers.value);
+  }).catch ((error) => {
+    console.error("Failed to fetch workers list:", error)
+  })
+}
+
 onMounted(() => {
   fetchWorkersList()
 })
@@ -104,20 +125,22 @@ onMounted(() => {
       <v-form
         class="search-form"
         validate-on="submit lazy"
-        @submit.prevent="">
+        @submit.prevent="handleSearch">
         <InputTextField
+          v-model="searchName"
           label="Имя"
           type="first-name-search"
           placeholder="Введите имя"
         ></InputTextField>
         <InputTextField
+          v-model="searchSurname"
           label="Фамилия"
           type="last-name-search"
           placeholder="Введите фамилию"
         ></InputTextField>
         <ActionButton
           text="Поиск"
-          type="create"
+          type="submit"
           variant="flat"
           color="#394cc2"
         ></ActionButton>
