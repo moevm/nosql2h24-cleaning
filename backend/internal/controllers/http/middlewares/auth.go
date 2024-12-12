@@ -19,13 +19,19 @@ type JWT interface {
 	Parse(token string) (string, error)
 }
 
-type AuthMiddleware struct {
-	jwt JWT
+type UserService interface {
+	UserExist(ctx context.Context, id string) error
 }
 
-func NewAuthMiddleware(jwt JWT) *AuthMiddleware {
+type AuthMiddleware struct {
+	jwt         JWT
+	userService UserService
+}
+
+func NewAuthMiddleware(jwt JWT, userService UserService) *AuthMiddleware {
 	return &AuthMiddleware{
-		jwt: jwt,
+		jwt:         jwt,
+		userService: userService,
 	}
 }
 
@@ -40,6 +46,10 @@ func (m *AuthMiddleware) JWT(next http.Handler) http.Handler {
 		id, err := m.jwt.Parse(cookie.Value)
 		if err != nil {
 			render.Render(w, r, httputil.NewError(http.StatusInternalServerError, err))
+			return
+		}
+		if err := m.userService.UserExist(r.Context(), id); err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
 		ctx := context.WithValue(r.Context(), UserID, id)

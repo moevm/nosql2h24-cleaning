@@ -22,6 +22,7 @@ type Hasher interface {
 type AuthRepo interface {
 	CreateUser(ctx context.Context, user *models.User) (string, error)
 	GetUserByEmail(ctx context.Context, email string) (*models.User, error)
+	GetUserById(ctx context.Context, id string) (*models.User, error)
 }
 
 type AuthService struct {
@@ -109,6 +110,27 @@ func (r *AuthService) Login(ctx context.Context, user *models.User) (*models.Use
 	// Do not return password hash
 	userFromDB.Password = ""
 	return userFromDB, token, nil
+}
+
+func (r *AuthService) UserExist(ctx context.Context, id string) error {
+	l := r.log.With(
+		zap.Any("operation", "AuthService.UserExist"),
+		zap.Any("id", id),
+	)
+
+	if _, err := r.repo.GetUserById(ctx, id); err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			l.Info(err.Error())
+			return ErrUserNotFound
+		}
+
+		l.Error(
+			"failed to get user",
+			zap.Any("error", err),
+		)
+		return err
+	}
+	return nil
 }
 
 func (r *AuthService) Logout(ctx context.Context, refreshToken string) error {
