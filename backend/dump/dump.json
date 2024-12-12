@@ -483,39 +483,6 @@
             "required_workers": 2,
             "workers": [],
             "created_at": "2024-04-12T09:00:00.000Z"
-        },
-        {
-            "id": "60b8c093f6d292edb4b4a784",
-            "user_id": "60b8c093f6d292edb4b4a761",
-            "address": {
-                "id": "60b8c093f6d292edb4b4a785",
-                "city": "Москва",
-                "street": "Маяковская",
-                "building": "5",
-                "entrance": "3",
-                "floor": "2",
-                "door_number": "8"
-            },
-            "date_time": "2024-04-13T10:15:00.000Z",
-            "price": 150.00,
-            "number_of_rooms": 2,
-            "number_of_bathrooms": 1,
-            "pollution": 15,
-            "area": 50.0,
-            "comment": "Требуется стандартная уборка квартиры",
-            "status_log": [
-                {
-                    "id": "60b8c093f6d292edb4b4a786",
-                    "new_status": "IN_PROGRESS",
-                    "prev_status": "CREATED",
-                    "created_at": "2024-04-13T10:00:00.000Z"
-                }
-            ],
-            "status": "IN_PROGRESS",
-            "services": ["3565ed3fa26c4a64672e9b38"],
-            "required_workers": 1,
-            "workers": ["60b8c093f6d292edb4b4a759"],
-            "created_at": "2024-04-13T10:00:00.000Z"
         }
     ]
 }
