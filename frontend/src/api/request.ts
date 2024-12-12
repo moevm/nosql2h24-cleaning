@@ -19,8 +19,13 @@ import {
   createWorkerUserPath,
   deleteClientAddressPath,
   uploadDumpsPath,
-  exportDumpsPath
+  exportDumpsPath,
+  getAllOrdersPath,
+  getAllServicesPath
 } from './endpoint'
+import Order from './models/order'
+import Service from './models/service'
+import { FilterOrder } from './models/filterOrder'
 
 const baseURL = 'http://localhost:8080/api'
 
@@ -37,7 +42,6 @@ export async function postRegister (data: UserRegisterData): Promise<void> {
 export async function postLogin (data: UserLoginData): Promise<User> {
   return axios.post(baseURL + getLoginPath, data)
   .then((response) => {
-    console.log(response.data)
     return Promise.resolve(response.data)
   })
   .catch((error) => {
@@ -218,3 +222,49 @@ export async function uploadDumps(file: File): Promise<void> {
     return Promise.reject(error);
   });
 }
+
+export async function filterWorkers(name: string, surname: string): Promise<User[]> {
+  return axios.get(baseURL + getUsersPath, { params: { type: 'WORKER', name: name, surname: surname } })
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error)
+  })
+}
+
+export async function getAllOrders(): Promise<Order[]> {
+  return axios.get(baseURL + getAllOrdersPath)
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error);
+  })
+}
+
+export async function getAllServices(): Promise<Service[]> {
+  return axios.get(baseURL + getAllServicesPath)
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error);
+  })
+}
+
+export async function filterOrder(filterData: FilterOrder): Promise<Order[]> {
+  return axios.get(baseURL + getAllOrdersPath, {
+    params: filterData, 
+    paramsSerializer: {
+      indexes: null
+    }
+  })
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error);
+  })
+}
+

@@ -3,11 +3,13 @@ package mongorepo
 import (
 	"context"
 	"errors"
+	"log"
 	"time"
 
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/models"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/repository"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/types"
+	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/mongo/search"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
@@ -112,32 +114,47 @@ func (r *OrderRepo) GetUserOrders(ctx context.Context, userID string) ([]*models
 }
 
 func (r *OrderRepo) GetOrders(ctx context.Context, query types.OrderFilters) ([]*models.Order, error) {
-	filter := bson.D{}
+	filter := search.Filter{}
+	// user info
+	filter.AddEqual("user_id", query.UserID)
 
-	// Not sure if this is the best way to handle this
-	if query.UserID != "" {
-		_id, err := bson.ObjectIDFromHex(query.UserID)
-		if err != nil {
-			return nil, repository.ErrInvalidArgument
-		}
-		filter = append(filter, bson.E{Key: "user_id", Value: _id})
-	}
-	if len(query.WorkersID) != 0 {
-		_ids := make([]bson.ObjectID, 0, len(query.WorkersID))
-		for _, id := range query.WorkersID {
-			_id, err := bson.ObjectIDFromHex(id)
-			if err != nil {
-				return nil, repository.ErrInvalidArgument
-			}
-			_ids = append(_ids, _id)
-		}
-		filter = append(filter, bson.E{Key: "workers", Value: bson.D{{Key: "$in", Value: _ids}}})
-	}
-	if len(query.Statuses) != 0 {
-		filter = append(filter, bson.E{Key: "status", Value: bson.D{{Key: "$in", Value: query.Statuses}}})
-	}
+	filter.AddRegex("user.name", query.User.Name)
+	filter.AddRegex("user.surname", query.User.Surname)
+	filter.AddRegex("user.patronymic", query.User.Patronymic)
+	filter.AddRegex("user.email", query.User.Email)
 
-	cur, err := r.collection.Find(ctx, filter)
+	// workers
+	filter.AddInObjectIDs("workers", query.WorkersID)
+
+	// address
+	filter.AddRegex("address.city", query.Address.City)
+	filter.AddRegex("address.street", query.Address.Street)
+	filter.AddRegex("address.building", query.Address.Building)
+	filter.AddRegex("address.entrance", query.Address.Entrance)
+	filter.AddRegex("address.floor", query.Address.Floor)
+	filter.AddRegex("address.door_number", query.Address.DoorNumber)
+
+	filter.AddIn("status", query.Statuses)
+	filter.ContainsAll("services", query.Services)
+
+	// time
+	filter.AddTimeIterval("date_time", query.DateTime)
+	log.Print(filter)
+	cur, err := r.collection.Aggregate(ctx, bson.A{
+		bson.D{{
+			Key: "$lookup",
+			Value: bson.D{
+				{Key: "from", Value: "users"},
+				{Key: "localField", Value: "user_id"},
+				{Key: "foreignField", Value: "_id"},
+				{Key: "as", Value: "user"},
+			},
+		}},
+		bson.D{{
+			Key:   "$match",
+			Value: filter.ToBson(),
+		}},
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -147,6 +164,8 @@ func (r *OrderRepo) GetOrders(ctx context.Context, query types.OrderFilters) ([]
 	if err := cur.All(ctx, &orders); err != nil {
 		return nil, err
 	}
+
+	log.Print(orders)
 
 	return orders, nil
 }

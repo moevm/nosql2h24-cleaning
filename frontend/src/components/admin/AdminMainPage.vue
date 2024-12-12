@@ -51,66 +51,14 @@ onMounted(() => {
   )
 
   getUserInfo('me').then((user) => {
-    // userStore.setUser(user)
     setUserCard!(`${user.name} ${user.surname}`, `${user.email}`)
   })
   
-})
-
-getUsers('CLIENT').then((response) => {
-  clients.value = response
-})
-getUsers('WORKER').then((response) => {
-  workers.value = response
 })
 </script>
 
 <template>
   <RouterView />
-  <div>
-    <v-data-table
-      :headers="headers"
-      :items="clients"
-      class="elevation-1"
-    >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-toolbar-title>Клиенты</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-      </template>
-      <template v-slot:item.name="{ item }">
-        <span>{{ item.name }}</span>
-      </template>
-      <template v-slot:item.email="{ item }">
-        <span>{{ item.email }}</span>
-      </template>
-      <!-- Добавьте другие слоты для отображения данных по мере необходимости -->
-    </v-data-table>
-  </div>
-  <div>
-    <v-data-table
-      :headers="headers"
-      :items="workers"
-      class="elevation-1"
-    >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-toolbar-title>Исполнители</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-      </template>
-      <template v-slot:item.name="{ item }">
-        <span>{{ item.name }}</span>
-      </template>
-      <template v-slot:item.email="{ item }">
-        <span>{{ item.email }}</span>
-      </template>
-      <!-- Добавьте другие слоты для отображения данных по мере необходимости -->
-    </v-data-table>
-  </div>
 </template>
 
 <style scoped>

@@ -210,6 +210,90 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "string",
+                        "description": "User name",
+                        "name": "user_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "User surname",
+                        "name": "user_surname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "User patronymic",
+                        "name": "user_patronymic",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "User email",
+                        "name": "user_email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Address city",
+                        "name": "address_city",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Address street",
+                        "name": "address_street",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Address building",
+                        "name": "address_building",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Address entrance",
+                        "name": "address_entrance",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Address floor",
+                        "name": "address_floor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Address door number",
+                        "name": "address_door_number",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Worker name",
+                        "name": "worker_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Worker surname",
+                        "name": "worker_surname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Worker patronymic",
+                        "name": "worker_patronymic",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Worker email",
+                        "name": "worker_email",
+                        "in": "query"
+                    },
+                    {
                         "type": "array",
                         "items": {
                             "type": "string"
@@ -227,6 +311,28 @@ const docTemplate = `{
                         "collectionFormat": "csv",
                         "description": "Statuses",
                         "name": "statuses",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Services",
+                        "name": "services",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Date time begin (string RFC3339)",
+                        "name": "date_time_begin",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Date time end (string RFC3339)",
+                        "name": "date_time_end",
                         "in": "query"
                     }
                 ],
@@ -673,6 +779,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "user surname",
                         "name": "surname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "user patronymic",
+                        "name": "patronymic",
                         "in": "query"
                     },
                     {

@@ -21,6 +21,7 @@ import (
 // @Param type query string false "specifying user_type"
 // @Param name query string false "user name"
 // @Param surname query string false "user surname"
+// @Param patronymic query string false "user patronymic"
 // @Param email query string false "user email"
 // @Param created_at_begin query string false "created_at begin (string RFC3339)"
 // @Param created_at_end query string false "created_at end (string RFC3339)"
@@ -31,17 +32,20 @@ import (
 // @Router       /api/v1/users [get]
 func (h *Handler) GetUsers(w http.ResponseWriter, r *http.Request) {
 	filters := types.UserFilters{
-		Name:     r.URL.Query().Get("name"),
-		Surname:  r.URL.Query().Get("surname"),
-		Email:    r.URL.Query().Get("email"),
+		UserData: types.UserData{
+			Name:       r.URL.Query().Get("name"),
+			Surname:    r.URL.Query().Get("surname"),
+			Patronymic: r.URL.Query().Get("patronymic"),
+			Email:      r.URL.Query().Get("email"),
+		},
 		UserType: r.URL.Query().Get("type"),
 	}
 
 	if createdAtBegin, err := time.Parse(time.RFC3339, r.URL.Query().Get("created_at_begin")); err == nil {
-		filters.CreatedAtBegin = &createdAtBegin
+		filters.CreatedAt.Begin = &createdAtBegin
 	}
 	if createdAtEnd, err := time.Parse(time.RFC3339, r.URL.Query().Get("created_at_end")); err == nil {
-		filters.CreatedAtEnd = &createdAtEnd
+		filters.CreatedAt.End = &createdAtEnd
 	}
 
 	users, err := h.userService.GetUsers(r.Context(), filters)
