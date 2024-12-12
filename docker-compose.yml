@@ -35,7 +35,7 @@ services:
       context: proxy/
       dockerfile: Dockerfile
     ports:
-      - "8080:80"
+      - "127.0.0.1:8080:80"
     depends_on:
       - frontend
       - backend
@@ -46,20 +46,12 @@ services:
     container_name: database
     hostname: mongodb
     image: mongodb/mongodb-community-server:7.0.0-ubi8
-    env_file:
-      - .env
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGODB_DB}
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 20s
-    expose:
-      - "27017"
     volumes:
       - mongo-data:/data/db
     networks:

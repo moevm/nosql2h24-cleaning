@@ -12,6 +12,9 @@ import (
 const mongodb_uri = "mongodb://%s:%s@%s:%d"
 
 func MongoURI(user, password, hostname string, port int) string {
+	if user == "" || password == "" {
+		return fmt.Sprintf("mongodb://%s:%d", hostname, port)
+	}
 	return fmt.Sprintf(mongodb_uri, user, password, hostname, port)
 }
 
