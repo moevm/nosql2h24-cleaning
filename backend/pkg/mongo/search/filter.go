@@ -30,7 +30,7 @@ func (f Filter) AddTimeIterval(key string, interval TimeInterval) {
 	if interval.GetBegin() != nil {
 		filter["$gte"] = interval.GetBegin()
 	}
-	if interval.GetBegin() != nil {
+	if interval.GetEnd() != nil {
 		filter["$lte"] = interval.GetEnd()
 	}
 	if len(filter) != 0 {
