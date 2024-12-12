@@ -23,6 +23,7 @@ import {
 } from './endpoint'
 import Order from './models/order'
 import Service from './models/service'
+import { FilterOrder } from './models/filterOrder'
 
 const baseURL = 'http://localhost:8080/api'
 
@@ -188,6 +189,21 @@ export async function getAllOrders(): Promise<Order[]> {
 
 export async function getAllServices(): Promise<Service[]> {
   return axios.get(baseURL + getAllServicesPath)
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error);
+  })
+}
+
+export async function filterOrder(filterData: FilterOrder): Promise<Order[]> {
+  return axios.get(baseURL + getAllOrdersPath, {
+    params: filterData, 
+    paramsSerializer: {
+      indexes: null
+    }
+  })
   .then((response) => {
     return Promise.resolve(response.data)
   })
