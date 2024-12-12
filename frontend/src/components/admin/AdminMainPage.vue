@@ -46,7 +46,7 @@ onMounted(() => {
     {
       text: 'Статистика',
       type: 'statistics',
-      to: `/cleaning/admin/statistics`
+      to: `/cleaning/admin/statistic`
     }
   )
 
