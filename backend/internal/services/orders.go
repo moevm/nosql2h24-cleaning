@@ -20,17 +20,20 @@ type OrdersRepo interface {
 }
 
 type OrderService struct {
-	log  *zap.Logger
-	repo OrdersRepo
+	log      *zap.Logger
+	repo     OrdersRepo
+	userRepo UserRepo
 }
 
 func NewOrderService(
 	logger *zap.Logger,
 	repo OrdersRepo,
+	userRepo UserRepo,
 ) *OrderService {
 	return &OrderService{
-		log:  logger,
-		repo: repo,
+		log:      logger,
+		repo:     repo,
+		userRepo: userRepo,
 	}
 }
 
@@ -97,7 +100,28 @@ func (r *OrderService) GetOrders(ctx context.Context, query types.OrderFilters) 
 	l := r.log.With(
 		zap.Any("operation", "OrderService.GetOrders"),
 	)
-	l.Info("get orders", zap.Any("query", query))
+
+	if query.Worker.Email != "" ||
+		query.Worker.Name != "" ||
+		query.Worker.Surname != "" ||
+		query.Worker.Patronymic != "" {
+		worker, err := r.userRepo.GetUsers(ctx, types.UserFilters{
+			UserData: query.Worker,
+			UserType: "WORKER",
+		})
+		if err != nil {
+			l.Error(
+				"failed to get workers",
+				zap.Any("error", err),
+			)
+			return nil, err
+		}
+		for _, w := range worker {
+			query.WorkersID = append(query.WorkersID, w.ID.Hex())
+		}
+	}
+
+	l.Info("query", zap.Any("query", query))
 	orders, err := r.repo.GetOrders(ctx, query)
 	if err != nil {
 		l.Error(
@@ -106,6 +130,8 @@ func (r *OrderService) GetOrders(ctx context.Context, query types.OrderFilters) 
 		)
 		return nil, err
 	}
+	l.Info("orders", zap.Any("orders", orders))
+
 	return orders, nil
 }
 

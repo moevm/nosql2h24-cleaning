@@ -76,6 +76,7 @@ func Run(cfg *config.Config) {
 	orderService := services.NewOrderService(
 		logger,
 		orderRepo,
+		userRepo,
 	)
 	dumpService := services.NewDumpService(
 		logger,

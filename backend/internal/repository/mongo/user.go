@@ -121,10 +121,8 @@ func (r *UserRepo) GetUsers(ctx context.Context, filters types.UserFilters) ([]*
 	filter.AddRegex("name", filters.Name)
 	filter.AddRegex("surname", filters.Surname)
 	filter.AddRegex("email", filters.Email)
-	filter.AddTimeIterval("created_at", search.TimeInterval{
-		Begin: filters.CreatedAtBegin,
-		End:   filters.CreatedAtEnd,
-	})
+	filter.AddTimeIterval("created_at", filters.CreatedAt)
+
 	cursor, err := r.collection.Find(ctx, filter.ToBson())
 	if err != nil {
 		return nil, err

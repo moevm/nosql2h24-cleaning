@@ -321,6 +321,62 @@ paths:
         in: query
         name: user_id
         type: string
+      - description: User name
+        in: query
+        name: user_name
+        type: string
+      - description: User surname
+        in: query
+        name: user_surname
+        type: string
+      - description: User patronymic
+        in: query
+        name: user_patronymic
+        type: string
+      - description: User email
+        in: query
+        name: user_email
+        type: string
+      - description: Address city
+        in: query
+        name: address_city
+        type: string
+      - description: Address street
+        in: query
+        name: address_street
+        type: string
+      - description: Address building
+        in: query
+        name: address_building
+        type: string
+      - description: Address entrance
+        in: query
+        name: address_entrance
+        type: string
+      - description: Address floor
+        in: query
+        name: address_floor
+        type: string
+      - description: Address door number
+        in: query
+        name: address_door_number
+        type: string
+      - description: Worker name
+        in: query
+        name: worker_name
+        type: string
+      - description: Worker surname
+        in: query
+        name: worker_surname
+        type: string
+      - description: Worker patronymic
+        in: query
+        name: worker_patronymic
+        type: string
+      - description: Worker email
+        in: query
+        name: worker_email
+        type: string
       - collectionFormat: csv
         description: Workers ID
         in: query
@@ -335,6 +391,21 @@ paths:
           type: string
         name: statuses
         type: array
+      - collectionFormat: csv
+        description: Services
+        in: query
+        items:
+          type: string
+        name: services
+        type: array
+      - description: Date time begin (string RFC3339)
+        in: query
+        name: date_time_begin
+        type: string
+      - description: Date time end (string RFC3339)
+        in: query
+        name: date_time_end
+        type: string
       produces:
       - application/json
       responses:
@@ -629,6 +700,10 @@ paths:
       - description: user surname
         in: query
         name: surname
+        type: string
+      - description: user patronymic
+        in: query
+        name: patronymic
         type: string
       - description: user email
         in: query
