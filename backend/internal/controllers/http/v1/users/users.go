@@ -3,6 +3,7 @@ package users
 import (
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/render"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/models"
@@ -17,20 +18,33 @@ import (
 // @Description  Get list of users from database
 // @Tags         Users
 // @Produce      json
-// @Param type query string true "specifying user_type"
+// @Param type query string false "specifying user_type"
+// @Param name query string false "user name"
+// @Param surname query string false "user surname"
+// @Param email query string false "user email"
+// @Param created_at_begin query string false "created_at begin (string RFC3339)"
+// @Param created_at_end query string false "created_at end (string RFC3339)"
 // @Success      200  {array}  models.User
 // @Failure      400  {object}  httputil.HTTPError
 // @Failure      404  {object}  httputil.HTTPError
 // @Failure      500  {object}  httputil.HTTPError
 // @Router       /api/v1/users [get]
 func (h *Handler) GetUsers(w http.ResponseWriter, r *http.Request) {
-	user_type := r.URL.Query().Get("type")
-	if len(user_type) == 0 {
-		render.Render(w, r, httputil.NewError(http.StatusBadRequest, errors.New("required query param didn't provided")))
-		return
+	filters := types.UserFilters{
+		Name:     r.URL.Query().Get("name"),
+		Surname:  r.URL.Query().Get("surname"),
+		Email:    r.URL.Query().Get("email"),
+		UserType: r.URL.Query().Get("type"),
 	}
 
-	users, err := h.userService.GetUsers(r.Context(), user_type)
+	if createdAtBegin, err := time.Parse(time.RFC3339, r.URL.Query().Get("created_at_begin")); err == nil {
+		filters.CreatedAtBegin = &createdAtBegin
+	}
+	if createdAtEnd, err := time.Parse(time.RFC3339, r.URL.Query().Get("created_at_end")); err == nil {
+		filters.CreatedAtEnd = &createdAtEnd
+	}
+
+	users, err := h.userService.GetUsers(r.Context(), filters)
 	if err != nil {
 		if errors.Is(err, services.ErrUserNotFound) {
 			render.Render(w, r, httputil.NewError(http.StatusNotFound, err))

@@ -14,7 +14,7 @@ type OrdersRepo interface {
 	CreateOrder(ctx context.Context, order *models.Order) (string, error)
 	GetOrderById(ctx context.Context, id string) (*models.Order, error)
 	GetUserOrders(ctx context.Context, userId string) ([]*models.Order, error)
-	GetOrders(ctx context.Context, query types.SearchParams) ([]*models.Order, error)
+	GetOrders(ctx context.Context, query types.OrderFilters) ([]*models.Order, error)
 	UpdateOrder(ctx context.Context, order *models.Order) error
 	DeleteOrder(ctx context.Context, id string) error
 }
@@ -93,7 +93,7 @@ func (r *OrderService) GetUserOrders(ctx context.Context, userID string) ([]*mod
 	return orders, nil
 }
 
-func (r *OrderService) GetOrders(ctx context.Context, query types.SearchParams) ([]*models.Order, error) {
+func (r *OrderService) GetOrders(ctx context.Context, query types.OrderFilters) ([]*models.Order, error) {
 	l := r.log.With(
 		zap.Any("operation", "OrderService.GetOrders"),
 	)
