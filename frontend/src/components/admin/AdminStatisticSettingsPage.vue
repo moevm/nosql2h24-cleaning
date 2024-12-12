@@ -1,15 +1,24 @@
 <script setup lang="ts">
 import { ref, Ref } from 'vue'
+import { useRouter } from 'vue-router'
 import MainContainer from '../../ui/uikit/containers/MainContainer.vue'
 import Dialog from '../../ui/uikit/Dialog.vue'
 import PanelContainer from '../../ui/uikit/containers/PanelContainer.vue'
+import ActionButton from '../../ui/uikit/ActionButton.vue'
+import { exportDumps, uploadDumps } from '../../api/request'
+
+const router = useRouter()
+
 const isDialogImportVisible: Ref<boolean> = ref(false)
 const isDialogExportVisible: Ref<boolean> = ref(false)
 const isDialogFiltersVisible: Ref<boolean> = ref(false)
 
 const isLoading = ref(false)
 const loadingProgress = ref(0)
+const remainingSeconds = ref(10)
 let loadingInterval: number
+let selectedFile: File | null = null
+const fileName = ref<string | null>(null)
 
 function openDialog(type: string): void {
 	switch (type) {
@@ -31,30 +40,69 @@ function closeDialog(): void {
 	isDialogFiltersVisible.value = false
 }
 
+function handleCancelAndReset() {
+  cancelImport()
+  resetLoading()
+  resetFile()
+  closeDialog()
+}
+
 function handleFileDrop(event: DragEvent) {
   const files = event.dataTransfer?.files
   if (files?.length) {
-    console.log('Файл добавлен для загрузки:', files[0])
+    const file = files[0]
+    if (file.type === 'application/json') {
+      selectedFile = file
+      fileName.value = file.name
+    } else {
+      console.error('Файл должен быть в формате JSON')
+      alert('Пожалуйста, выберите файл формата JSON')
+    }
+  }
+}
+
+function confirmImportFile() {
+  if (selectedFile) {
+    startImport()
+  } else {
+    console.error('Нет выбранного файла')
+    alert('Пожалуйста, сначала выберите файл JSON')
   }
 }
 
 function startImport() {
-  isLoading.value = true
-  loadingProgress.value = 0
+  isLoading.value = true;
+  loadingProgress.value = 0;
+  remainingSeconds.value = 10;
+
+  let totalDuration = 10000;
+  let intervalDuration = 100;
+  let progressIncrement = (100 / (totalDuration / intervalDuration));
+
   loadingInterval = setInterval(() => {
     if (loadingProgress.value < 100) {
-      loadingProgress.value += 1
+      loadingProgress.value += progressIncrement;
+
+      if (remainingSeconds.value > 0 && loadingProgress.value % 10 === 0) {
+        remainingSeconds.value -= 1;
+      }
     } else {
-      completeImport()
+      completeImport();
     }
-  }, 100)
+  }, intervalDuration);
 }
 
 function completeImport() {
   clearInterval(loadingInterval)
   isLoading.value = false
+  loadingProgress.value = 0
+  remainingSeconds.value = 10
   closeDialog()
-  console.log('Импорт данных закончен')
+  if (selectedFile) {
+    uploadFile(selectedFile)
+    resetFile()
+  }
+  console.log('Загрузка завершена')
 }
 
 function cancelImport() {
@@ -64,12 +112,40 @@ function cancelImport() {
 }
 
 function resetLoading() {
+  clearInterval(loadingInterval)
   isLoading.value = false
   loadingProgress.value = 0
+  remainingSeconds.value = 10
+}
+
+function resetFile() {
+  selectedFile = null
+  fileName.value = null
+}
+
+function uploadFile(file: File) {
+  uploadDumps(file)
+    .then(() => {
+      closeDialog();
+      router.push('/login')
+    })
+    .catch((error) => {
+      console.error('Ошибка при загрузке файла:', error);
+      alert('Произошла ошибка при загрузке файла. Возможно он не соответсвует формату json');
+      resetLoading()
+      resetFile()
+    });
 }
 
 function fetchExportData() {
-	console.log('Экспорт данных');
+  exportDumps()
+    .then(() => {
+      console.log('Данные успешно экспортированы.');
+    })
+    .catch((error) => {
+      console.error('Ошибка экспорта данных:', error);
+      alert('Произошла ошибка при экспорте данных. Пожалуйста, попробуйте снова.');
+    });
 }
 
 </script>
@@ -106,13 +182,25 @@ function fetchExportData() {
       dialogMaxWidth="30%"
       @update:visible="closeDialog"
 			>
-			<div>
+			<template #body>
         <p>Вы уверены, что хотите экспортировать все данные сервиса?</p>
-        <div class="button-container">
-          <button class="no-button" @click="closeDialog">Нет</button>
-          <button class="yes-button" @click="fetchExportData">Да</button>
-        </div>
-      </div>
+      </template>
+      <template #footer>
+        <ActionButton
+          text="Нет"
+          type="cancel"
+          variant="flat"
+          color=red
+          @click="closeDialog"
+        ></ActionButton>
+        <ActionButton
+          text="Да"
+          type="confirm"
+          variant="flat"
+          color=green
+          @click="fetchExportData"
+        ></ActionButton>
+      </template>
     </Dialog>
 		<Dialog
       title="Импорт"
@@ -120,29 +208,43 @@ function fetchExportData() {
       dialogMaxWidth="30%"
       @update:visible="closeDialog"
 			>
-			<div>
-        <p>Вы уверены, что хотите загрузить новые данные? Это удалит все текущие данные.</p>
-
+      <template #body>
+        <p>Вы уверены что хотите загрузить новые данные? Это приведет к удалению всех текущих данных</p>
         <div
           class="drag-drop-area"
           @dragover.prevent
           @drop.prevent
           @drop="handleFileDrop"
         >
-          Перетащите файл для загрузки
+        <span>{{ fileName || 'Перетащите файл сюда для загрузки' }}</span>
         </div>
-
         <div v-if="isLoading">
-          <p>Загрузка... Подождите или нажмите 'Стоп', чтобы отменить.</p>
-          <progress :value="loadingProgress" max="100"></progress>
-          <button class="stop-button" @click="cancelImport">Стоп</button>
+          <p style="font-weight: bold">Через {{ remainingSeconds }} секунд данные в базе будут заменены данными из файла</p>          <progress :value="loadingProgress" max="100"></progress>
+          <ActionButton
+            text="Отменить импорт"
+            type="cancel"
+            variant="flat"
+            color=orange
+            @click="cancelImport"
+          ></ActionButton>
         </div>
-
-        <div class="button-container" v-else>
-          <button class="no-button" @click="closeDialog">Нет</button>
-          <button class="yes-button" @click="startImport()">Да</button>
-        </div>
-      </div>
+      </template>
+      <template #footer>
+        <ActionButton
+          text="Нет"
+          type="cancel"
+          variant="flat"
+          color=red
+          @click="handleCancelAndReset"
+        ></ActionButton>
+        <ActionButton
+          text="Да"
+          type="confirm"
+          variant="flat"
+          color=green
+          @click="confirmImportFile"
+        ></ActionButton>
+      </template>
     </Dialog>
 		<Dialog
       title="Фильтры"
@@ -150,7 +252,9 @@ function fetchExportData() {
       dialogMaxWidth="30%"
       @update:visible="closeDialog"
 			>
-			
+      <template #body>
+        <p>Work in progress</p>
+      </template>
     </Dialog>
   </MainContainer>
 </template>
