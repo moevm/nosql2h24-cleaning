@@ -17,8 +17,13 @@ import {
   getClientAddressPath,
   updateClientAddressPath,
   createWorkerUserPath,
-  deleteClientAddressPath
+  deleteClientAddressPath,
+  getAllOrdersPath,
+  getAllServicesPath
 } from './endpoint'
+import Order from './models/order'
+import Service from './models/service'
+import { FilterOrder } from './models/filterOrder'
 
 const baseURL = 'http://localhost:8080/api'
 
@@ -35,7 +40,6 @@ export async function postRegister (data: UserRegisterData): Promise<void> {
 export async function postLogin (data: UserLoginData): Promise<User> {
   return axios.post(baseURL + getLoginPath, data)
   .then((response) => {
-    console.log(response.data)
     return Promise.resolve(response.data)
   })
   .catch((error) => {
@@ -170,5 +174,40 @@ export function deleteClientAddress(id: string, address_id: string): Promise<any
   .catch((error) => {
     console.error('Error HTTP:', error);
     throw error;
+  })
+}
+
+export async function getAllOrders(): Promise<Order[]> {
+  return axios.get(baseURL + getAllOrdersPath)
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error);
+  })
+}
+
+export async function getAllServices(): Promise<Service[]> {
+  return axios.get(baseURL + getAllServicesPath)
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error);
+  })
+}
+
+export async function filterOrder(filterData: FilterOrder): Promise<Order[]> {
+  return axios.get(baseURL + getAllOrdersPath, {
+    params: filterData, 
+    paramsSerializer: {
+      indexes: null
+    }
+  })
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error);
   })
 }

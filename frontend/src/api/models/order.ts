@@ -12,6 +12,7 @@ interface Order {
   pollution: number;
   area: number;
   comment: string;
+  status: string;
   status_logs: StatusLog[];
   services: string[];
   required_workers: number;
