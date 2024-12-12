@@ -39,35 +39,31 @@ function closeDialog(): void {
 }
 
 async function fetchWorkersList() {
-  try {
-    const response = await getUsers('WORKER');
-    workers.value = response.map(user => ({
-      id: user.id,
-      name: user.name,
-      surname: user.surname,
-      patronymic: user.patronymic,
-      email: user.email,
-      phone_number: user.phone_number
-    }));
-  } catch (error) {
-    console.error("Failed to fetch workers list:", error);
+    await getUsers('WORKER').then((response) => { 
+      workers.value = response.map(user => ({
+        id: user.id,
+        name: user.name,
+        surname: user.surname,
+        patronymic: user.patronymic,
+        email: user.email,
+        phone_number: user.phone_number
+      }));
+    }).catch ((error) => {
+      console.error("Failed to fetch workers list:", error)
+    })
   }
-}
 
 async function fetchCreateUser(workerData: UserRegisterData) {
-      const userPayload: Partial<User> = {
-        ...workerData,
-        user_type: 'WORKER',
-      };
-
-      try {
-        const response = await createWorkerUser(userPayload as User);
-        console.log('Created User ID:', response.id);
-      } catch (error) {
-        console.error('Error HTTP:', error);
-        throw error;
-      }
-    }
+  const userPayload: Partial<User> = {
+    ...workerData,
+    user_type: 'WORKER',
+  };
+  await createWorkerUser(userPayload as User).then((response) => {
+    console.log('Created User ID:', response.id);
+  }).catch ((error) => {
+    console.error('Error HTTP:', error);
+  })
+}
 
 async function handleCreateWorkerUser() {
   closeDialog();

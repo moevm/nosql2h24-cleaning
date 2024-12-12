@@ -16,6 +16,7 @@ const props = defineProps<{
     patronymic: string;
     email: string;
     phone_number: string;
+    password: string;
   }
 }>()
 
@@ -29,30 +30,29 @@ const editWorker = ref<UserRegisterData>({
 });
 
 async function handleUpdateWorker() {
-  try {
-    const workerData: Partial<User> = {
-      ...editWorker.value,
-      id: props.worker.id,
-      user_type: 'WORKER',
-    };
-    await updateUser(props.worker.id, workerData as User);
+  const workerData: Partial<User> = {
+    ...editWorker.value,
+    id: props.worker.id,
+    user_type: 'WORKER',
+  };
+    
+  await updateUser(props.worker.id, workerData as User).then( _ => {
     console.log('User updated successfully');
     closeDialog();
     emit('update-worker')
-  } catch (error) {
+  }).catch((error) => {
     console.error('Error updating user:', error);
-  }
+  })
 }
 
 async function handleDeleteWorker() {
-  try {
-    await deleteUser(props.worker.id);
+  await deleteUser(props.worker.id).then((_) => {
     console.log('User deleted successfully');
     closeDialog();
     emit('update-worker');
-  } catch (error) {
+  }).catch((error) => {
     console.error('Error deleting user:', error);
-  }
+  })
 }
 
 function resetEditableWorker() {
