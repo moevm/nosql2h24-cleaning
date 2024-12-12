@@ -9,6 +9,7 @@ import AdminMainPage from '../components/admin/AdminMainPage.vue'
 import AdminOrdersPage from '../components/admin/AdminOrdersPage.vue'
 import AdminWorkersSettingsPage from '../components/admin/AdminWorkersSettingsPage.vue'
 import AdminServicesSettingsPage from '../components/admin/AdminServicesSettingsPage.vue'
+import AdminStatisticSettingsPage from '../components/admin/AdminStatisticSettingsPage.vue'
 
 const routes = [
   {
@@ -62,6 +63,11 @@ const routes = [
             name: 'admin-services-settings',
             path: 'services',
             component: AdminServicesSettingsPage
+          },
+          {
+            name: 'admin-statistic-settings',
+            path: 'statistic',
+            component: AdminStatisticSettingsPage
           }
         ]
       }
