@@ -1,17 +1,70 @@
 <script setup lang="ts">
 import { Ref, ref, defineProps } from 'vue'
+import { User, UserRegisterData } from '../../../api/models/user'
+import { updateUser, deleteUser } from '../../../api/request'
 import ActionButton from '../ActionButton.vue'
 import InputTextField from '../inputs//InputTextField.vue'
 import Dialog from '../Dialog.vue'
 
+const emit = defineEmits(['update-worker']);
+
 const props = defineProps<{
   worker: {
     id: string;
-    firstName: string;
-    lastName: string;
+    name: string;
+    surname: string;
+    patronymic: string;
     email: string;
+    phone_number: string;
+    password: string;
   }
 }>()
+
+const editWorker = ref<UserRegisterData>({
+  name: props.worker.name,
+  surname: props.worker.surname,
+  patronymic: props.worker.patronymic,
+  email: props.worker.email,
+  phone_number: props.worker.phone_number,
+  password: '',
+});
+
+async function handleUpdateWorker() {
+  const workerData: Partial<User> = {
+    ...editWorker.value,
+    id: props.worker.id,
+    user_type: 'WORKER',
+  };
+    
+  await updateUser(props.worker.id, workerData as User).then( _ => {
+    console.log('User updated successfully');
+    closeDialog();
+    emit('update-worker')
+  }).catch((error) => {
+    console.error('Error updating user:', error);
+  })
+}
+
+async function handleDeleteWorker() {
+  await deleteUser(props.worker.id).then((_) => {
+    console.log('User deleted successfully');
+    closeDialog();
+    emit('update-worker');
+  }).catch((error) => {
+    console.error('Error deleting user:', error);
+  })
+}
+
+function resetEditableWorker() {
+  editWorker.value = {
+    name: props.worker.name,
+    surname: props.worker.surname,
+    patronymic: props.worker.patronymic,
+    email: props.worker.email,
+    phone_number: props.worker.phone_number,
+    password: ''
+  };
+}
 
 const isDialogVisible: Ref<boolean> = ref(false)
 
@@ -21,12 +74,13 @@ function openDialog(): void {
 
 function closeDialog(): void {
   isDialogVisible.value = false
+  resetEditableWorker();
 }
 </script>
 
 <template>
   <div class="worker-item">
-    <p>{{ props.worker.firstName }} {{ props.worker.lastName }}</p>
+    <p>{{ props.worker.name }} {{ props.worker.surname }}</p>
     <p>{{ props.worker.email }}</p>
     <div class="worker-edit">
       <ActionButton
@@ -46,32 +100,38 @@ function closeDialog(): void {
     >
       <template #body>
         <InputTextField
+          v-model="editWorker.name"
           placeholder="Введите имя"
           type="text"
           label="Имя"
         ></InputTextField>
         <InputTextField
+          v-model="editWorker.surname"
           placeholder="Введите фамилию"
           type="text"
           label="Фамилия"
         ></InputTextField>
         <InputTextField
+          v-model="editWorker.patronymic"
           placeholder="Введите отчество"
           type="text"
           label="Отчество"
         ></InputTextField>
         <InputTextField
+          v-model="editWorker.phone_number"
           placeholder="Введите телефон"
           type="phonenumber"
           label="Номер телефона"
         ></InputTextField>
         <InputTextField
+          v-model="editWorker.email"
           placeholder="Введите почту"
           type="email"
           label="Почта"
         ></InputTextField>
         <InputTextField
-          placeholder="Введите пароль"
+          v-model="editWorker.password"
+          placeholder="Новый пароль"
           type="password"
           label="Пароль"
         ></InputTextField>
@@ -89,14 +149,14 @@ function closeDialog(): void {
           type="delete"
           variant="flat"
           color="#f65858"
-          @click="closeDialog"
+          @click="handleDeleteWorker"
         ></ActionButton>
         <ActionButton
           text="Подтвердить"
           type="submit"
           variant="flat"
           color="#394cc2"
-          @click="closeDialog"
+          @click="handleUpdateWorker"
         ></ActionButton>
       </template>
     </Dialog>
