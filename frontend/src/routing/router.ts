@@ -6,6 +6,7 @@ import ClientAddressesPage from '../components/client/ClientAddressesPage.vue'
 import ClientOrdersHistoryPage from '../components/client/ClientOrdersHistoryPage.vue'
 import ClientCreateOrderPage from '../components/client/ClientCreateOrderPage.vue'
 import AdminMainPage from '../components/admin/AdminMainPage.vue'
+import AdminOrdersPage from '../components/admin/AdminOrdersPage.vue'
 import AdminWorkersSettingsPage from '../components/admin/AdminWorkersSettingsPage.vue'
 import AdminServicesSettingsPage from '../components/admin/AdminServicesSettingsPage.vue'
 
@@ -47,6 +48,11 @@ const routes = [
         path: 'admin',
         component: AdminMainPage,
         children: [
+          {
+            name: 'admin-orders',
+            path: 'orders',
+            component: AdminOrdersPage
+          },
           {
             name: 'admin-workers-settings',
             path: 'workers',
