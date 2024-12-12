@@ -6,9 +6,9 @@ import (
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
-type TimeInterval struct {
-	Begin *time.Time
-	End   *time.Time
+type TimeInterval interface {
+	GetBegin() *time.Time
+	GetEnd() *time.Time
 }
 
 type Filter bson.M
@@ -27,15 +27,43 @@ func (f Filter) AddEqual(key string, value string) {
 
 func (f Filter) AddTimeIterval(key string, interval TimeInterval) {
 	filter := bson.M{}
-	if interval.Begin != nil {
-		filter["$gte"] = interval.Begin
+	if interval.GetBegin() != nil {
+		filter["$gte"] = interval.GetBegin()
 	}
-	if interval.End != nil {
-		filter["$lte"] = interval.End
+	if interval.GetBegin() != nil {
+		filter["$lte"] = interval.GetEnd()
 	}
 	if len(filter) != 0 {
 		f[key] = filter
 	}
+}
+
+func (f Filter) AddIn(key string, values []string) {
+	if len(values) != 0 {
+		f[key] = bson.M{"$in": values}
+	}
+}
+
+func toObjectID(values []string) []bson.ObjectID {
+	arr := make([]bson.ObjectID, len(values))
+	for i, v := range values {
+		arr[i], _ = bson.ObjectIDFromHex(v)
+	}
+	return arr
+}
+
+func (f Filter) AddInObjectIDs(key string, values []string) {
+	if len(values) == 0 {
+		return
+	}
+	f[key] = bson.M{"$in": toObjectID(values)}
+}
+
+func (f Filter) ContainsAll(key string, values []string) {
+	if len(values) == 0 {
+		return
+	}
+	f[key] = bson.M{"$all": toObjectID(values)}
 }
 
 func (f Filter) ToBson() bson.M {

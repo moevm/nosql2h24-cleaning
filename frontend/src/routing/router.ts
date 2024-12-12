@@ -6,8 +6,10 @@ import ClientAddressesPage from '../components/client/ClientAddressesPage.vue'
 import ClientOrdersHistoryPage from '../components/client/ClientOrdersHistoryPage.vue'
 import ClientCreateOrderPage from '../components/client/ClientCreateOrderPage.vue'
 import AdminMainPage from '../components/admin/AdminMainPage.vue'
+import AdminOrdersPage from '../components/admin/AdminOrdersPage.vue'
 import AdminWorkersSettingsPage from '../components/admin/AdminWorkersSettingsPage.vue'
 import AdminServicesSettingsPage from '../components/admin/AdminServicesSettingsPage.vue'
+import AdminStatisticSettingsPage from '../components/admin/AdminStatisticSettingsPage.vue'
 
 const routes = [
   {
@@ -48,6 +50,11 @@ const routes = [
         component: AdminMainPage,
         children: [
           {
+            name: 'admin-orders',
+            path: 'orders',
+            component: AdminOrdersPage
+          },
+          {
             name: 'admin-workers-settings',
             path: 'workers',
             component: AdminWorkersSettingsPage
@@ -56,11 +63,17 @@ const routes = [
             name: 'admin-services-settings',
             path: 'services',
             component: AdminServicesSettingsPage
+          },
+          {
+            name: 'admin-statistic-settings',
+            path: 'statistic',
+            component: AdminStatisticSettingsPage
           }
         ]
       }
     ]
-  }
+  },
+  { path: '/:pathMatch(.*)*', redirect: '/login' }
 ]
 
 const router = createRouter({
