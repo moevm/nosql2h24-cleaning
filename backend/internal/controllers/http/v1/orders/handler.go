@@ -23,6 +23,9 @@ func (h *Handler) Routes() chi.Router {
 		r.Get("/", h.GetOrder)
 		r.Put("/", h.UpdateOrder)
 		r.Delete("/", h.DeleteOrder)
+
+		r.Post("/complete", h.CompleteOrder)
+		r.Post("/take", h.TakeOrder)
 	})
 
 	return router
