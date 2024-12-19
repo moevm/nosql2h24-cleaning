@@ -30,6 +30,18 @@ func (f Filter) AddEqual(key string, value string) {
 	}
 }
 
+func (f Filter) AddEqualObjectID(key string, value string) error {
+	if len(value) == 0 {
+		return nil
+	}
+	objectID, err := bson.ObjectIDFromHex(value)
+	if err != nil {
+		return err
+	}
+	f[key] = objectID
+	return nil
+}
+
 func (f Filter) AddTimeIterval(key string, interval TimeInterval) {
 	filter := bson.M{}
 	if interval.GetBegin() != nil {

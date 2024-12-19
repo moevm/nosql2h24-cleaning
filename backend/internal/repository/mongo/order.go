@@ -115,7 +115,7 @@ func (r *OrderRepo) GetUserOrders(ctx context.Context, userID string) ([]*models
 func (r *OrderRepo) GetOrders(ctx context.Context, query types.OrderFilters) ([]*models.Order, error) {
 	filter := search.Filter{}
 	// user info
-	filter.AddEqual("user_id", query.UserID)
+	filter.AddEqualObjectID("user_id", query.UserID)
 
 	filter.AddRegex("user.name", query.User.Name)
 	filter.AddRegex("user.surname", query.User.Surname)
