@@ -39,6 +39,7 @@
             "surname": "Петров",
             "patronymic": "Иванович",
             "email": "andrey@mail.ru",
+            "orders_count": 2,
             "password": "$2a$10$dC8NSVsldxLdQbSzW9DPCO4LWoP1ZJDzdH0tbW5aPdUG.XOyIe596",
             "phone_number": "+7 (999) 010-10-22",
             "user_type": "WORKER",
@@ -61,6 +62,7 @@
             "surname": "Смирнова",
             "patronymic": "Викторовна",
             "email": "katya@mail.ru",
+            "orders_count": 2,
             "password": "$2a$10$bh0Y3bOB4lkIImrXwvDhL2gnzLf0pX6r0kO2ja13kR5LdyKD9yROO",
             "phone_number": "+7 (999) 444-55-66",
             "user_type": "WORKER",
@@ -72,6 +74,7 @@
             "surname": "Давыдова",
             "patronymic": "Михайловна",
             "email": "marina@mail.ru",
+            "orders_count": 3,
             "password": "$2a$10$J7XkT3xLwvQJxJn68mXbo/jhD5pw7vwIMomik6CH32ewX3jZf1Gti",
             "phone_number": "+7 (999) 888-99-00",
             "user_type": "WORKER",
@@ -349,7 +352,7 @@
             "status": "IN_PROGRESS",
             "services": ["3565ed3fa26c4a64672e9b38"],
             "required_workers": 2,
-            "workers": ["60b8c093f6d292edb4b4a761", "60b8c093f6d292edb4b4a762"],
+            "workers": ["60b8c093f6d292edb4b4a761"],
             "created_at": "2024-04-08T15:30:00.000Z"
         },
         {
@@ -415,7 +418,7 @@
             "status": "IN_PROGRESS",
             "services": ["3fa26c4a64672e9b383565ed", "565ed3fa26c4a64672e9b383"],
             "required_workers": 2,
-            "workers": ["60b8c093f6d292edb4b4a761", "60b8c093f6d292edb4b4a762"],
+            "workers": ["60b8c093f6d292edb4b4a761"],
             "created_at": "2024-04-10T13:45:00.000Z"
         },
         {
@@ -448,7 +451,7 @@
             "status": "IN_PROGRESS",
             "services": ["3fa26c4a64672e9b383565ed", "565ed3fa26c4a64672e9b383"],
             "required_workers": 2,
-            "workers": ["60b8c093f6d292edb4b4a762", "60b8c093f6d292edb4b4a761"],
+            "workers": ["60b8c093f6d292edb4b4a761"],
             "created_at": "2024-04-11T11:45:00.000Z"
         },
         {
@@ -470,14 +473,7 @@
             "pollution": 50,
             "area": 100.0,
             "comment": "Нужна полная уборка дома после въезда",
-            "status_log": [
-                {
-                    "id": "60b8c093f6d292edb4b4a783",
-                    "new_status": "CREATED",
-                    "prev_status": "CREATED",
-                    "created_at": "2024-04-12T09:00:00.000Z"
-                }
-            ],
+            "status_log": [],
             "status": "CREATED",
             "services": ["3fa26c4a64672e9b383565ed", "565ed3fa26c4a64672e9b383"],
             "required_workers": 2,
