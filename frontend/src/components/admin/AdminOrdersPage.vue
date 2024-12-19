@@ -96,7 +96,7 @@ function submitSearch(): void {
 }
 
 onMounted(() => {
-  getAllOrders()
+  getAllOrders(null)
   .then((response) => {
     orders.value = response
   })

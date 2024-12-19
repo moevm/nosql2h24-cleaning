@@ -21,7 +21,8 @@ import {
   uploadDumpsPath,
   exportDumpsPath,
   getAllOrdersPath,
-  getAllServicesPath
+  getAllServicesPath,
+  updateOrdersPath
 } from './endpoint'
 import Order from './models/order'
 import Service from './models/service'
@@ -233,7 +234,7 @@ export async function filterWorkers(name: string, surname: string): Promise<User
   })
 }
 
-export async function getAllOrders(id: string): Promise<Order[]> {
+export async function getAllOrders(id: string | null): Promise<Order[]> {
   const url = `${baseURL}${getAllOrdersPath}?user_id=${id}`;
   return axios.get(url)
   .then((response) => {
@@ -242,6 +243,18 @@ export async function getAllOrders(id: string): Promise<Order[]> {
   .catch((error) => {
     return Promise.reject(error);
   })
+}
+
+export async function updateOrder(newOrder: Order): Promise<Order> {
+  return axios.put<Order>(baseURL + updateOrdersPath(newOrder.id), newOrder)
+  .then((response) => {
+    return response.data
+  })
+  .catch((error) => {
+    console.error('Error update order:', error);
+    throw error;
+  })
+  
 }
 
 export async function getAllServices(): Promise<Service[]> {

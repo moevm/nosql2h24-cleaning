@@ -14,4 +14,5 @@ export const deleteClientAddressPath = (id: string, address_id: string) => `/v1/
 export const uploadDumpsPath = '/v1/dumps'
 export const exportDumpsPath = '/v1/dumps'
 export const getAllOrdersPath = '/v1/orders'
+export const updateOrdersPath = (id: string) => `/v1/orders/${id}`
 export const getAllServicesPath = '/v1/services'
