@@ -5,13 +5,14 @@ import (
 	"time"
 
 	"github.com/go-chi/render"
+	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/middlewares"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/types"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/httputil"
 )
 
 // GetOrders
 // @Summary Get orders
-// @Description Get all orders
+// @Description Get orders from database. If user_id is "me" then it will be replaced with the current user ID
 // @Tags Orders
 // @Accept json
 // @Produce json
@@ -65,6 +66,10 @@ func (h *Handler) GetOrders(w http.ResponseWriter, r *http.Request) {
 		WorkersID: query["workers_id"],
 		Statuses:  query["statuses"],
 		Services:  query["services"],
+	}
+
+	if filters.UserID == "me" {
+		filters.UserID = middlewares.GetUserID(r.Context())
 	}
 
 	if dateTimeBegin, err := time.Parse(time.RFC3339, query.Get("date_time_begin")); err == nil {

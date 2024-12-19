@@ -3,6 +3,7 @@ package users
 import (
 	"errors"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/go-chi/render"
@@ -23,6 +24,9 @@ import (
 // @Param surname query string false "user surname"
 // @Param patronymic query string false "user patronymic"
 // @Param email query string false "user email"
+// @Param phone_number query string false "user phone number"
+// @Param orders_count_min query int false "worker orders count min"
+// @Param orders_count_max query int false "worker orders count max"
 // @Param created_at_begin query string false "created_at begin (string RFC3339)"
 // @Param created_at_end query string false "created_at end (string RFC3339)"
 // @Success      200  {array}  models.User
@@ -33,10 +37,11 @@ import (
 func (h *Handler) GetUsers(w http.ResponseWriter, r *http.Request) {
 	filters := types.UserFilters{
 		UserData: types.UserData{
-			Name:       r.URL.Query().Get("name"),
-			Surname:    r.URL.Query().Get("surname"),
-			Patronymic: r.URL.Query().Get("patronymic"),
-			Email:      r.URL.Query().Get("email"),
+			Name:        r.URL.Query().Get("name"),
+			Surname:     r.URL.Query().Get("surname"),
+			Patronymic:  r.URL.Query().Get("patronymic"),
+			Email:       r.URL.Query().Get("email"),
+			PhoneNumber: r.URL.Query().Get("phone_number"),
 		},
 		UserType: r.URL.Query().Get("type"),
 	}
@@ -46,6 +51,13 @@ func (h *Handler) GetUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	if createdAtEnd, err := time.Parse(time.RFC3339, r.URL.Query().Get("created_at_end")); err == nil {
 		filters.CreatedAt.End = &createdAtEnd
+	}
+
+	if ordersCountMin, err := strconv.Atoi(r.URL.Query().Get("orders_count_min")); err == nil {
+		filters.OrdersCount.Min = &ordersCountMin
+	}
+	if ordersCountMax, err := strconv.Atoi(r.URL.Query().Get("orders_count_max")); err == nil {
+		filters.OrdersCount.Max = &ordersCountMax
 	}
 
 	users, err := h.userService.GetUsers(r.Context(), filters)

@@ -317,7 +317,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get all orders
+      description: Get orders from database. If user_id is "me" then it will be replaced
+        with the current user ID
       parameters:
       - description: User ID
         in: query
@@ -765,6 +766,18 @@ paths:
         in: query
         name: email
         type: string
+      - description: user phone number
+        in: query
+        name: phone_number
+        type: string
+      - description: worker orders count min
+        in: query
+        name: orders_count_min
+        type: integer
+      - description: worker orders count max
+        in: query
+        name: orders_count_max
+        type: integer
       - description: created_at begin (string RFC3339)
         in: query
         name: created_at_begin
