@@ -233,8 +233,9 @@ export async function filterWorkers(name: string, surname: string): Promise<User
   })
 }
 
-export async function getAllOrders(): Promise<Order[]> {
-  return axios.get(baseURL + getAllOrdersPath)
+export async function getAllOrders(id: string): Promise<Order[]> {
+  const url = `${baseURL}${getAllOrdersPath}?user_id=${id}`;
+  return axios.get(url)
   .then((response) => {
     return Promise.resolve(response.data)
   })

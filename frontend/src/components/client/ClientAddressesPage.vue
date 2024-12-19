@@ -10,7 +10,7 @@ import { getClientAddresses, createNewAddress } from '../../api/request'
 import Address from '../../api/models/address'
 
 onMounted(() => {
-  fetchClientAddresses("10")
+  fetchClientAddresses("me")
 })
 
 const addresses = ref<Address[]>([])
