@@ -11,6 +11,11 @@ type TimeInterval interface {
 	GetEnd() *time.Time
 }
 
+type NumberRange interface {
+	GetMin() *int
+	GetMax() *int
+}
+
 type Filter bson.M
 
 func (f Filter) AddRegex(key string, value string) {
@@ -32,6 +37,19 @@ func (f Filter) AddTimeIterval(key string, interval TimeInterval) {
 	}
 	if interval.GetEnd() != nil {
 		filter["$lte"] = interval.GetEnd()
+	}
+	if len(filter) != 0 {
+		f[key] = filter
+	}
+}
+
+func (f Filter) AddNumberRange(key string, rangeValue NumberRange) {
+	filter := bson.M{}
+	if rangeValue.GetMin() != nil {
+		filter["$gte"] = rangeValue.GetMin()
+	}
+	if rangeValue.GetMax() != nil {
+		filter["$lte"] = rangeValue.GetMax()
 	}
 	if len(filter) != 0 {
 		f[key] = filter
