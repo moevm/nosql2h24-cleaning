@@ -17,7 +17,7 @@ function fetchAllOrders() {
       orders.value = response
     })
     .catch((error) => {
-      console.error('All orders fetch error:', error);
+      console.error('Fetch all orders error:', error);
     });
 }
 
