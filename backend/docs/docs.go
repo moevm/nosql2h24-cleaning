@@ -191,7 +191,7 @@ const docTemplate = `{
         },
         "/api/v1/orders": {
             "get": {
-                "description": "Get all orders",
+                "description": "Get orders from database. If user_id is \"me\" then it will be replaced with the current user ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -873,6 +873,24 @@ const docTemplate = `{
                         "type": "string",
                         "description": "user email",
                         "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "user phone number",
+                        "name": "phone_number",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "worker orders count min",
+                        "name": "orders_count_min",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "worker orders count max",
+                        "name": "orders_count_max",
                         "in": "query"
                     },
                     {

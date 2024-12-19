@@ -56,3 +56,7 @@ func (m *AuthMiddleware) JWT(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
+
+func GetUserID(ctx context.Context) string {
+	return ctx.Value(UserID).(string)
+}

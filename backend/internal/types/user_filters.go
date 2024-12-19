@@ -2,6 +2,7 @@ package types
 
 type UserFilters struct {
 	UserData
-	UserType  string `json:"user_type"`
-	CreatedAt TimeInterval
+	OrdersCount NumberRange
+	UserType    string `json:"user_type"`
+	CreatedAt   TimeInterval
 }

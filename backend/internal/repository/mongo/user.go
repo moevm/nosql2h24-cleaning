@@ -121,7 +121,11 @@ func (r *UserRepo) GetUsers(ctx context.Context, filters types.UserFilters) ([]*
 	filter.AddRegex("name", filters.Name)
 	filter.AddRegex("surname", filters.Surname)
 	filter.AddRegex("email", filters.Email)
+	filter.AddRegex("phone_number", filters.PhoneNumber)
 	filter.AddTimeIterval("created_at", filters.CreatedAt)
+
+	// worker filters
+	filter.AddNumberRange("orders_count", filters.OrdersCount)
 
 	cursor, err := r.collection.Find(ctx, filter.ToBson())
 	if err != nil {
