@@ -6,6 +6,12 @@ import (
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
+const (
+	OrderStatusNew      = "CREATED"
+	OrderStatusAccepted = "IN_PROGRESS"
+	OrderStatusDone     = "FINISHED"
+)
+
 type Order struct {
 	ID                bson.ObjectID   `json:"id" bson:"_id,omitempty"`
 	UserID            bson.ObjectID   `json:"user_id" bson:"user_id,omitempty"`

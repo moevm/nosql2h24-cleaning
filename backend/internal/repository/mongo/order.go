@@ -3,7 +3,6 @@ package mongorepo
 import (
 	"context"
 	"errors"
-	"log"
 	"time"
 
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/models"
@@ -139,7 +138,7 @@ func (r *OrderRepo) GetOrders(ctx context.Context, query types.OrderFilters) ([]
 
 	// time
 	filter.AddTimeIterval("date_time", query.DateTime)
-	log.Print(filter)
+
 	cur, err := r.collection.Aggregate(ctx, bson.A{
 		bson.D{{
 			Key: "$lookup",
@@ -165,17 +164,13 @@ func (r *OrderRepo) GetOrders(ctx context.Context, query types.OrderFilters) ([]
 		return nil, err
 	}
 
-	log.Print(orders)
-
 	return orders, nil
 }
 
 func (r *OrderRepo) UpdateOrder(ctx context.Context, order *models.Order) error {
+	order.UpdatedAt = time.Now()
 	update := bson.D{
 		{Key: "$set", Value: order},
-		{Key: "$currentDate", Value: bson.D{
-			{Key: "updated_at", Value: true},
-		}},
 	}
 
 	res, err := r.collection.UpdateByID(ctx, order.ID, update)

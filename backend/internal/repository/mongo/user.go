@@ -347,3 +347,26 @@ func (r *UserRepo) DeleteAddress(ctx context.Context, userID string, addressID s
 	}
 	return nil
 }
+
+func (r *UserRepo) IncrementWorkersOrderCounts(ctx context.Context, workersIDs ...string) error {
+	filter := search.Filter{}
+	filter.AddInObjectIDs("_id", workersIDs)
+
+	update := bson.D{
+		{Key: "$inc", Value: bson.D{
+			{Key: "orders_count", Value: 1},
+		}},
+	}
+
+	res, err := r.collection.UpdateMany(ctx, filter.ToBson(), update)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return repository.ErrNotFound
+		}
+		return err
+	}
+	if res.ModifiedCount == 0 {
+		return repository.ErrNotFound
+	}
+	return nil
+}
