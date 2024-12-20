@@ -17,6 +17,8 @@ const props = defineProps<{
     email: string;
     phone_number: string;
     password: string;
+    orders_count: number;
+    created_at: string;
   }
 }>()
 
@@ -76,12 +78,27 @@ function closeDialog(): void {
   isDialogVisible.value = false
   resetEditableWorker();
 }
+
+function formatDate(date: Date) {
+  const months = [
+    'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+  ];
+
+  const day = date.getDate();
+  const monthIndex = date.getMonth();
+  const year = date.getFullYear();
+
+  return `${day} ${months[monthIndex]} ${year}`;
+}
 </script>
 
 <template>
   <div class="worker-item">
     <p>{{ props.worker.name }} {{ props.worker.surname }}</p>
-    <p>{{ props.worker.email }}</p>
+    <p>email: {{ props.worker.email }}</p>
+    <p>выполнено заказов: {{ props.worker.orders_count }}</p>
+    <p>на сервисе с {{ formatDate(new Date(props.worker.created_at)) }} года</p>
     <div class="worker-edit">
       <ActionButton
         text="Редактировать"

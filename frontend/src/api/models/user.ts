@@ -24,6 +24,7 @@ export type User = {
   user_type: string;
   created_at: Date;
   updated_at: Date;
+  orders_count: number;
 }
 
 export type UserRegisterData = {

@@ -18,6 +18,8 @@ const workers = ref<{
   patronymic: string;
   email: string;
   phone_number: string;
+  orders_count: number;
+  created_at: Date;
 }[]>([]);
 
 const searchName = ref<string>('');
@@ -50,7 +52,9 @@ async function fetchWorkersList() {
       surname: user.surname,
       patronymic: user.patronymic,
       email: user.email,
-      phone_number: user.phone_number
+      phone_number: user.phone_number,
+      orders_count: user.orders_count  || 0,
+      created_at: user.created_at
     }));
   }).catch ((error) => {
     console.error("Failed to fetch workers list:", error)
@@ -96,7 +100,9 @@ function handleSearch(): void {
       surname: user.surname,
       patronymic: user.patronymic,
       email: user.email,
-      phone_number: user.phone_number
+      phone_number: user.phone_number,
+      orders_count: user.orders_count  || 0,
+      created_at: user.created_at
     }));
     console.log('Filtered workers:', workers.value);
   }).catch ((error) => {
