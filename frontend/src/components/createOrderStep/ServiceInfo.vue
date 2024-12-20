@@ -1,13 +1,34 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import HeaderList from '../../ui/uikit/containers/HeaderList.vue'
 import ServiceItem from '../../ui/uikit/items/ServiceItem.vue'
+import Service from '../../api/models/service'
+import { getAllServices } from '../../api/request'
 
-const services = ref([
-  {id: 1, name: "Уборка", price: "10$"},
-  {id: 2, name: "Уборка", price: "10$"},
-  {id: 3, name: "Уборка", price: "10$"}
-]) // TODO DB request
+const emit = defineEmits(['update-form-validity', 'update-price'])
+const props = defineProps<{ currentPrice: number }>()
+const services = ref<Service[]>([])
+const price = ref<number>(props.currentPrice)
+
+onMounted(() => {
+  emit('update-form-validity', true)
+  getAllServices()
+  .then((response) => {
+    services.value = response
+  })
+})
+
+watch(price, (newVal) => {
+  emit('update-price', newVal);
+})
+
+function addServicePrice(servicePrice: number): void {
+  price.value += servicePrice;
+}
+
+function removeServicePrice(servicePrice: number): void {
+  price.value -= servicePrice;
+}
 </script>
 
 <template>
@@ -20,13 +41,15 @@ const services = ref([
     <template #items="{ item }">
       <ServiceItem
         :isAdmin="false"
-        :service="item">
-      </ServiceItem>
+        :service="item"
+        @add-service-price="addServicePrice"
+        @remove-service-price="removeServicePrice"
+      ></ServiceItem>
     </template>
     <template #bottom>
       <div class="service-info-price-container">
         <div class="service-info-price">
-          <p>Итого: 0$</p>
+          <p>Итого: {{ price }}₽</p>
         </div>
       </div>
     </template>

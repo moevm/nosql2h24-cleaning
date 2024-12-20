@@ -9,11 +9,14 @@ const props = defineProps<{
   service: {
     id: string;
     name: string;
-    price: string;
+    price: number;
   }
 }>()
 
+const emit = defineEmits(['add-service-price', 'remove-service-price'])
+
 const isDialogVisible: Ref<boolean> = ref(false)
+const isServiceAdded: Ref<boolean> = ref(false)
 
 function openDialog(): void {
   isDialogVisible.value = true
@@ -22,12 +25,21 @@ function openDialog(): void {
 function closeDialog(): void {
   isDialogVisible.value = false
 }
+
+function toggleServicePrice(): void {
+  if (isServiceAdded.value) {
+    emit('remove-service-price', props.service.price);
+  } else {
+    emit('add-service-price', props.service.price);
+  }
+  isServiceAdded.value = !isServiceAdded.value;
+}
 </script>
 
 <template>
   <div class="service-item">
     <p>{{ props.service.name }}</p>
-    <p>{{ props.service.price }}</p>
+    <p>{{ props.service.price }}₽</p>
     <div class="service-edit">
       <ActionButton
         v-if="props.isAdmin"
@@ -39,10 +51,11 @@ function closeDialog(): void {
       ></ActionButton>
       <ActionButton
         v-else
-        text="Добавить"
-        type="add"
-        color="#394cc2"
+        :text="isServiceAdded ? 'Убрать' : 'Добавить'"
+        type="add-remove"
+        :color="isServiceAdded ? '#f65858' : '#394cc2'"
         variant="flat"
+        @click="toggleServicePrice"
       ></ActionButton>
     </div>
     <!-- Dialog to edit service -->
