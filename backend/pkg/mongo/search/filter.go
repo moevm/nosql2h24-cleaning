@@ -30,6 +30,16 @@ func (f Filter) AddEqual(key string, value string) {
 	}
 }
 
+func (f Filter) AddNotEqual(key string, value string) {
+	filter := bson.M{}
+	if len(value) != 0 {
+		filter["$ne"] = value
+	}
+	if len(filter) != 0 {
+		f[key] = filter
+	}
+}
+
 func (f Filter) AddEqualObjectID(key string, value string) error {
 	if len(value) == 0 {
 		return nil

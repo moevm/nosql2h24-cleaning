@@ -6,6 +6,11 @@ import (
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
+const (
+	UserTypeClient = "CLIENT"
+	UserTypeWorker = "WORKER"
+)
+
 type UserCredentials struct {
 	Email    string `json:"email" bson:"email" validate:"required,email"`
 	Password string `json:"password,omitempty" bson:"password" validate:"required"`

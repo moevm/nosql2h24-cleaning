@@ -12,6 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
+	"golang.org/x/sync/errgroup"
 )
 
 type UserRepo struct {
@@ -186,6 +187,85 @@ func (r *UserRepo) DeleteUser(ctx context.Context, id string) error {
 
 	if res.DeletedCount == 0 {
 		return repository.ErrNotFound
+	}
+
+	return nil
+}
+
+func (r *UserRepo) DeleteWorker(ctx context.Context, id string) error {
+	_id, err := bson.ObjectIDFromHex(id)
+	if err != nil {
+		return repository.ErrInvalidArgument
+	}
+
+	eg := &errgroup.Group{}
+	// gorutine 1: delete from user
+	eg.Go(func() error {
+		return r.DeleteUser(ctx, id)
+	})
+
+	// gorutine 2: delete from orders where status != models.OrderStatusDone
+	eg.Go(func() error {
+		filter := search.Filter{}
+		filter.AddNotEqual("status", models.OrderStatusDone)
+		filter.AddInObjectIDs("workers", []string{id})
+
+		update := bson.A{
+			bson.M{"$set": bson.M{
+				"workers": bson.M{
+					"$filter": bson.M{
+						"input": "$workers", // Исходный массив workers
+						"as":    "worker",   // Псевдоним для элементов массива
+						"cond": bson.M{
+							"$ne": bson.A{"$$worker", _id}, // Убираем _id из массива
+						},
+					},
+				},
+				"status_logs": bson.M{
+					"$cond": bson.M{
+						"if": bson.M{
+							"$eq": bson.A{
+								"$status", models.OrderStatusAccepted, // Проверка, что статус равен "active"
+							},
+						},
+						"then": bson.M{
+							"$concatArrays": bson.A{
+								"$status_logs", // Текущий массив status_log
+								bson.A{
+									// Новый элемент, который будет добавлен
+									bson.M{
+										"new_status":  models.OrderStatusNew,
+										"prev_status": "$status",
+										"created_at":  time.Now(),
+									},
+								},
+							},
+						},
+						"else": "$status_logs", // Если условие не выполнено, оставляем текущий status_log
+					},
+				},
+				"status": bson.M{
+					"$cond": bson.M{
+						"if": bson.M{
+							"$eq": bson.A{
+								"$status", models.OrderStatusAccepted, // Проверка, что статус равен "active"
+							},
+						},
+						"then": models.OrderStatusNew, // Если количество работников меньше требуемого, обновляем статус
+						"else": "$status",             // В противном случае оставляем текущий статус
+					},
+				},
+				"updated_at": time.Now(),
+			},
+			},
+		}
+
+		_, err := r.collection.Database().Collection(OrdersCollection).UpdateMany(ctx, filter.ToBson(), update)
+		return err
+	})
+
+	if err := eg.Wait(); err != nil {
+		return err
 	}
 
 	return nil
