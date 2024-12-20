@@ -107,7 +107,7 @@
         {
             "id": "3565ed3fa26c4a64672e9b38",
             "name": "Глажка",
-            "price": 120.99,
+            "price": 120,
             "workers_quantity": 1,
             "description": "Глажка одежды самым лучшим образом",
             "consumables": [
@@ -129,7 +129,7 @@
         {
             "id": "3fa26c4a64672e9b383565ed",
             "name": "Чистка ковров",
-            "price": 99.99,
+            "price": 99,
             "workers_quantity": 1,
             "description": "Чистим ковры до блеска",
             "consumables": [
@@ -151,7 +151,7 @@
         {
             "id": "565ed3fa26c4a64672e9b383",
             "name": "Мойка окон",
-            "price": 200.00,
+            "price": 200,
             "workers_quantity": 1,
             "description": "Ваши окна будут сверкать",
             "consumables": [
@@ -179,11 +179,11 @@
                 "door_number": "96"
             },
             "date_time": "2024-03-25T16:00:00.000Z",
-            "price": 300.99,
+            "price": 6935,
             "number_of_rooms": 2,
             "number_of_bathrooms": 1,
             "pollution": 30,
-            "area": 55.3,
+            "area": 55,
             "comment": "Хочу чтобы все было чисто",
             "status_log": [
                 {
@@ -212,11 +212,11 @@
                 "door_number": "3"
             },
             "date_time": "2024-03-27T16:00:00.000Z",
-            "price": 99.99,
+            "price": 3759,
             "number_of_rooms": 1,
             "number_of_bathrooms": 1,
             "pollution": 50,
-            "area": 30.5,
+            "area": 30,
             "comment": "Хочу чтобы все было чисто",
             "status": "CREATED",
             "services": ["3fa26c4a64672e9b383565ed"],
@@ -237,11 +237,11 @@
                 "door_number": "96"
             },
             "date_time": "2024-03-26T16:00:00.000Z",
-            "price": 120.99,
+            "price": 4920,
             "number_of_rooms": 1,
             "number_of_bathrooms": 1,
             "pollution": 70,
-            "area": 40.0,
+            "area": 40,
             "comment": "Хочу чтобы все было чисто",
             "status_log": [
                 {
@@ -276,11 +276,11 @@
                 "door_number": "15"
             },
             "date_time": "2024-04-07T14:00:00.000Z",
-            "price": 250.50,
+            "price": 8079,
             "number_of_rooms": 3,
             "number_of_bathrooms": 1,
             "pollution": 40,
-            "area": 65.5,
+            "area": 65,
             "comment": "Требуется качественная уборка",
             "status_log": [
                 {
@@ -309,11 +309,11 @@
                 "door_number": "20"
             },
             "date_time": "2024-04-08T09:00:00.000Z",
-            "price": 180.00,
+            "price": 6200,
             "number_of_rooms": 2,
             "number_of_bathrooms": 1,
             "pollution": 25,
-            "area": 50.0,
+            "area": 50,
             "comment": "Стандартная уборка",
             "status_log": [],
             "status": "CREATED",
@@ -335,11 +335,11 @@
                 "door_number": "35"
             },
             "date_time": "2024-04-08T16:00:00.000Z",
-            "price": 300.00,
+            "price": 9120,
             "number_of_rooms": 4,
             "number_of_bathrooms": 2,
             "pollution": 60,
-            "area": 75.0,
+            "area": 75,
             "comment": "Требуется очистка всех помещений",
             "status_log": [
                 {
@@ -368,11 +368,11 @@
                 "door_number": "44"
             },
             "date_time": "2024-04-09T10:30:00.000Z",
-            "price": 220.00,
+            "price": 6720,
             "number_of_rooms": 2,
             "number_of_bathrooms": 1,
             "pollution": 20,
-            "area": 55.0,
+            "area": 55,
             "comment": "Требуется быстрая уборка",
             "status_log": [
                 {
@@ -401,11 +401,11 @@
                 "door_number": "17"
             },
             "date_time": "2024-04-10T14:00:00.000Z",
-            "price": 180.00,
+            "price": 8699,
             "number_of_rooms": 3,
             "number_of_bathrooms": 1,
             "pollution": 30,
-            "area": 70.0,
+            "area": 70,
             "comment": "Необходимо генеральное очищение",
             "status_log": [
                 {
@@ -434,11 +434,11 @@
                 "door_number": "28"
             },
             "date_time": "2024-04-11T12:00:00.000Z",
-            "price": 270.00,
+            "price": 9899,
             "number_of_rooms": 4,
             "number_of_bathrooms": 2,
             "pollution": 40,
-            "area": 80.0,
+            "area": 80,
             "comment": "Производить уборку после ремонта",
             "status_log": [
                 {
@@ -467,11 +467,11 @@
                 "door_number": "5"
             },
             "date_time": "2024-04-12T09:30:00.000Z",
-            "price": 320.00,
+            "price": 12299,
             "number_of_rooms": 5,
             "number_of_bathrooms": 2,
             "pollution": 50,
-            "area": 100.0,
+            "area": 100,
             "comment": "Нужна полная уборка дома после въезда",
             "status_log": [],
             "status": "CREATED",

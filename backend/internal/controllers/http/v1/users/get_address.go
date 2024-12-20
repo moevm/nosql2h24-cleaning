@@ -17,7 +17,7 @@ import (
 // @Produce      json
 // @Param id path string true "user_id"
 // @Param address_id path string true "address_id"
-// @Success      200  {object}  models.Address
+// @Success      200  {object}  models.AddressWithTimestamp
 // @Failure      400  {object}  httputil.HTTPError
 // @Failure      404  {object}  httputil.HTTPError
 // @Failure      500  {object}  httputil.HTTPError

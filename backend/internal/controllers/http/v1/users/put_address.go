@@ -19,7 +19,7 @@ import (
 // @Produce      json
 // @Param id path string true "user_id"
 // @Param address_id path string true "address_id"
-// @Param address body models.Address true "address_id"
+// @Param address body models.AddressWithTimestamp true "address_id"
 // @Success      200
 // @Failure      400  {object}  httputil.HTTPError
 // @Failure      404  {object}  httputil.HTTPError
@@ -35,7 +35,7 @@ func (h *Handler) PutAddress(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var address models.Address
+	var address models.AddressWithTimestamp
 	if err := render.DecodeJSON(r.Body, &address); err != nil {
 		render.Render(w, r, httputil.NewError(http.StatusBadRequest, err))
 		return
