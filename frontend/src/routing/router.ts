@@ -10,6 +10,8 @@ import AdminOrdersPage from '../components/admin/AdminOrdersPage.vue'
 import AdminWorkersSettingsPage from '../components/admin/AdminWorkersSettingsPage.vue'
 import AdminServicesSettingsPage from '../components/admin/AdminServicesSettingsPage.vue'
 import AdminStatisticSettingsPage from '../components/admin/AdminStatisticSettingsPage.vue'
+import WorkerMainPage from '../components/worker/WorkerMainPage.vue'
+import WorkerOrdersPage from '../components/worker/WorkerOrdersPage.vue'
 
 const routes = [
   {
@@ -68,6 +70,18 @@ const routes = [
             name: 'admin-statistic-settings',
             path: 'statistic',
             component: AdminStatisticSettingsPage
+          }
+        ]
+      },
+      {
+        name: 'worker',
+        path: 'worker:id([a-fA-F0-9]+)',
+        component: WorkerMainPage,
+        children: [
+          {
+            name: 'worker-orders',
+            path: 'orders',
+            component: WorkerOrdersPage
           }
         ]
       }
