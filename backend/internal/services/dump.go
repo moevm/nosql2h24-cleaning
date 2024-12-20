@@ -15,8 +15,8 @@ type (
 		Drop(context.Context) error
 	}
 	UserRepoDumper interface {
-		ImportUsers(context.Context, []models.User) error
-		ExportUsers(context.Context) ([]models.User, error)
+		ImportUsers(context.Context, []models.UserDump) error
+		ExportUsers(context.Context) ([]models.UserDump, error)
 		Droper
 	}
 	OrderRepoDumper interface {
