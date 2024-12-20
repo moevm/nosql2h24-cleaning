@@ -97,7 +97,7 @@ function formatDate(date: Date) {
 
 <template>
   <div class="worker-item">
-    <p>{{ props.worker.name }} {{ props.worker.surname }}</p>
+    <p>{{ props.worker.surname }} {{ props.worker.name }} {{ props.worker.patronymic }}</p>
     <p>email: {{ props.worker.email }}</p>
     <p>Выполнено заказов: {{ props.worker.orders_count }}</p>
     <p>На сервисе с {{ formatDate(new Date(props.worker.created_at)) }} года</p>
