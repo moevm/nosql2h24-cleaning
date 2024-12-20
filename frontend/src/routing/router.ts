@@ -12,6 +12,7 @@ import AdminServicesSettingsPage from '../components/admin/AdminServicesSettings
 import AdminStatisticSettingsPage from '../components/admin/AdminStatisticSettingsPage.vue'
 import WorkerMainPage from '../components/worker/WorkerMainPage.vue'
 import WorkerOrdersPage from '../components/worker/WorkerOrdersPage.vue'
+import OrderDetail from '../ui/uikit/items/OrderDetail.vue'
 
 const routes = [
   {
@@ -37,7 +38,14 @@ const routes = [
           {
             name: 'client-orders-history',
             path: 'history-order',
-            component: ClientOrdersHistoryPage
+            component: ClientOrdersHistoryPage,
+            children: [
+              {
+                name: 'order-details',
+                path: ':order_id([a-fA-F0-9]+)',
+                component: OrderDetail
+              }
+            ]
           },
           {
             name: 'client-create-order',

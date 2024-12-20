@@ -6,11 +6,17 @@ import MainContainer from '../../ui/uikit/containers/MainContainer.vue'
 import Dialog from '../../ui/uikit/Dialog.vue'
 import ActionButton from '../../ui/uikit/ActionButton.vue'
 import InputTextField from '../../ui/uikit/inputs/InputTextField.vue'
-import { getClientAddresses, createNewAddress } from '../../api/request'
+import { getClientAddresses, createNewAddress, getUserInfo } from '../../api/request'
 import Address from '../../api/models/address'
 
 onMounted(() => {
-  fetchClientAddresses("me")
+  getUserInfo('me')
+  .then((user) => {
+    getClientAddresses(user.id)
+    .then((response) => {
+      addresses.value = response
+    })
+  })
 })
 
 const addresses = ref<Address[]>([])
@@ -33,49 +39,28 @@ function closeDialog(): void {
   isDialogVisible.value = false
 }
 
-function formatAddress(item: any): string {
-  return `${item.city}, ${item.street}, ${item.building}, Подъезд ${item.entrance}, Этаж ${item.floor}, Квартира ${item.door_number}`;
-}
-
-async function fetchClientAddresses(clientId: string) {
-  getClientAddresses(clientId)
-  .then((response) => {
-    addresses.value = response
-  })
-  .catch((error) => {
-    console.error("Failed to fetch client addresses:", error)
+function submitNewAddress(): void {
+  getUserInfo('me').then((userId) => {
+    addNewAddress(userId.id)
   })
 }
 
-async function addNewAddress(clientId: string) {
+function addNewAddress(clientId: string) {
   closeDialog()
   const addressData: Address = {
-    id: clientId.toString(),
     city: newAddress.value.city,
     street: newAddress.value.street,
     building: newAddress.value.building,
     entrance: newAddress.value.entrance,
     floor: newAddress.value.floor,
     door_number: newAddress.value.door_number,
-    created_at: new Date(),
-    updated_at: new Date()
-  };
-  addresses.value.push(addressData);
-
+  }
   createNewAddress(clientId, addressData)
-  .then((newAddressId) => {
-    /* раскомментировать после добавления авторизации
-    addresses.value.push({
-      ...addressData, 
-      id: newAddressId
-    });
-    */
-  })
-  .catch((error) => {
-    console.error("Failed to createNewAddress:", error)
-    // addresses.value.pop() раскомментировать после добавления авторизации
+  .then((response) => {
+    addresses.value.push(addressData)
   })
 }
+
 </script>
 
 <template>
@@ -87,7 +72,7 @@ async function addNewAddress(clientId: string) {
       width="95%"
     >
       <template #items="{ item }">
-        <AddressItem :address="formatAddress(item)" />
+        <AddressItem :address="item" />
       </template>
     </HeaderList>
   </MainContainer>
@@ -119,7 +104,7 @@ async function addNewAddress(clientId: string) {
       <InputTextField
         v-model="newAddress.building"
         placeholder="Дом"
-        type="number"
+        type="text"
         label="Дом"
       ></InputTextField>
       <InputTextField
@@ -154,7 +139,7 @@ async function addNewAddress(clientId: string) {
         type="create"
         variant="flat"
         color="#394cc2"
-        @click="addNewAddress"
+        @click="submitNewAddress"
       ></ActionButton>
     </template>
   </Dialog>

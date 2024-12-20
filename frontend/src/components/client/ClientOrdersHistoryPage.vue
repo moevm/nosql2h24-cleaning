@@ -6,7 +6,7 @@ import OrderItem from '../../ui/uikit/items/OrderItem.vue'
 import ActionButton from '../../ui/uikit/ActionButton.vue'
 import DateFilter from '../../ui/uikit/DateFilter.vue'
 import MainContainer from '../../ui/uikit/containers/MainContainer.vue'
-import { getAllOrders, getUserInfo } from '../../api/request'
+import { getAllOrders } from '../../api/request'
 import Order from '../../api/models/order'
 
 const orders = ref<Order[]>([])
