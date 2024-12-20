@@ -1,8 +1,6 @@
 package models
 
 import (
-	"time"
-
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
@@ -14,6 +12,9 @@ type Address struct {
 	Entrance   string        `json:"entrance" bson:"entrance"`
 	Floor      string        `json:"floor" bson:"floor"`
 	DoorNumber string        `json:"door_number" bson:"door_number"`
-	CreatedAt  time.Time     `json:"created_at" bson:"created_at"`
-	UpdatedAt  time.Time     `json:"updated_at,omitempty" bson:"updated_at,omitempty"`
+}
+
+type AddressWithTimestamp struct {
+	Address   `json:",inline" bson:",inline"`
+	Timestamp `json:",inline" bson:",inline"`
 }

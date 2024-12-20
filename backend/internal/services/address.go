@@ -11,9 +11,9 @@ import (
 
 type AddressRepo interface {
 	CreateAddress(ctx context.Context, userID string, address *models.Address) (string, error)
-	GetAddress(ctx context.Context, userID, addressID string) (*models.Address, error)
-	GetAddresses(ctx context.Context, userID string) ([]*models.Address, error)
-	UpdateAddress(ctx context.Context, userID string, address *models.Address) error
+	GetAddress(ctx context.Context, userID, addressID string) (*models.AddressWithTimestamp, error)
+	GetAddresses(ctx context.Context, userID string) ([]*models.AddressWithTimestamp, error)
+	UpdateAddress(ctx context.Context, userID string, address *models.AddressWithTimestamp) error
 	DeleteAddress(ctx context.Context, userID string, addressID string) error
 }
 
@@ -50,7 +50,7 @@ func (r *AddressService) CreateAddress(ctx context.Context, userID string, addre
 	return id, nil
 }
 
-func (r *AddressService) GetAddress(ctx context.Context, userID, addressID string) (*models.Address, error) {
+func (r *AddressService) GetAddress(ctx context.Context, userID, addressID string) (*models.AddressWithTimestamp, error) {
 	l := r.log.With(
 		zap.Any("operation", "AddressService.GetAddress"),
 		zap.Any("user_id", userID),
@@ -69,7 +69,7 @@ func (r *AddressService) GetAddress(ctx context.Context, userID, addressID strin
 	return address, nil
 }
 
-func (r *AddressService) GetAddresses(ctx context.Context, userID string) ([]*models.Address, error) {
+func (r *AddressService) GetAddresses(ctx context.Context, userID string) ([]*models.AddressWithTimestamp, error) {
 	l := r.log.With(
 		zap.Any("operation", "AddressService.GetAddresses"),
 		zap.Any("user_id", userID),
@@ -87,7 +87,7 @@ func (r *AddressService) GetAddresses(ctx context.Context, userID string) ([]*mo
 	return addresses, nil
 }
 
-func (r *AddressService) UpdateAddress(ctx context.Context, userID string, address *models.Address) error {
+func (r *AddressService) UpdateAddress(ctx context.Context, userID string, address *models.AddressWithTimestamp) error {
 	l := r.log.With(
 		zap.Any("operation", "AddressService.UpdateAddress"),
 		zap.Any("user_id", userID),

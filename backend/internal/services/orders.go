@@ -53,6 +53,7 @@ func (r *OrderService) CreateOrder(ctx context.Context, order *models.Order) (st
 		zap.Any("userId", order.UserID),
 	)
 
+	order.Status = models.OrderStatusNew
 	id, err := r.repo.CreateOrder(ctx, order)
 	if err != nil {
 		if errors.Is(err, repository.ErrAlreadyExist) {
@@ -276,7 +277,7 @@ func (r *OrderService) CompleteOrder(ctx context.Context, orderID string) error 
 		)
 		return err
 	}
-	
+
 	ids := make([]string, len(order.Workers))
 	for i, id := range order.Workers {
 		ids[i] = id.Hex()

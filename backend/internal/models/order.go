@@ -17,11 +17,11 @@ type Order struct {
 	UserID            bson.ObjectID   `json:"user_id" bson:"user_id,omitempty"`
 	Address           Address         `json:"address" bson:"address"`
 	DateTime          time.Time       `json:"date_time" bson:"date_time"`
-	Price             float64         `json:"price" bson:"price"`
+	Price             int             `json:"price" bson:"price"`
 	NumberOfRooms     int             `json:"number_of_rooms" bson:"number_of_rooms"`
 	NumberOfBathrooms int             `json:"number_of_bathrooms" bson:"number_of_bathrooms"`
 	Pollution         int             `json:"pollution" bson:"pollution"`
-	Area              float64         `json:"area" bson:"area"`
+	Area              int             `json:"area" bson:"area"`
 	Comment           string          `json:"comment,omitempty" bson:"comment"`
 	StatusLogs        []StatusLog     `json:"status_log,omitempty" bson:"status_logs,omitempty"`
 	Status            string          `json:"status" bson:"status"`

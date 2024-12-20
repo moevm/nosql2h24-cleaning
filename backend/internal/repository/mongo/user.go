@@ -198,13 +198,16 @@ func (r *UserRepo) CreateAddress(ctx context.Context, userID string, address *mo
 		return "", repository.ErrInvalidArgument
 	}
 	address.ID = bson.NewObjectID()
-	address.CreatedAt = time.Now()
+
+	withTimestamp := models.AddressWithTimestamp{}
+	withTimestamp.Address = *address
+	withTimestamp.CreatedAt = time.Now()
 
 	update := bson.D{
 		bson.E{
 			Key: "$push",
 			Value: bson.D{
-				{Key: "addresses", Value: address},
+				{Key: "addresses", Value: withTimestamp},
 			},
 		},
 		bson.E{
@@ -228,7 +231,7 @@ func (r *UserRepo) CreateAddress(ctx context.Context, userID string, address *mo
 	return address.ID.Hex(), nil
 }
 
-func (r *UserRepo) GetAddress(ctx context.Context, userID, addressID string) (*models.Address, error) {
+func (r *UserRepo) GetAddress(ctx context.Context, userID, addressID string) (*models.AddressWithTimestamp, error) {
 	user_id, userErr := bson.ObjectIDFromHex(userID)
 	address_id, addressErr := bson.ObjectIDFromHex(addressID)
 	if userErr != nil || addressErr != nil {
@@ -262,7 +265,7 @@ func (r *UserRepo) GetAddress(ctx context.Context, userID, addressID string) (*m
 	return user.Addresses[0], nil
 }
 
-func (r *UserRepo) GetAddresses(ctx context.Context, userID string) ([]*models.Address, error) {
+func (r *UserRepo) GetAddresses(ctx context.Context, userID string) ([]*models.AddressWithTimestamp, error) {
 	_id, err := bson.ObjectIDFromHex(userID)
 	if err != nil {
 		return nil, repository.ErrInvalidArgument
@@ -290,7 +293,7 @@ func (r *UserRepo) GetAddresses(ctx context.Context, userID string) ([]*models.A
 	return user.Addresses, nil
 }
 
-func (r *UserRepo) UpdateAddress(ctx context.Context, userID string, address *models.Address) error {
+func (r *UserRepo) UpdateAddress(ctx context.Context, userID string, address *models.AddressWithTimestamp) error {
 	_id, err := bson.ObjectIDFromHex(userID)
 	if err != nil {
 		return repository.ErrInvalidArgument

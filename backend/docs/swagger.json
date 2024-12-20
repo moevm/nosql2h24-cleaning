@@ -1132,7 +1132,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Address"
+                                "$ref": "#/definitions/models.AddressWithTimestamp"
                             }
                         }
                     },
@@ -1241,7 +1241,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Address"
+                            "$ref": "#/definitions/models.AddressWithTimestamp"
                         }
                     },
                     "400": {
@@ -1294,7 +1294,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Address"
+                            "$ref": "#/definitions/models.AddressWithTimestamp"
                         }
                     }
                 ],
@@ -1396,6 +1396,32 @@
                 "city": {
                     "type": "string"
                 },
+                "door_number": {
+                    "type": "string"
+                },
+                "entrance": {
+                    "type": "string"
+                },
+                "floor": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AddressWithTimestamp": {
+            "type": "object",
+            "properties": {
+                "building": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
                 "created_at": {
                     "type": "string"
                 },
@@ -1479,7 +1505,7 @@
                     "$ref": "#/definitions/models.Address"
                 },
                 "area": {
-                    "type": "number"
+                    "type": "integer"
                 },
                 "comment": {
                     "type": "string"
@@ -1503,7 +1529,7 @@
                     "type": "integer"
                 },
                 "price": {
-                    "type": "number"
+                    "type": "integer"
                 },
                 "required_workers": {
                     "type": "integer"
@@ -1565,7 +1591,7 @@
                     "type": "string"
                 },
                 "price": {
-                    "type": "number"
+                    "type": "integer"
                 },
                 "updated_at": {
                     "type": "string"
@@ -1605,7 +1631,7 @@
                 "addresses": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Address"
+                        "$ref": "#/definitions/models.AddressWithTimestamp"
                     }
                 },
                 "created_at": {

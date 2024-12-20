@@ -17,7 +17,7 @@ import (
 // @Tags         Users
 // @Produce      json
 // @Param id path string true "user_id"
-// @Success      200  {array}  models.Address
+// @Success      200  {array}  models.AddressWithTimestamp
 // @Failure      400  {object}  httputil.HTTPError
 // @Failure      404  {object}  httputil.HTTPError
 // @Failure      500  {object}  httputil.HTTPError
@@ -36,7 +36,7 @@ func (h *Handler) GetAddresses(w http.ResponseWriter, r *http.Request) {
 	}
 	// print not null
 	if addresses == nil {
-		addresses = make([]*models.Address, 0)
+		addresses = make([]*models.AddressWithTimestamp, 0)
 	}
 	render.JSON(w, r, addresses)
 }

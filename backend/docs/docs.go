@@ -1143,7 +1143,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Address"
+                                "$ref": "#/definitions/models.AddressWithTimestamp"
                             }
                         }
                     },
@@ -1252,7 +1252,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Address"
+                            "$ref": "#/definitions/models.AddressWithTimestamp"
                         }
                     },
                     "400": {
@@ -1305,7 +1305,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Address"
+                            "$ref": "#/definitions/models.AddressWithTimestamp"
                         }
                     }
                 ],
@@ -1407,6 +1407,32 @@ const docTemplate = `{
                 "city": {
                     "type": "string"
                 },
+                "door_number": {
+                    "type": "string"
+                },
+                "entrance": {
+                    "type": "string"
+                },
+                "floor": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AddressWithTimestamp": {
+            "type": "object",
+            "properties": {
+                "building": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
                 "created_at": {
                     "type": "string"
                 },
@@ -1490,7 +1516,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/models.Address"
                 },
                 "area": {
-                    "type": "number"
+                    "type": "integer"
                 },
                 "comment": {
                     "type": "string"
@@ -1514,7 +1540,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "price": {
-                    "type": "number"
+                    "type": "integer"
                 },
                 "required_workers": {
                     "type": "integer"
@@ -1576,7 +1602,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "price": {
-                    "type": "number"
+                    "type": "integer"
                 },
                 "updated_at": {
                     "type": "string"
@@ -1616,7 +1642,7 @@ const docTemplate = `{
                 "addresses": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Address"
+                        "$ref": "#/definitions/models.AddressWithTimestamp"
                     }
                 },
                 "created_at": {
