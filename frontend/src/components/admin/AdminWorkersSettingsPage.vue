@@ -13,13 +13,15 @@ import { filterWorkers } from '../../api/request'
 
 const workers = ref<{
   id: string;
+  email: string;
   name: string;
   surname: string;
   patronymic: string;
-  email: string;
   phone_number: string;
-  orders_count: number;
+  user_type: string;
   created_at: Date;
+  updated_at: Date;
+  orders_count: number;
 }[]>([]);
 
 const searchName = ref<string>('');
@@ -53,8 +55,10 @@ async function fetchWorkersList() {
       patronymic: user.patronymic,
       email: user.email,
       phone_number: user.phone_number,
+      user_type: user.user_type,
       orders_count: user.orders_count  || 0,
-      created_at: user.created_at
+      created_at: user.created_at,
+      updated_at: user.updated_at
     }));
   }).catch ((error) => {
     console.error("Failed to fetch workers list:", error)
@@ -101,8 +105,10 @@ function handleSearch(): void {
       patronymic: user.patronymic,
       email: user.email,
       phone_number: user.phone_number,
+      user_type: user.user_type,
       orders_count: user.orders_count  || 0,
-      created_at: user.created_at
+      created_at: user.created_at,
+      updated_at: user.updated_at
     }));
     console.log('Filtered workers:', workers.value);
   }).catch ((error) => {

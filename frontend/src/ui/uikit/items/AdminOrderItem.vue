@@ -38,7 +38,7 @@ const statusClass = computed(() => {
     <p>{{ formatDate() }}</p>
     <p>{{ formatAddress() }}, </p>
     <div class="order-price">
-      <p>{{ props.order.price }}$</p>
+      <p>{{ props.order.price }}</p>
       <div :class="['order-status', statusClass]">
         <p>{{ props.order.status }}</p>
       </div>
