@@ -16,9 +16,8 @@ const props = defineProps<{
     patronymic: string;
     email: string;
     phone_number: string;
-    password: string;
     orders_count: number;
-    created_at: string;
+    created_at: Date;
   }
 }>()
 
@@ -36,6 +35,8 @@ async function handleUpdateWorker() {
     ...editWorker.value,
     id: props.worker.id,
     user_type: 'WORKER',
+    orders_count: props.worker.orders_count,
+    created_at: props.worker.created_at,
   };
     
   await updateUser(props.worker.id, workerData as User).then( _ => {
@@ -57,17 +58,6 @@ async function handleDeleteWorker() {
   })
 }
 
-function resetEditableWorker() {
-  editWorker.value = {
-    name: props.worker.name,
-    surname: props.worker.surname,
-    patronymic: props.worker.patronymic,
-    email: props.worker.email,
-    phone_number: props.worker.phone_number,
-    password: ''
-  };
-}
-
 const isDialogVisible: Ref<boolean> = ref(false)
 
 function openDialog(): void {
@@ -76,7 +66,6 @@ function openDialog(): void {
 
 function closeDialog(): void {
   isDialogVisible.value = false
-  resetEditableWorker();
 }
 
 function formatDate(date: Date) {
