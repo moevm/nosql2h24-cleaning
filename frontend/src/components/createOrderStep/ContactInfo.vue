@@ -1,6 +1,29 @@
 <script setup lang="ts">
+import { computed, ref, watch } from 'vue';
 import ActionButton from '../../ui/uikit/ActionButton.vue'
 import InputTextField from '../../ui/uikit/inputs/InputTextField.vue'
+import { VTimePicker} from 'vuetify/labs/VTimePicker'
+import { VDateInput } from 'vuetify/labs/components'
+
+const emit = defineEmits(['update-form-validity'])
+const menu = ref<boolean>(false)
+const contactData = ref({
+  city: "",
+  street: "",
+  building: "",
+  entrance: "",
+  floor: "",
+  doorNumber: "",
+  date: null,
+  time: null
+})
+const isFormValid = computed(() => {
+  return Object.values(contactData.value).every(value => value !== "" && value !== null);
+})
+
+watch(isFormValid, (newVal) => {
+  emit('update-form-validity', newVal);
+})
 </script>
 
 <template>
@@ -12,26 +35,23 @@ import InputTextField from '../../ui/uikit/inputs/InputTextField.vue'
     >
       <div class="input-row">
         <InputTextField
-          placeholder="Введите имя"
+          v-model="contactData.city"
+          placeholder="Введите город"
           type="text"
-          label="Имя"
+          label="Город"
         ></InputTextField>
         <InputTextField
-          placeholder="Введите фамилию"
+          v-model="contactData.street"
+          placeholder="Введите улицу"
           type="text"
-          label="Фамилия"
+          label="Улица"
         ></InputTextField>
-      </div>
         <InputTextField
-          placeholder="Введите номер телефона"
+          v-model="contactData.building"
+          placeholder="Введите номер дома"
           type="text"
-          label="Номер телефона"
-        ></InputTextField>
-      <div class="input-row">
-        <InputTextField
-          placeholder="Введите адрес"
-          type="text"
-          label="Адрес"
+          label="Дом"
+          hint="Пример: 4к1 или 8AE"
         ></InputTextField>
         <ActionButton
           id="my-address-btn"
@@ -43,37 +63,61 @@ import InputTextField from '../../ui/uikit/inputs/InputTextField.vue'
       </div>
       <div class="input-row">
         <InputTextField
+          v-model="contactData.entrance"
           placeholder="Введите квартиру"
           type="text"
           label="Квартира"
         ></InputTextField>
         <InputTextField
+          v-model="contactData.floor"
           placeholder="Введите подъезд"
           type="text"
           label="Подъезд"
         ></InputTextField>
         <InputTextField
+          v-model="contactData.doorNumber"
           placeholder="Введите этаж"
           type="text"
           label="Этаж"
         ></InputTextField>
-        <InputTextField
-          placeholder="Введите домофон"
-          type="text"
-          label="Домофон"
-        ></InputTextField>
       </div>
       <div class="input-row">
-        <InputTextField
-          placeholder="Введите дату"
-          type="date"
+        <v-date-input
+          v-model="contactData.date"
+          class="input-date"
           label="Дата"
-        ></InputTextField>
+          variant="solo"
+          rounded="xl"
+          prepend-icon=""
+        ></v-date-input>
         <InputTextField
+          v-model="contactData.time"
           placeholder="Введите время"
           type="string"
           label="Время"
-        ></InputTextField>
+          :active="menu"
+          :focus="menu"
+          readonly
+        >
+          <template #body>
+            <v-menu
+              v-model="menu"
+              :close-on-content-click="false"
+              activator="parent"
+              transition="scale-transition"
+            >
+              <v-time-picker
+                v-if="menu"
+                v-model="contactData.time"
+                width="auto"
+                format="24hr"
+                max="18:00"
+                min="6:00"
+                scrollable
+              ></v-time-picker>
+            </v-menu>
+          </template>
+        </InputTextField>
       </div>
     </v-form>
   </div>
@@ -104,6 +148,9 @@ import InputTextField from '../../ui/uikit/inputs/InputTextField.vue'
   flex-direction: row;
   align-items: flex-start;
   gap: 10px;
+}
+.input-date{
+  font-weight: bold;
 }
 #my-address-btn {
   height: 72%;

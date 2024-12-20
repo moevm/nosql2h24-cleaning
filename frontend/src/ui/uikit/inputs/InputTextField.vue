@@ -20,7 +20,11 @@ const props = withDefaults(defineProps<TextField>(), {
     :type="props.type"
     :label="props.label"
     clearable
-  ></v-text-field>
+  >
+    <slot
+      name="body"
+    ></slot>
+  </v-text-field>
 </template>
 
 <style scoped>

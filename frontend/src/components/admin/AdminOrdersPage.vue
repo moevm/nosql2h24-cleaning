@@ -160,7 +160,7 @@ onMounted(() => {
     <HeaderList
       title="Заказы" 
       :items="orders"
-      height="100%"
+      height="92%"
       width="95%"
     >
       <template #items="{ item }">

@@ -13,15 +13,27 @@ const steps: any = {
   3: Step3,
 }
 const currentStepComponent = computed(() => steps[currentStep.value])
+const currentPrice = ref<number>(0)
+const isFormValid = ref<boolean>(false)
 
 function changeStep(): void {
   if (currentStep.value >= 3) {
     // create order
+    
     // redirect to order history
   } else {
     currentStep.value += 1;
+    isFormValid.value = false
   }
 }
+
+function updateFormValidity(isValid: boolean): void {
+  isFormValid.value = isValid
+}
+function updatePrice(num: number): void {
+  currentPrice.value = num
+}
+
 </script>
 
 <template>
@@ -30,7 +42,9 @@ function changeStep(): void {
   >
     <component
       :is="currentStepComponent"
-      @change-step="changeStep"
+      @update-form-validity="updateFormValidity"
+      @update-price="updatePrice"
+      :currentPrice="currentPrice"
     ></component>
     <ActionButton
       id="next-btn"
@@ -39,6 +53,7 @@ function changeStep(): void {
       variant="flat"
       color="#394cc2"
       :onClick="changeStep"
+      :disabled="!isFormValid"
     ></ActionButton>
   </MainContainer>
 </template>
