@@ -17,6 +17,7 @@ var (
 	ErrOrderIncorrectStatus  = errors.New("order has incorrect status")
 	ErrOrderAlreadyDone      = errors.New("order already done")
 	ErrWorkerAlreadyAssigned = errors.New("worker already assigned to this order")
+	ErrOrderAlreadyAccepted  = errors.New("order already have enough workers")
 	// Service errors
 	ErrServiceAlreadyExist = errors.New("service already exist")
 	ErrServiceNotFound     = errors.New("service not found")

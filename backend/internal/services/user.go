@@ -16,6 +16,7 @@ type UserRepo interface {
 	GetUsers(ctx context.Context, filters types.UserFilters) ([]*models.User, error)
 	UpdateUser(ctx context.Context, user *models.User) error
 	DeleteUser(ctx context.Context, id string) error
+	DeleteWorker(ctx context.Context, id string) error
 }
 
 type UserService struct {
@@ -130,6 +131,24 @@ func (r *UserService) DeleteUser(ctx context.Context, id string) error {
 		zap.Any("operation", "UserService.DeleteUser"),
 		zap.Any("id", id),
 	)
+
+	user, err := r.repo.GetUserById(ctx, id)
+	if err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			l.Info("user not found", zap.Any("error", err))
+			return ErrUserNotFound
+		}
+		l.Error("get user by id failed", zap.Any("error", err))
+		return err
+	}
+
+	if user.UserType == models.UserTypeWorker {
+		if err := r.repo.DeleteWorker(ctx, id); err != nil {
+			l.Error("delete worker failed", zap.Any("error", err))
+			return err
+		}
+		return nil
+	}
 
 	if err := r.repo.DeleteUser(ctx, id); err != nil {
 		if errors.Is(err, repository.ErrNotFound) {
