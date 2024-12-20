@@ -1,21 +1,7 @@
 <script setup lang="ts">
 import { inject, onMounted } from 'vue'
 import { RouterView } from 'vue-router'
-import { getUserInfo, getUsers } from '../../api/request'
-import { ref } from 'vue' 
-import { User } from '../../api/models/user'
-
-// const userStore = useUserStore()
-// const user = userStore.getUser()
-
-const clients = ref<User[]>([]);
-const workers = ref<User[]>([]);
-const headers = [
-  { text: 'ID', value: 'id' },
-  { text: 'Имя', value: 'name' },
-  { text: 'Email', value: 'email' },
-  // Добавьте другие заголовки по мере необходимости
-];
+import { getUserInfo } from '../../api/request'
 
 const addSideBarButtons: Function | undefined = inject('addSideBarButtons')
 const setUserCard: Function | undefined = inject('setUserCard')

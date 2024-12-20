@@ -1,12 +1,12 @@
 interface Address {
-  id: string;
+  id?: string;
   city: string;
   street: string;
   building: string;
   entrance: string;
   floor: string;
   door_number: string;
-  created_at: Date;
+  created_at?: Date;
   updated_at?: Date;
 }
 

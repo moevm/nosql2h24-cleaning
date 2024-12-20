@@ -22,7 +22,8 @@ import {
   exportDumpsPath,
   getAllOrdersPath,
   getAllServicesPath,
-  updateOrdersPath
+  updateOrdersPath,
+  createOrderPath
 } from './endpoint'
 import Order from './models/order'
 import Service from './models/service'
@@ -104,47 +105,23 @@ export function deleteUser(id: string): Promise<any> {
 }
 
 export async function getClientAddresses(id: string): Promise<Address[]> {
-  try {
-    const response = await fetch(baseURL+getClientAddressesPath(id), {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  
-    if (!response.ok) {
-      throw new Error(`Error HTTP: ${response.status}`);
-    }
-  
-    const data = (await response.json()) as Address[];
-    return data;
-  } catch (error) {
-    console.error('Error request:', error);
-    throw error;
-  }
+  return axios.get(baseURL + getClientAddressesPath(id))
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error)
+  })
 }
 
 export async function createNewAddress(id: string, addressData: Address): Promise<Address> {
-  try {
-    const response = await fetch(baseURL+createNewAddressPath(id), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(addressData),
-    });
-  
-    if (!response.ok) {
-      throw new Error(`Error HTTP: ${response.status}`);
-    }
-  
-    const data = await response.json();
-    return data.id; 
-    
-  } catch (error) {
-    console.error('Error request:', error);
-    throw error;
-  }
+  return axios.post<Address>(baseURL + createNewAddressPath(id), addressData)
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error)
+  })
 }
 
 export function getClientAddress(id: string, address_id: string): Promise<Address> {
@@ -246,7 +223,7 @@ export async function getAllOrders(id: string | null): Promise<Order[]> {
 }
 
 export async function updateOrder(newOrder: Order): Promise<Order> {
-  return axios.put<Order>(baseURL + updateOrdersPath(newOrder.id), newOrder)
+  return axios.put<Order>(baseURL + updateOrdersPath(newOrder.id!), newOrder)
   .then((response) => {
     return response.data
   })
@@ -282,3 +259,22 @@ export async function filterOrder(filterData: FilterOrder): Promise<Order[]> {
   })
 }
 
+export async function createOrder(newOrder: Order): Promise<Order> {
+  return axios.post<Order>(baseURL + createOrderPath, newOrder)
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error)
+  })
+}
+
+export async function getOrderById(id: string): Promise<Order> {
+  return axios.get(baseURL + updateOrdersPath(id))
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error)
+  })
+}

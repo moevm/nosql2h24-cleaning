@@ -1,7 +1,38 @@
 <script setup lang="ts">
+import { computed, ref, watch } from 'vue';
 import InputNumber from '../../ui/uikit/inputs/InputNumber.vue'
-import InputTextField from '../../ui/uikit/inputs/InputTextField.vue'
 import InputTextArea from '../../ui/uikit/inputs/InputTextArea.vue'
+
+const emit = defineEmits(['update-form-validity', 'update-price', 'update-appartment-data'])
+const appartmentData = ref({
+  rooms: 0,
+  bathrooms: 0,
+  area: 0,
+  pollution: 0,
+  comment: "",
+})
+
+const isFormValid = computed(() => {
+  const { rooms, bathrooms, area, pollution } = appartmentData.value;
+  return rooms !== 0 && bathrooms !== 0 && area !== 0 && pollution !== 0;
+})
+
+const price = computed(() => {
+  const { rooms, bathrooms, area, pollution } = appartmentData.value;
+  return rooms * 100 + bathrooms * 100 + area * 150 + pollution * 200;
+})
+
+watch(appartmentData, (newVal) => {
+  emit('update-appartment-data', newVal);
+}, { deep: true })
+
+watch(isFormValid, (newVal) => {
+  emit('update-form-validity', newVal)
+})
+
+watch(price, (newVal) => {
+  emit('update-price', newVal)
+}, {deep: true})
 </script>
 
 <template>
@@ -13,12 +44,14 @@ import InputTextArea from '../../ui/uikit/inputs/InputTextArea.vue'
     >
       <div class="input-row">
         <InputNumber
+          v-model="appartmentData.rooms"
           label="Количество комнат"
           :min="1"
           :max="10"
           :step="1"
         ></InputNumber>
         <InputNumber
+          v-model="appartmentData.bathrooms"
           label="Количество санузлов"
           :min="1"
           :max="10"
@@ -26,20 +59,23 @@ import InputTextArea from '../../ui/uikit/inputs/InputTextArea.vue'
         ></InputNumber>
       </div>
       <div class="input-row">
-        <InputTextField
-          class="input-field-row"
-          placeholder="Введите площадь квартиры в м²"
-          type="text"
-          label="Площадь квартиры"
-        ></InputTextField>
         <InputNumber
-          label="Количество санузлов"
+          v-model="appartmentData.area"
+          label="Площадь квартиры в м²"
+          :min="5"
+          :max="120"
+          :step="1"
+        ></InputNumber>
+        <InputNumber
+          v-model="appartmentData.pollution"
+          label="Загрезненность"
           :min="1"
           :max="10"
           :step="1"
         ></InputNumber>
       </div>
       <InputTextArea
+        v-model="appartmentData.comment"
         label="Комментарий к заказу"
         placeholder="Введите комментарий"
         :rows="3"

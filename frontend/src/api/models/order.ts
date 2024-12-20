@@ -2,7 +2,7 @@ import Address from "./address";
 import StatusLog from "./statuslog";
 
 interface Order {
-  id: string;
+  id?: string;
   user_id: string;
   address: Address;
   date_time: Date;
@@ -12,12 +12,12 @@ interface Order {
   pollution: number;
   area: number;
   comment: string;
-  status: string;
-  status_logs: StatusLog[];
+  status?: string;
+  status_logs?: StatusLog[];
   services: string[];
   required_workers: number;
-  workers: string[];
-  created_at: Date;
+  workers?: string[];
+  created_at?: Date;
   updated_at?: Date;
 }
 

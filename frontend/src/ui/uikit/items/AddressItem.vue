@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import { defineProps } from 'vue'
+import Address from '../../../api/models/address'
 
 const props = defineProps<{
-  address: string;
-  // id: string; раскомментировать после добавления авторизации
+  address: Address;
 }>()
 </script>
 
 <template>
   <div class="address-item">
-    <p>{{ props.address }}</p>
+    <p>
+      {{ props.address.city }}, {{ props.address.street }}, 
+      дом {{ props.address.building }}, подъезд {{ props.address.entrance }},
+      этаж {{ props.address.floor }}, квартира {{ props.address.door_number }}
+    </p>
   </div>
 </template>
 
@@ -26,7 +30,7 @@ const props = defineProps<{
   text-align: left;
 }
 p {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: bold;
 }
 </style>

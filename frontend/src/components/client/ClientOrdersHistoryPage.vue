@@ -6,7 +6,7 @@ import OrderItem from '../../ui/uikit/items/OrderItem.vue'
 import ActionButton from '../../ui/uikit/ActionButton.vue'
 import DateFilter from '../../ui/uikit/DateFilter.vue'
 import MainContainer from '../../ui/uikit/containers/MainContainer.vue'
-import { getAllOrders, getUserInfo } from '../../api/request'
+import { getAllOrders } from '../../api/request'
 import Order from '../../api/models/order'
 
 const orders = ref<Order[]>([])
@@ -54,18 +54,4 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* .container {
-  max-width: 100%;
-  max-height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 80%;
-  background-color: white;
-  gap: 20px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-} */
 </style>
