@@ -58,14 +58,27 @@ async function handleDeleteWorker() {
   })
 }
 
+function resetEditableWorker() {
+  editWorker.value = {
+    name: props.worker.name,
+    surname: props.worker.surname,
+    patronymic: props.worker.patronymic,
+    email: props.worker.email,
+    phone_number: props.worker.phone_number,
+    password: ''
+  };
+}
+
 const isDialogVisible: Ref<boolean> = ref(false)
 
 function openDialog(): void {
+  resetEditableWorker()
   isDialogVisible.value = true
 }
 
 function closeDialog(): void {
   isDialogVisible.value = false
+  resetEditableWorker();
 }
 
 function formatDate(date: Date) {
@@ -86,8 +99,8 @@ function formatDate(date: Date) {
   <div class="worker-item">
     <p>{{ props.worker.name }} {{ props.worker.surname }}</p>
     <p>email: {{ props.worker.email }}</p>
-    <p>выполнено заказов: {{ props.worker.orders_count }}</p>
-    <p>на сервисе с {{ formatDate(new Date(props.worker.created_at)) }} года</p>
+    <p>Выполнено заказов: {{ props.worker.orders_count }}</p>
+    <p>На сервисе с {{ formatDate(new Date(props.worker.created_at)) }} года</p>
     <div class="worker-edit">
       <ActionButton
         text="Редактировать"
