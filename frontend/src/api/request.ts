@@ -22,7 +22,8 @@ import {
   exportDumpsPath,
   getAllOrdersPath,
   getAllServicesPath,
-  updateOrdersPath
+  updateOrdersPath,
+  createOrderPath
 } from './endpoint'
 import Order from './models/order'
 import Service from './models/service'
@@ -246,7 +247,7 @@ export async function getAllOrders(id: string | null): Promise<Order[]> {
 }
 
 export async function updateOrder(newOrder: Order): Promise<Order> {
-  return axios.put<Order>(baseURL + updateOrdersPath(newOrder.id), newOrder)
+  return axios.put<Order>(baseURL + updateOrdersPath(newOrder.id!), newOrder)
   .then((response) => {
     return response.data
   })
@@ -282,3 +283,12 @@ export async function filterOrder(filterData: FilterOrder): Promise<Order[]> {
   })
 }
 
+export async function createOrder(newOrder: Order): Promise<Order> {
+  return axios.post<Order>(baseURL + createOrderPath, newOrder)
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error)
+  })
+}

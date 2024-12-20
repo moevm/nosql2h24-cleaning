@@ -5,7 +5,7 @@ import InputTextField from '../../ui/uikit/inputs/InputTextField.vue'
 import { VTimePicker} from 'vuetify/labs/VTimePicker'
 import { VDateInput } from 'vuetify/labs/components'
 
-const emit = defineEmits(['update-form-validity'])
+const emit = defineEmits(['update-form-validity', 'update-address-data'])
 const menu = ref<boolean>(false)
 const contactData = ref({
   city: "",
@@ -14,7 +14,7 @@ const contactData = ref({
   entrance: "",
   floor: "",
   doorNumber: "",
-  date: null,
+  date: new Date(""),
   time: null
 })
 const isFormValid = computed(() => {
@@ -24,6 +24,10 @@ const isFormValid = computed(() => {
 watch(isFormValid, (newVal) => {
   emit('update-form-validity', newVal);
 })
+
+watch(contactData, (newVal) => {
+  emit('update-address-data', newVal);
+}, { deep: true })
 </script>
 
 <template>

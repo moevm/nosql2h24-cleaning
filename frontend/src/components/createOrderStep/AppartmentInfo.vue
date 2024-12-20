@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue';
 import InputNumber from '../../ui/uikit/inputs/InputNumber.vue'
 import InputTextArea from '../../ui/uikit/inputs/InputTextArea.vue'
 
-const emit = defineEmits(['update-form-validity', 'update-price'])
+const emit = defineEmits(['update-form-validity', 'update-price', 'update-appartment-data'])
 const appartmentData = ref({
   rooms: 0,
   bathrooms: 0,
@@ -21,6 +21,10 @@ const price = computed(() => {
   const { rooms, bathrooms, area, pollution } = appartmentData.value;
   return rooms * 100 + bathrooms * 100 + area * 150 + pollution * 200;
 })
+
+watch(appartmentData, (newVal) => {
+  emit('update-appartment-data', newVal);
+}, { deep: true })
 
 watch(isFormValid, (newVal) => {
   emit('update-form-validity', newVal)

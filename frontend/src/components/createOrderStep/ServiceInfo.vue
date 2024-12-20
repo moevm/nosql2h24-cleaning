@@ -5,9 +5,10 @@ import ServiceItem from '../../ui/uikit/items/ServiceItem.vue'
 import Service from '../../api/models/service'
 import { getAllServices } from '../../api/request'
 
-const emit = defineEmits(['update-form-validity', 'update-price'])
+const emit = defineEmits(['update-form-validity', 'update-price', 'update-selected-services'])
 const props = defineProps<{ currentPrice: number }>()
 const services = ref<Service[]>([])
+const selectedServices = ref<Service[]>([])
 const price = ref<number>(props.currentPrice)
 
 onMounted(() => {
@@ -22,12 +23,18 @@ watch(price, (newVal) => {
   emit('update-price', newVal);
 })
 
-function addServicePrice(servicePrice: number): void {
-  price.value += servicePrice;
+watch(selectedServices, (newVal) => {
+  emit('update-selected-services', newVal);
+}, { deep: true });
+
+function addServicePrice(service: Service): void {
+  selectedServices.value.push(service)
+  price.value += service.price
 }
 
-function removeServicePrice(servicePrice: number): void {
-  price.value -= servicePrice;
+function removeServicePrice(service: Service): void {
+  selectedServices.value = selectedServices.value.filter(s => s.id !== service.id)
+  price.value -= service.price
 }
 </script>
 

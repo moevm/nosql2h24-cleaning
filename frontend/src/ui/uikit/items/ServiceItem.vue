@@ -2,6 +2,7 @@
 import { Ref, ref, defineProps } from 'vue'
 import ActionButton from '../ActionButton.vue'
 import InputTextField from '../inputs/InputTextField.vue'
+import Consumable from '../../../api/models/consumable'
 import Dialog from '../Dialog.vue'
 
 const props = defineProps<{
@@ -10,6 +11,9 @@ const props = defineProps<{
     id: string;
     name: string;
     price: number;
+    workers_quantity: number;
+    description: string;
+    consumables: Consumable[];
   }
 }>()
 
@@ -28,9 +32,9 @@ function closeDialog(): void {
 
 function toggleServicePrice(): void {
   if (isServiceAdded.value) {
-    emit('remove-service-price', props.service.price);
+    emit('remove-service-price', props.service);
   } else {
-    emit('add-service-price', props.service.price);
+    emit('add-service-price', props.service);
   }
   isServiceAdded.value = !isServiceAdded.value;
 }
