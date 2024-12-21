@@ -1,8 +1,6 @@
 package models
 
 import (
-	"time"
-
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
@@ -30,8 +28,7 @@ type User struct {
 	Addresses       []*AddressWithTimestamp `json:"addresses,omitempty" bson:"addresses,omitempty"`
 	OrdersCount     int                     `json:"orders_count,omitempty" bson:"orders_count,omitempty"`
 	UserType        string                  `json:"user_type" bson:"user_type"`
-	CreatedAt       time.Time               `json:"created_at,omitempty" bson:"created_at"`
-	UpdatedAt       time.Time               `json:"updated_at,omitempty" bson:"updated_at,omitempty"`
+	Timestamp       `json:",inline" bson:",inline"`
 }
 
 type NewUser struct {

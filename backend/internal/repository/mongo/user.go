@@ -147,11 +147,10 @@ func (r *UserRepo) GetUsers(ctx context.Context, filters types.UserFilters) ([]*
 }
 
 func (r *UserRepo) UpdateUser(ctx context.Context, user *models.User) error {
+	currTime := time.Now()
+	user.UpdatedAt = &currTime
 	update := bson.D{
 		{Key: "$set", Value: user},
-		{Key: "$currentDate", Value: bson.D{
-			{Key: "updated_at", Value: true},
-		}},
 	}
 
 	res, err := r.collection.UpdateByID(
@@ -378,7 +377,7 @@ func (r *UserRepo) UpdateAddress(ctx context.Context, userID string, address *mo
 	if err != nil {
 		return repository.ErrInvalidArgument
 	}
-	address.UpdatedAt = time.Now()
+	*address.UpdatedAt = time.Now()
 
 	filter := bson.D{
 		{Key: "_id", Value: _id},
