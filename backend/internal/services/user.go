@@ -48,7 +48,7 @@ func (r *UserService) CreateUser(ctx context.Context, user *models.User) (string
 		l.Error("hashing error")
 		return "", ErrHashing
 	}
-	user.Password = hash
+	user.PasswordHash = hash
 
 	id, err := r.repo.CreateUser(ctx, user)
 	if err != nil {
