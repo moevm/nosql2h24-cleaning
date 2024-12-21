@@ -2,7 +2,6 @@ package orders
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/go-chi/render"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/middlewares"
@@ -27,6 +26,18 @@ import (
 // @Param address_entrance query string false "Address entrance"
 // @Param address_floor query string false "Address floor"
 // @Param address_door_number query string false "Address door number"
+// @Param price_min query int false "Price min"
+// @Param price_max query int false "Price max"
+// @Param area_min query int false "Area min"
+// @Param area_max query int false "Area max"
+// @Param number_of_rooms_min query int false "Number of rooms min"
+// @Param number_of_rooms_max query int false "Number of rooms max"
+// @Param number_of_bathrooms_min query int false "Number of bathrooms min"
+// @Param number_of_bathrooms_max query int false "Number of bathrooms max"
+// @Param pollution_min query int false "Pollution min"
+// @Param pollution_max query int false "Pollution max"
+// @Param required_workers_min query int false "Required workers min"
+// @Param required_workers_max query int false "Required workers max"
 // @Param worker_name query string false "Worker name"
 // @Param worker_surname query string false "Worker surname"
 // @Param worker_patronymic query string false "Worker patronymic"
@@ -63,21 +74,20 @@ func (h *Handler) GetOrders(w http.ResponseWriter, r *http.Request) {
 			Floor:      query.Get("address_floor"),
 			DoorNumber: query.Get("address_door_number"),
 		},
-		WorkersID: query["workers_id"],
-		Statuses:  query["statuses"],
-		Services:  query["services"],
+		Price:             types.NewNumberRange("price", query),
+		Area:              types.NewNumberRange("area", query),
+		NumberOfRooms:     types.NewNumberRange("number_of_rooms", query),
+		NumberOfBathrooms: types.NewNumberRange("number_of_bathrooms", query),
+		Pollution:         types.NewNumberRange("pollution", query),
+		RequiredWorkers:   types.NewNumberRange("required_workers", query),
+		WorkersID:         query["workers_id"],
+		Statuses:          query["statuses"],
+		Services:          query["services"],
+		DateTime:          types.NewTimeInterval("date_time", query),
 	}
 
 	if filters.UserID == "me" {
 		filters.UserID = middlewares.GetUserID(r.Context())
-	}
-
-	if dateTimeBegin, err := time.Parse(time.RFC3339, query.Get("date_time_begin")); err == nil {
-		filters.DateTime.Begin = &dateTimeBegin
-	}
-
-	if dateTimeEnd, err := time.Parse(time.RFC3339, query.Get("date_time_end")); err == nil {
-		filters.DateTime.End = &dateTimeEnd
 	}
 
 	orders, err := h.service.GetOrders(r.Context(), filters)
