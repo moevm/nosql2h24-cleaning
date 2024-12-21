@@ -3,8 +3,6 @@ package users
 import (
 	"errors"
 	"net/http"
-	"strconv"
-	"time"
 
 	"github.com/go-chi/render"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/models"
@@ -43,21 +41,9 @@ func (h *Handler) GetUsers(w http.ResponseWriter, r *http.Request) {
 			Email:       r.URL.Query().Get("email"),
 			PhoneNumber: r.URL.Query().Get("phone_number"),
 		},
-		UserType: r.URL.Query().Get("type"),
-	}
-
-	if createdAtBegin, err := time.Parse(time.RFC3339, r.URL.Query().Get("created_at_begin")); err == nil {
-		filters.CreatedAt.Begin = &createdAtBegin
-	}
-	if createdAtEnd, err := time.Parse(time.RFC3339, r.URL.Query().Get("created_at_end")); err == nil {
-		filters.CreatedAt.End = &createdAtEnd
-	}
-
-	if ordersCountMin, err := strconv.Atoi(r.URL.Query().Get("orders_count_min")); err == nil {
-		filters.OrdersCount.Min = &ordersCountMin
-	}
-	if ordersCountMax, err := strconv.Atoi(r.URL.Query().Get("orders_count_max")); err == nil {
-		filters.OrdersCount.Max = &ordersCountMax
+		UserType:    r.URL.Query().Get("type"),
+		OrdersCount: types.NewNumberRange("orders_count", r.URL.Query()),
+		CreatedAt:   types.NewTimeInterval("created_at", r.URL.Query()),
 	}
 
 	users, err := h.userService.GetUsers(r.Context(), filters)

@@ -259,6 +259,78 @@
                         "in": "query"
                     },
                     {
+                        "type": "integer",
+                        "description": "Price min",
+                        "name": "price_min",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Price max",
+                        "name": "price_max",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Area min",
+                        "name": "area_min",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Area max",
+                        "name": "area_max",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of rooms min",
+                        "name": "number_of_rooms_min",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of rooms max",
+                        "name": "number_of_rooms_max",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of bathrooms min",
+                        "name": "number_of_bathrooms_min",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of bathrooms max",
+                        "name": "number_of_bathrooms_max",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Pollution min",
+                        "name": "pollution_min",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Pollution max",
+                        "name": "pollution_max",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Required workers min",
+                        "name": "required_workers_min",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Required workers max",
+                        "name": "required_workers_max",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "Worker name",
                         "name": "worker_name",
