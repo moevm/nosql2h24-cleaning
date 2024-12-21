@@ -2,31 +2,33 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import Order from '../../../api/models/order'
-import { getOrderById } from '../../../api/request';
+import { getOrderById } from '../../../api/request'
 
-const route = useRoute();
-const orderId = route.params.id as string;
-const order = ref<Order>();
+const route = useRoute()
+const orderId = route.params.order_id as string
+const order = ref<Order | null>(null)
 
 onMounted(() => {
   getOrderById(orderId)
     .then((response) => {
       order.value = response
       console.log(order.value)
+      const date = new Date(order.value.date_time)
+      order.value.date_time = date
     })
 })
 
 function formatDate(dateTime: string): string {
-  const date = new Date(dateTime);
-  const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-  const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-  return `${date.getDate()}.${month}.${date.getFullYear()} ${date.getHours()}:${minutes}`;
+  const date = new Date(dateTime)
+  const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1
+  const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
+  return `${date.getDate()}.${month}.${date.getFullYear()} ${date.getHours()}:${minutes}`
 }
 
 </script>
 
 <template>
-  <div class="order-detail">
+  <div v-if="order" class="order-detail">
     <h1>Детали заказа</h1>
     <p>Заказ по адресу: {{ order!.address.city }}, {{ order!.address.street }}, дом {{ order!.address.building }}, подъезд {{ order!.address.entrance }}, этаж {{ order!.address.floor }}, квартира {{ order!.address.door_number }}</p>
     <p>На дату: {{ formatDate(order!.date_time.toISOString()) }}</p>
