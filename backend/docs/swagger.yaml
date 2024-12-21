@@ -381,6 +381,54 @@ paths:
         in: query
         name: address_door_number
         type: string
+      - description: Price min
+        in: query
+        name: price_min
+        type: integer
+      - description: Price max
+        in: query
+        name: price_max
+        type: integer
+      - description: Area min
+        in: query
+        name: area_min
+        type: integer
+      - description: Area max
+        in: query
+        name: area_max
+        type: integer
+      - description: Number of rooms min
+        in: query
+        name: number_of_rooms_min
+        type: integer
+      - description: Number of rooms max
+        in: query
+        name: number_of_rooms_max
+        type: integer
+      - description: Number of bathrooms min
+        in: query
+        name: number_of_bathrooms_min
+        type: integer
+      - description: Number of bathrooms max
+        in: query
+        name: number_of_bathrooms_max
+        type: integer
+      - description: Pollution min
+        in: query
+        name: pollution_min
+        type: integer
+      - description: Pollution max
+        in: query
+        name: pollution_max
+        type: integer
+      - description: Required workers min
+        in: query
+        name: required_workers_min
+        type: integer
+      - description: Required workers max
+        in: query
+        name: required_workers_max
+        type: integer
       - description: Worker name
         in: query
         name: worker_name
