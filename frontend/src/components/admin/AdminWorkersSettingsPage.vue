@@ -26,7 +26,7 @@ const filterWorker = ref<FilterWorkers>({
   email: '',
   phone_number: '',
   orders_count_min: 0,
-  orders_count_max: 0,
+  orders_count_max: maxOrders.value,
   created_at_begin: '',
   created_at_end: '',
 });
@@ -166,6 +166,22 @@ function handleSearch(): void {
   })
 }
 
+function clearFilters() {
+  fetchWorkersList();
+  filterWorker.value = {
+    name: '',
+    surname: '',
+    patronymic: '',
+    email: '',
+    phone_number: '',
+    orders_count_min: 0,
+    orders_count_max: maxOrders.value,
+    created_at_begin: '',
+    created_at_end: '',
+  };
+  ordersRange.value = [0, maxOrders.value];
+}
+
 onMounted(() => {
   fetchWorkersList()
 })
@@ -191,6 +207,12 @@ onMounted(() => {
         <div class="filter-dropdown">
           <div class="filter-header" @click="toggleDropdown">
             <h3>Фильтры</h3>
+            <ActionButton
+              text="Очистить"
+              type="clear"
+              color="#394cc2"
+              @click.stop="clearFilters"
+            ></ActionButton>
           </div>
           <transition name="fade">
             <div v-if="isOpen" class="filter-content">
@@ -343,6 +365,9 @@ onMounted(() => {
   border: 1px solid #ddd;
   border-radius: 25px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .filter-content {
