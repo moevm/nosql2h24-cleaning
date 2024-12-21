@@ -24,7 +24,7 @@ function formatDate(): string {
 }
 
 async  function takeOrder() {
-    const updatedOrder = { // тут пока что непонятно какую логику юзаем и на фронте ли это должно лежать
+    const updatedOrder = {
         ...props.order,
         status: 'INPROGRESS',
         workers: [...(props.order.workers ?? []), props.workerId]
