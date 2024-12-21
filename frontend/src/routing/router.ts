@@ -38,14 +38,12 @@ const routes = [
           {
             name: 'client-orders-history',
             path: 'history-order',
-            component: ClientOrdersHistoryPage,
-            children: [
-              {
-                name: 'order-details',
-                path: ':order_id([a-fA-F0-9]+)',
-                component: OrderDetail
-              }
-            ]
+            component: ClientOrdersHistoryPage
+          },
+          {
+            name: 'order-details',
+            path: 'history-order/:order_id([a-fA-F0-9]+)',
+            component: OrderDetail
           },
           {
             name: 'client-create-order',
