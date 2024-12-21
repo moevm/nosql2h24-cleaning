@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, Ref, ref } from 'vue'
+import { onMounted, computed, watch, Ref, ref } from 'vue'
 import { createWorkerUser, getUsers } from '../../api/request'
 import { User, UserRegisterData } from '../../api/models/user'
 import HeaderList from '../../ui/uikit/containers/HeaderList.vue'
@@ -14,7 +14,11 @@ import { FilterWorkers } from '../../api/models/filterWorkers'
 
 
 const maxOrdersWorker = ref<number | null>(null);
-const maxOrders = maxOrdersWorker.value ?? 0
+const maxOrders = computed(() => maxOrdersWorker.value ?? 0);
+watch(maxOrders, (newMax) => {
+  ordersRange.value = [0, newMax];
+});
+
 const filterWorker = ref<FilterWorkers>({
   name: '',
   surname: '',
@@ -26,8 +30,6 @@ const filterWorker = ref<FilterWorkers>({
   created_at_begin: '',
   created_at_end: '',
 });
-const ordersRange = ref<[number, number]>([0, maxOrders]);
-
 
 const isOpen = ref(false);
 
@@ -67,6 +69,15 @@ function closeDialog(): void {
   isDialogVisible.value = false
 }
 
+function formatToRFC3339(dateString: string, isEnd: boolean) {
+  let date = new Date(dateString);
+  if (isEnd) {
+    date.setDate(date.getDate() + 1);
+    date = new Date(date.getTime() - 1);
+  }
+  return date.toISOString(); 
+}
+
 async function fetchWorkersList() {
   try {
     const response = await getUsers('WORKER');
@@ -78,18 +89,21 @@ async function fetchWorkersList() {
       email: user.email,
       phone_number: user.phone_number,
       user_type: user.user_type,
-      orders_count: user.orders_count || 0,
+      orders_count: user.orders_count,
       created_at: user.created_at,
       updated_at: user.updated_at
     }));
 
     if (maxOrdersWorker.value === null) {
+      console.log("maxOrdersWorker null finde max orders")
       maxOrdersWorker.value = Math.max(...workers.value.map(worker => worker.orders_count));
     }
   } catch (error) {
     console.error("Failed to fetch workers list:", error);
   }
 }
+
+const ordersRange = ref<[number, number]>([0, maxOrders.value]);
 
 async function fetchCreateUser(workerData: UserRegisterData) {
   const userPayload: Partial<User> = {
@@ -124,6 +138,12 @@ async function handleCreateWorkerUser() {
 function handleSearch(): void {
   toggleDropdown()
   const filterParams = { ...filterWorker.value };
+  if (filterParams.created_at_begin) {
+    filterParams.created_at_begin = formatToRFC3339(filterParams.created_at_begin, false);
+  }
+  if (filterParams.created_at_end) {
+    filterParams.created_at_end = formatToRFC3339(filterParams.created_at_end, true);
+  }
   filterParams.orders_count_min = ordersRange.value[0];
   filterParams.orders_count_max = ordersRange.value[1];
   filterWorkers(filterParams)
@@ -175,16 +195,16 @@ onMounted(() => {
           <transition name="fade">
             <div v-if="isOpen" class="filter-content">
               <InputTextField
-                v-model="filterWorker.name"
-                label="Имя"
-                type="first-name-search"
-                placeholder="Введите имя"
-              />
-              <InputTextField
                 v-model="filterWorker.surname"
                 label="Фамилия"
                 type="last-name-search"
                 placeholder="Введите фамилию"
+              />
+              <InputTextField
+                v-model="filterWorker.name"
+                label="Имя"
+                type="first-name-search"
+                placeholder="Введите имя"
               />
               <InputTextField
                 v-model="filterWorker.patronymic"
