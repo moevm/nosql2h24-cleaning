@@ -136,6 +136,14 @@ func (r *OrderRepo) GetOrders(ctx context.Context, query types.OrderFilters) ([]
 	filter.AddIn("status", query.Statuses)
 	filter.ContainsAll("services", query.Services)
 
+	// order info
+	filter.AddNumberRange("price", query.Price)
+	filter.AddNumberRange("area", query.Area)
+	filter.AddNumberRange("number_of_rooms", query.NumberOfRooms)
+	filter.AddNumberRange("number_of_bathrooms", query.NumberOfBathrooms)
+	filter.AddNumberRange("pollution", query.Pollution)
+	filter.AddNumberRange("required_workers", query.RequiredWorkers)
+
 	// time
 	filter.AddTimeIterval("date_time", query.DateTime)
 
