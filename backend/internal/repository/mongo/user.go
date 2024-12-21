@@ -121,6 +121,7 @@ func (r *UserRepo) GetUsers(ctx context.Context, filters types.UserFilters) ([]*
 	filter.AddEqual("user_type", filters.UserType)
 	filter.AddRegex("name", filters.Name)
 	filter.AddRegex("surname", filters.Surname)
+	filter.AddRegex("patronymic", filters.Patronymic)
 	filter.AddRegex("email", filters.Email)
 	filter.AddRegex("phone_number", filters.PhoneNumber)
 	filter.AddTimeIterval("created_at", filters.CreatedAt)
