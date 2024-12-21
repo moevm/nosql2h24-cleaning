@@ -57,7 +57,7 @@ func (r *AuthService) Register(ctx context.Context, user *models.User) (string, 
 		l.Error("hashing error")
 		return "", ErrHashing
 	}
-	user.Password = hash
+	user.PasswordHash = hash
 
 	// On registration user is always a client
 	user.UserType = "CLIENT"
@@ -98,7 +98,7 @@ func (r *AuthService) Login(ctx context.Context, user *models.User) (*models.Use
 		return nil, nil, err
 	}
 
-	if !r.hasher.Compare(user.Password, userFromDB.Password) {
+	if !r.hasher.Compare(user.Password, userFromDB.PasswordHash) {
 		l.Info("invalid password")
 		return nil, nil, ErrIncorrectPassword
 	}
@@ -107,8 +107,7 @@ func (r *AuthService) Login(ctx context.Context, user *models.User) (*models.Use
 		l.Error("failed to generate jwt")
 		return nil, nil, err
 	}
-	// Do not return password hash
-	userFromDB.Password = ""
+	
 	return userFromDB, token, nil
 }
 

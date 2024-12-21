@@ -70,7 +70,7 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	user.ID = _id
 
-	if err := validate.Validate.Struct(user); err != nil {
+	if err := validate.Validate.StructExcept(user, "UserCredentials.Password"); err != nil {
 		render.Render(w, r, httputil.NewError(http.StatusBadRequest, err))
 		return
 	}

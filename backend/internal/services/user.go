@@ -48,7 +48,7 @@ func (r *UserService) CreateUser(ctx context.Context, user *models.User) (string
 		l.Error("hashing error")
 		return "", ErrHashing
 	}
-	user.Password = hash
+	user.PasswordHash = hash
 
 	id, err := r.repo.CreateUser(ctx, user)
 	if err != nil {
@@ -73,12 +73,17 @@ func (r *UserService) UpdateUser(ctx context.Context, user *models.User) error {
 		zap.Any("email", user.Email),
 	)
 
-	hash, err := r.hasher.Hash(user.Password)
-	if err != nil {
-		l.Error("hashing error")
-		return ErrHashing
+	userFromDB, _ := r.GetUserById(ctx, user.ID.Hex())
+	user.PasswordHash = userFromDB.PasswordHash
+
+	if len(user.Password) != 0 {
+		hash, err := r.hasher.Hash(user.Password)
+		if err != nil {
+			l.Error("hashing error")
+			return ErrHashing
+		}
+		user.PasswordHash = hash
 	}
-	user.Password = hash
 
 	if err := r.repo.UpdateUser(ctx, user); err != nil {
 		if errors.Is(err, repository.ErrNotFound) {
