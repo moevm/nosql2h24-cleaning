@@ -28,6 +28,5 @@ type Order struct {
 	Services          []bson.ObjectID `json:"services,omitempty" bson:"services,omitempty"`
 	RequiredWorkers   int             `json:"required_workers" bson:"required_workers"`
 	Workers           []bson.ObjectID `json:"workers,omitempty" bson:"workers"`
-	CreatedAt         time.Time       `json:"created_at" bson:"created_at"`
-	UpdatedAt         time.Time       `json:"updated_at,omitempty" bson:"updated_at,omitempty"`
+	Timestamp `json:",inline" bson:",inline"`
 }

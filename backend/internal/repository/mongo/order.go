@@ -168,7 +168,8 @@ func (r *OrderRepo) GetOrders(ctx context.Context, query types.OrderFilters) ([]
 }
 
 func (r *OrderRepo) UpdateOrder(ctx context.Context, order *models.Order) error {
-	order.UpdatedAt = time.Now()
+	currTime := time.Now()
+	order.UpdatedAt = &currTime
 	update := bson.D{
 		{Key: "$set", Value: order},
 	}

@@ -110,11 +110,10 @@ func (r *ServiceRepo) GetServices(ctx context.Context) ([]*models.Service, error
 }
 
 func (r *ServiceRepo) UpdateService(ctx context.Context, service *models.Service) error {
+	currTime := time.Now()
+	service.UpdatedAt = &currTime
 	update := bson.D{
 		{Key: "$set", Value: service},
-		{Key: "$currentDate", Value: bson.D{
-			{Key: "updated_at", Value: true},
-		}},
 	}
 
 	res, err := r.collection.UpdateByID(ctx, service.ID, update)
