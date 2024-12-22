@@ -29,6 +29,7 @@ import {
 import Order from './models/order'
 import Service from './models/service'
 import { FilterOrder } from './models/filterOrder'
+import { FilterWorkers } from './models/filterWorkers'
 
 const baseURL = 'http://localhost:8080/api'
 
@@ -202,8 +203,8 @@ export async function uploadDumps(file: File): Promise<void> {
   });
 }
 
-export async function filterWorkers(name: string, surname: string): Promise<User[]> {
-  return axios.get(baseURL + getUsersPath, { params: { type: 'WORKER', name: name, surname: surname } })
+export async function filterWorkers(filterWorkers: FilterWorkers): Promise<User[]> {
+  return axios.get(baseURL + getUsersPath, { params: { type: 'WORKER', ...filterWorkers} })
   .then((response) => {
     return Promise.resolve(response.data)
   })

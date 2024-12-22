@@ -35,7 +35,7 @@ func NewUserRepo(db *mongo.Database) *UserRepo {
 	}
 }
 
-func (r *UserRepo) ImportUsers(ctx context.Context, users []models.User) error {
+func (r *UserRepo) ImportUsers(ctx context.Context, users []models.UserDump) error {
 	count, err := r.collection.EstimatedDocumentCount(ctx)
 	if err != nil {
 		return err
@@ -47,16 +47,16 @@ func (r *UserRepo) ImportUsers(ctx context.Context, users []models.User) error {
 	return err
 }
 
-func (r *UserRepo) ExportUsers(ctx context.Context) ([]models.User, error) {
+func (r *UserRepo) ExportUsers(ctx context.Context) ([]models.UserDump, error) {
 	cursor, err := r.collection.Find(ctx, bson.D{})
 	if err != nil {
 		return nil, err
 	}
 	defer cursor.Close(ctx)
 
-	users := make([]models.User, 0)
+	users := make([]models.UserDump, 0)
 	for cursor.Next(ctx) {
-		var user models.User
+		var user models.UserDump
 		if err := cursor.Decode(&user); err != nil {
 			return nil, err
 		}
@@ -121,6 +121,7 @@ func (r *UserRepo) GetUsers(ctx context.Context, filters types.UserFilters) ([]*
 	filter.AddEqual("user_type", filters.UserType)
 	filter.AddRegex("name", filters.Name)
 	filter.AddRegex("surname", filters.Surname)
+	filter.AddRegex("patronymic", filters.Patronymic)
 	filter.AddRegex("email", filters.Email)
 	filter.AddRegex("phone_number", filters.PhoneNumber)
 	filter.AddTimeIterval("created_at", filters.CreatedAt)
