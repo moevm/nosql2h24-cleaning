@@ -258,7 +258,7 @@ onMounted(() => {
   <MainContainer>
     <PanelContainer>
       <ActionButton
-        text="Все"
+        text="Все заказы"
         color="#394cc2"
         @click="clearFilters"
       ></ActionButton>
@@ -268,12 +268,6 @@ onMounted(() => {
         <div class="filter-dropdown">
           <div class="filter-header" @click="toggleDropdown">
             <h3>Фильтры</h3>
-            <ActionButton
-              text="Очистить"
-              type="clear"
-              color="#394cc2"
-              @click="clearFilters"
-            ></ActionButton>
           </div>
           <transition name="fade">
             <div v-if="isOpen" class="filter-content">
