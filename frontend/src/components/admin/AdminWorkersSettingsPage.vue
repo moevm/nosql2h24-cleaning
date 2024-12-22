@@ -95,7 +95,6 @@ async function fetchWorkersList() {
     }));
 
     if (maxOrdersWorker.value === null) {
-      console.log("maxOrdersWorker null finde max orders")
       maxOrdersWorker.value = Math.max(...workers.value.map(worker => worker.orders_count));
     }
   } catch (error) {

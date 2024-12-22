@@ -28,6 +28,7 @@ import {
 import Order from './models/order'
 import Service from './models/service'
 import { FilterOrder } from './models/filterOrder'
+import OrderFilter from './models/orderFilter' // для клиента
 import { FilterWorkers } from './models/filterWorkers'
 
 const baseURL = 'http://localhost:8080/api'
@@ -215,6 +216,16 @@ export async function filterWorkers(filterWorkers: FilterWorkers): Promise<User[
 export async function getAllOrders(id: string | null): Promise<Order[]> {
   const url = `${baseURL}${getAllOrdersPath}?user_id=${id}`;
   return axios.get(url)
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error);
+  })
+}
+
+export async function getFiltredOrders(filter: OrderFilter): Promise<Order[]> {
+  return axios.get(baseURL + getAllOrdersPath, { params: { ...filter} })
   .then((response) => {
     return Promise.resolve(response.data)
   })
