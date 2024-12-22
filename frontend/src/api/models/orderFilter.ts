@@ -22,8 +22,8 @@ interface OrderFilter {
   worker_name: string;
   worker_surname: string;
   worker_patronymic: string;
-  statuses: string[];
-  services: string[];
+  statuses?: string[];
+  services?: string[];
   date_time_begin: string;
   date_time_end: string;
 }

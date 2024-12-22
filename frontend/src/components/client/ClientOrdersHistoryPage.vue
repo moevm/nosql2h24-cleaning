@@ -29,48 +29,48 @@ watch(allAdresses, (newValue) => {
 });
 
 const allServices = ref<Service[]>([])
-const selectedServices = ref(allServices.value.map(() => false));
+let selectedServices = ref(allServices.value.map(() => false));
 watch(allServices, (newValue) => {
   selectedServices.value = newValue.map(() => false);
 });
 
 const allStatuses = ref<string[]>(["CREATED", "IN_PROGRESS", "FINISHED"])
-const selectedStatuses = ref(allStatuses.value.map(() => false));
+let selectedStatuses = ref(allStatuses.value.map(() => false));
 
 const maxPriceOrder = ref<number | null>(null);
 const maxPrice = computed(() => maxPriceOrder.value ?? 0);
-const orderPriceRange = ref<[number, number]>([0, maxPrice.value]);
+let orderPriceRange = ref<[number, number]>([0, maxPrice.value]);
 watch(maxPrice, (newMax) => {
   orderPriceRange.value = [0, newMax];
 });
 
 const maxPollution = 10;
-const orderPollutionRange = ref<[number, number]>([0, maxPollution]);
+let orderPollutionRange = ref<[number, number]>([0, maxPollution]);
 
 const maxRoomsOrder = ref<number | null>(null);
 const maxRooms = computed(() => maxRoomsOrder.value ?? 0);
-const orderRoomsRange = ref<[number, number]>([0, maxRooms.value]);
+let orderRoomsRange = ref<[number, number]>([0, maxRooms.value]);
 watch(maxRooms, (newMax) => {
   orderRoomsRange.value = [0, newMax];
 });
 
 const maxBathroomsOrder = ref<number | null>(null);
 const maxBathrooms = computed(() => maxBathroomsOrder.value ?? 0);
-const orderBathroomsRange = ref<[number, number]>([0, maxBathrooms.value]);
+let orderBathroomsRange = ref<[number, number]>([0, maxBathrooms.value]);
 watch(maxBathrooms, (newMax) => {
   orderBathroomsRange.value = [0, newMax];
 });
 
 const maxAreaOrder = ref<number | null>(null);
 const maxArea = computed(() => maxAreaOrder.value ?? 0);
-const orderAreaRange = ref<[number, number]>([0, maxArea.value]);
+let orderAreaRange = ref<[number, number]>([0, maxArea.value]);
 watch(maxArea, (newMax) => {
   orderAreaRange.value = [0, newMax];
 });
 
 const maxWorkersOrder = ref<number | null>(null);
 const maxWorkers = computed(() => maxWorkersOrder.value ?? 0);
-const orderWorkersRange = ref<[number, number]>([1, maxWorkers.value]);
+let orderWorkersRange = ref<[number, number]>([1, maxWorkers.value]);
 watch(maxWorkers, (newMax) => {
   orderWorkersRange.value = [1, newMax];
 });
@@ -164,12 +164,17 @@ function handleSearch() {
   orderFilter.value.number_of_bathrooms_min = orderBathroomsRange.value[0];
   orderFilter.value.number_of_bathrooms_max = orderBathroomsRange.value[1];
 
+  const services = allServices.value
+    .filter((_, index) => selectedServices.value[index])
+    .map(service => service.id);
+   
+  const statuses = allStatuses.value.filter((_, index) => selectedStatuses.value[index]);
 
   const updatedOrderFilter = {
-    ...orderFilter.value
+    ...orderFilter.value,
+    services,
+    statuses
   };
-
-  updatedOrderFilter.statuses = allStatuses.value.filter((_, index) => selectedStatuses.value[index]);
 
   if (orderFilter.value.date_time_begin !== '') {
     updatedOrderFilter.date_time_begin = formatToRFC3339(orderFilter.value.date_time_begin, false)
@@ -177,10 +182,6 @@ function handleSearch() {
   if (orderFilter.value.date_time_end !== '') {
     updatedOrderFilter.date_time_end = formatToRFC3339(orderFilter.value.date_time_end, true)
   }
-
-  updatedOrderFilter.services = allServices.value
-    .filter((_, index) => selectedServices.value[index])
-    .map(service => service.id);
     
   const selectedIndex = selectedAddresses.value.indexOf(true);
   if (selectedIndex !== -1) {
@@ -204,7 +205,17 @@ function handleSearch() {
 
 function clearFilters() {
   fetchAllOrders();
+  selectedServices = ref(allServices.value.map(() => false));
+  selectedStatuses = ref(allStatuses.value.map(() => false));
+  orderPriceRange = ref<[number, number]>([0, maxPrice.value]);
+  orderPollutionRange = ref<[number, number]>([0, maxPollution]);
+  orderRoomsRange = ref<[number, number]>([0, maxRooms.value]);
+  orderBathroomsRange = ref<[number, number]>([0, maxBathrooms.value]);
+  orderAreaRange = ref<[number, number]>([0, maxArea.value]);
+  orderWorkersRange = ref<[number, number]>([1, maxWorkers.value]);
   orderFilter.value = initOrderFilter.value
+  orderFilter.value.date_time_begin = ''
+  orderFilter.value.date_time_end = ''
 }
 
 function formatToRFC3339(dateString: string, isEnd: boolean) {
@@ -249,6 +260,7 @@ onMounted(() => {
       <ActionButton
         text="Все"
         color="#394cc2"
+        @click="clearFilters"
       ></ActionButton>
       <v-form
         class="search-form"
@@ -260,7 +272,7 @@ onMounted(() => {
               text="Очистить"
               type="clear"
               color="#394cc2"
-              @click.stop="clearFilters"
+              @click="clearFilters"
             ></ActionButton>
           </div>
           <transition name="fade">
@@ -286,7 +298,7 @@ onMounted(() => {
                   </div>
                 </div>
                 <div class="selection-container">
-                  <p class="selection-label">Услуги:</p>
+                  <p class="selection-label">Услуги в заказе:</p>
                   <div class="selection-list">
                     <div
                       class="selection-item"
@@ -301,7 +313,7 @@ onMounted(() => {
                   </div>
                 </div>
                 <div class="selection-container">
-                  <p class="selection-label">Статус:</p>
+                  <p class="selection-label">Заказ находится в статусе:</p>
                   <div class="selection-list">
                     <div
                       class="selection-item"

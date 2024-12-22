@@ -225,7 +225,12 @@ export async function getAllOrders(id: string | null): Promise<Order[]> {
 }
 
 export async function getFiltredOrders(filter: OrderFilter): Promise<Order[]> {
-  return axios.get(baseURL + getAllOrdersPath, { params: { ...filter} })
+  return axios.get(baseURL + getAllOrdersPath, { 
+    params: filter, 
+    paramsSerializer: {
+      indexes: null
+    }
+  })
   .then((response) => {
     return Promise.resolve(response.data)
   })
