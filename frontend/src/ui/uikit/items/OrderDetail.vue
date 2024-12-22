@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import Order from '../../../api/models/order'
-import { getOrderById } from '../../../api/request'
+import { getOrderById, getService } from '../../../api/request'
+import Service from '../../../api/models/service'
+import ActionButton from '../ActionButton.vue'
 
 const route = useRoute()
+const router = useRouter()
 const orderId = route.params.order_id as string
 const order = ref<Order | null>(null)
+const services = ref<Service[]>([])
 
 onMounted(() => {
   getOrderById(orderId)
@@ -15,6 +19,11 @@ onMounted(() => {
       console.log(order.value)
       const date = new Date(order.value.date_time)
       order.value.date_time = date
+      const servicePromises = order.value.services.map((serviceId: string) => getService(serviceId))
+      return Promise.all(servicePromises)
+    })
+    .then((serviceResponses) => {
+      services.value = serviceResponses;
     })
 })
 
@@ -23,6 +32,10 @@ function formatDate(dateTime: string): string {
   const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1
   const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
   return `${date.getDate()}.${month}.${date.getFullYear()} ${date.getHours()}:${minutes}`
+}
+
+function goBack() {
+  router.push({ name: 'client-orders-history' });
 }
 
 </script>
@@ -35,6 +48,12 @@ function formatDate(dateTime: string): string {
     <p>Цена: {{ order!.price }}₽</p>
     <p>Количество работников: {{ order!.required_workers }}</p>
     <p>Услуги:</p>
+    <p v-for="service in services" :key="service.id">- {{ service.name }}</p>
+    <ActionButton
+      text="Назад"
+      color="red"
+      :onClick="goBack"
+    ></ActionButton>
   </div>
 </template>
 
@@ -46,5 +65,9 @@ function formatDate(dateTime: string): string {
   border-radius: 15px;
   padding: 10px;
   text-align: left;
+  font-weight: bold;
+}
+p {
+  font-size: 28px;
 }
 </style>
