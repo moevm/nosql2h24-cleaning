@@ -82,13 +82,21 @@ function filtrationOrder(): void {
   })
 }
 
+function formatToRFC3339(dateString: Date | null) {
+  if (dateString === null) return ''
+  let date = new Date(dateString);
+  date.setDate(date.getDate() + 1);
+  date = new Date(date.getTime() - 1);
+  return date.toISOString(); 
+}
+
 function submitSearch(): void {
   filterOrder({
     ...filterData.value,
     statuses: statuses.value,
     services: selectedServiceIds.value,
     date_time_begin: startDate.value?.toISOString(),
-    date_time_end: endDate.value?.toISOString()
+    date_time_end: formatToRFC3339(endDate.value)
   })
   .then((response) => {
     orders.value = response
@@ -168,7 +176,7 @@ onMounted(() => {
       </template>
     </HeaderList>
     <Dialog
-      title="Филтрация заказов"
+      title="Фильтрация заказов"
       :visible="isDialogVisible"
       dialogMaxWidth="40%"
       @update:visible="closeDialog"
