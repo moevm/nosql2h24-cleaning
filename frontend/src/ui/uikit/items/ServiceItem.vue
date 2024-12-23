@@ -7,7 +7,7 @@ import Dialog from '../Dialog.vue'
 import Service from '../../../api/models/service'
 import { deleteService, updateService } from '../../../api/request'
 
-const emit = defineEmits(['update-service-item']);
+const emit = defineEmits(['add-service-price', 'remove-service-price', 'update-service-item'])
 
 const props = defineProps<{
   isAdmin: boolean;
@@ -53,6 +53,11 @@ function closeDialog(): void {
 }
 
 function toggleServicePrice(): void {
+  if (isServiceAdded.value) {
+    emit('remove-service-price', props.service);
+  } else {
+    emit('add-service-price', props.service);
+  }
   isServiceAdded.value = !isServiceAdded.value;
 }
 
