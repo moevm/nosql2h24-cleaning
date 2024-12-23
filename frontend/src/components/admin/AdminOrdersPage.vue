@@ -99,6 +99,7 @@ function submitSearch(): void {
     date_time_end: formatToRFC3339(endDate.value)
   })
   .then((response) => {
+    closeDialog()
     orders.value = response
   })
 }
