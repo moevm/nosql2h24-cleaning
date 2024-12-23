@@ -2,8 +2,12 @@
 import { Ref, ref, defineProps } from 'vue'
 import ActionButton from '../ActionButton.vue'
 import InputTextField from '../inputs/InputTextField.vue'
-import Consumable from '../../../api/models/consumable'
+import InputNumber from '../inputs/InputNumber.vue'
 import Dialog from '../Dialog.vue'
+import Service from '../../../api/models/service'
+import { deleteService, updateService } from '../../../api/request'
+
+const emit = defineEmits(['update-service-item']);
 
 const props = defineProps<{
   isAdmin: boolean;
@@ -13,11 +17,20 @@ const props = defineProps<{
     price: number;
     workers_quantity: number;
     description: string;
-    consumables: Consumable[];
+    consumables: [];
+    created_at: ''
   }
 }>()
 
-const emit = defineEmits(['add-service-price', 'remove-service-price'])
+let editService = ref<Service>({
+  id: props.service.id,
+  name: props.service.name,
+  price: props.service.price,
+  workers_quantity: props.service.workers_quantity,
+  description: props.service.description,
+  consumables: props.service.consumables,
+  created_at: props.service.created_at
+})
 
 const isDialogVisible: Ref<boolean> = ref(false)
 const isServiceAdded: Ref<boolean> = ref(false)
@@ -28,15 +41,43 @@ function openDialog(): void {
 
 function closeDialog(): void {
   isDialogVisible.value = false
+  editService = ref<Service>({
+    id: props.service.id,
+    name: props.service.name,
+    price: props.service.price,
+    workers_quantity: props.service.workers_quantity,
+    description: props.service.description,
+    consumables: props.service.consumables,
+    created_at: props.service.created_at
+  })
 }
 
 function toggleServicePrice(): void {
-  if (isServiceAdded.value) {
-    emit('remove-service-price', props.service);
-  } else {
-    emit('add-service-price', props.service);
-  }
   isServiceAdded.value = !isServiceAdded.value;
+}
+
+async function fetchUpdateService() {
+  if (editService.value.name === '') {
+    alert("Название не может быть пустым");
+  } else if (editService.value.price < 1) {
+    alert("Услуга не может быть бесплатной");
+  } else {
+    try {
+      await updateService(editService.value);
+      isDialogVisible.value = false
+      emit('update-service-item');
+    } catch (error) {
+      console.error('Ошибка при обновлении услуги:', error);
+    }
+  }
+}
+
+function fetchDeleteService() {
+  deleteService(editService.value.id)
+  .then((_) => {
+    closeDialog()
+    emit('update-service-item')
+  })
 }
 </script>
 
@@ -72,28 +113,29 @@ function toggleServicePrice(): void {
     >
       <template #body>
         <InputTextField
+          v-model="editService.name"
           placeholder="Введите название"
           type="text"
           label="Название услуги"
         ></InputTextField>
-        <InputTextField
-          placeholder="Введите стоимость"
-          type="text"
+        <InputNumber
+          v-model="editService.price"
           label="Стоимость услуги"
-        ></InputTextField>
-        <InputTextField
-          placeholder="Введите количество"
-          type="text"
+          :min="0"
+          :max="10000"
+          :step="10"
+        ></InputNumber>
+        <InputNumber
+          v-model="editService.workers_quantity"
           label="Количество исполнителей"
-        ></InputTextField>
+          :min="1"
+          :max="10"
+          :step="1"
+        ></InputNumber>
         <InputTextField
+          v-model="editService.description"
           type="text"
           label="Описание"
-        ></InputTextField>
-        <InputTextField
-          placeholder="eancode, name, count;"
-          type="text"
-          label="Рассходники"
         ></InputTextField>
       </template>
       <template #footer>
@@ -109,14 +151,14 @@ function toggleServicePrice(): void {
           type="delete"
           variant="flat"
           color="#f65858"
-          @click="closeDialog"
+          @click="fetchDeleteService"
         ></ActionButton>
         <ActionButton
           text="Подтвердить"
           type="submit"
           variant="flat"
           color="#394cc2"
-          @click="closeDialog"
+          @click="fetchUpdateService"
         ></ActionButton>
       </template>
     </Dialog>
@@ -130,6 +172,7 @@ function toggleServicePrice(): void {
   flex-direction: column;
   align-items: flex-start;
   width: 49%;
+  overflow: hidden;
   border: 3px solid #3846c0;
   border-radius: 15px;
   padding: 10px;
@@ -142,6 +185,8 @@ function toggleServicePrice(): void {
   width: 100%;
 }
 p {
+  width: 100%;
+  box-sizing: border-box;
   font-size: 32px;
   font-weight: bold;
 }

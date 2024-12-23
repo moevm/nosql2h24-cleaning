@@ -24,7 +24,9 @@ import {
   getAllServicesPath,
   updateOrdersPath,
   createOrderPath,
-  getServicesPath
+  getServicesPath,
+  createServicePath,
+  updateServicePath
 } from './endpoint'
 import Order from './models/order'
 import Service from './models/service'
@@ -299,6 +301,36 @@ export async function getOrderById(id: string): Promise<Order> {
 
 export async function getService (id: string): Promise<Service> {
   return axios.get(baseURL + getServicesPath(id))
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error)
+  })
+}
+
+export async function createService (newService: Service): Promise<void> {
+  return axios.post(baseURL + createServicePath, newService)
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error)
+  })
+}
+
+export async function deleteService (id: string): Promise<void> {
+  return axios.delete(baseURL + updateServicePath(id))
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error)
+  })
+}
+
+export async function updateService (service: Service): Promise<void> {
+  return axios.put(baseURL + updateServicePath(service.id), service)
   .then((response) => {
     return Promise.resolve(response.data)
   })

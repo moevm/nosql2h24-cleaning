@@ -7,8 +7,8 @@ interface Service {
     workers_quantity: number;
     description: string;
     consumables: Consumable[];
-    created_at: Date;
-    updated_at?: Date
+    created_at: string;
+    updated_at?: string
   }
 
 export default Service;

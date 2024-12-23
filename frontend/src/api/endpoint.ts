@@ -18,3 +18,5 @@ export const updateOrdersPath = (id: string) => `/v1/orders/${id}`
 export const createOrderPath = '/v1/orders'
 export const getAllServicesPath = '/v1/services'
 export const getServicesPath = (id: string) => `/v1/services/${id}`
+export const createServicePath = '/v1/services'
+export const updateServicePath = (id: string) => `/v1/services/${id}`
