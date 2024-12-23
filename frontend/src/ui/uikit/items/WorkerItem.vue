@@ -8,6 +8,29 @@ import Dialog from '../Dialog.vue'
 
 const emit = defineEmits(['update-worker']);
 
+const isCorrectUpdateForm = ref<boolean>(false);
+const rules = {
+  required: (value: any) => {
+    if (
+      editWorker.value.name &&
+      editWorker.value.surname &&
+      editWorker.value.phone_number
+    ) {
+      isCorrectUpdateForm.value = true;
+    } else {
+      isCorrectUpdateForm.value = false;
+    }
+    return !!value || 'Поле является обязательным'
+  },
+  email: (value: any) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailRegex.test(value)) {
+      isCorrectUpdateForm.value = false;
+    }
+    return emailRegex.test(value) || 'Введите корректный email'
+  },
+}
+
 const props = defineProps<{
   worker: {
     id: string;
@@ -98,8 +121,9 @@ function formatDate(date: Date) {
 <template>
   <div class="worker-item">
     <p>{{ props.worker.surname }} {{ props.worker.name }} {{ props.worker.patronymic }}</p>
-    <p>email: {{ props.worker.email }}</p>
-    <p>Выполнено заказов: {{ props.worker.orders_count }}</p>
+    <p>E-mail: {{ props.worker.email }}</p>
+    <p>Номер телефона: {{ props.worker.phone_number }}</p>
+    <p>Выполнено заказов: {{ isNaN(props.worker.orders_count) ? 0 : props.worker.orders_count }}</p>
     <p>На сервисе с {{ formatDate(new Date(props.worker.created_at)) }} года</p>
     <div class="worker-edit">
       <ActionButton
@@ -123,12 +147,14 @@ function formatDate(date: Date) {
           placeholder="Введите имя"
           type="text"
           label="Имя"
+          :rules="[rules.required]"
         ></InputTextField>
         <InputTextField
           v-model="editWorker.surname"
           placeholder="Введите фамилию"
           type="text"
           label="Фамилия"
+          :rules="[rules.required]"
         ></InputTextField>
         <InputTextField
           v-model="editWorker.patronymic"
@@ -141,12 +167,14 @@ function formatDate(date: Date) {
           placeholder="Введите телефон"
           type="phonenumber"
           label="Номер телефона"
+          :rules="[rules.required]"
         ></InputTextField>
         <InputTextField
           v-model="editWorker.email"
           placeholder="Введите почту"
           type="email"
           label="Почта"
+          :rules="[rules.required, rules.email]"
         ></InputTextField>
         <InputTextField
           v-model="editWorker.password"
@@ -176,6 +204,7 @@ function formatDate(date: Date) {
           variant="flat"
           color="#394cc2"
           @click="handleUpdateWorker"
+          :disabled="!isCorrectUpdateForm"
         ></ActionButton>
       </template>
     </Dialog>
