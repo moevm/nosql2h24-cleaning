@@ -25,6 +25,8 @@ import {
   updateOrdersPath,
   createOrderPath,
   getServicesPath,
+  takeOrderPath,
+  completeOrderPath
   createServicePath,
   updateServicePath
 } from './endpoint'
@@ -252,6 +254,26 @@ export async function updateOrder(newOrder: Order): Promise<Order> {
     throw error;
   })
   
+}
+
+export async function takeOrder(id: string): Promise<void> {
+  return axios.post(baseURL + takeOrderPath(id))
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error);
+  })
+}
+
+export async function completeOrder(id: string): Promise<void> {
+  return axios.post(baseURL + completeOrderPath(id))
+  .then((response) => {
+    return Promise.resolve(response.data)
+  })
+  .catch((error) => {
+    return Promise.reject(error);
+  })
 }
 
 export async function getAllServices(): Promise<Service[]> {

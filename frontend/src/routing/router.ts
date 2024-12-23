@@ -13,6 +13,7 @@ import AdminStatisticSettingsPage from '../components/admin/AdminStatisticSettin
 import WorkerMainPage from '../components/worker/WorkerMainPage.vue'
 import WorkerOrdersPage from '../components/worker/WorkerOrdersPage.vue'
 import OrderDetail from '../ui/uikit/items/OrderDetail.vue'
+import WorkerTakedOrdersPage from '../components/worker/WorkerTakedOrdersPage.vue'
 
 const routes = [
   {
@@ -88,6 +89,11 @@ const routes = [
             name: 'worker-orders',
             path: 'orders',
             component: WorkerOrdersPage
+          },
+          {
+            name: 'taked-orders',
+            path: 'taked-orders',
+            component: WorkerTakedOrdersPage
           }
         ]
       }
