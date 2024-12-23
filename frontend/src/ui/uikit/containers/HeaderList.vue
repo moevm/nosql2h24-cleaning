@@ -17,6 +17,12 @@ const props = defineProps<{
       width: props.width 
     }"
   > <h1>{{ props.title }}</h1>
+    <div class="empty">
+      <slot
+        name="empty"
+        v-if="props.items.length == 0"
+      ></slot>
+    </div>
     <div class="items-container">
       <slot
         name="items"
@@ -57,6 +63,12 @@ const props = defineProps<{
 .items-container::-webkit-scrollbar {
   width: 0px;
   background: transparent;
+}
+.empty {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 h1 {
   font-size: 42px;

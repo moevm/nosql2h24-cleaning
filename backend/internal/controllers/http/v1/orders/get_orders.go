@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-chi/render"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/controllers/http/middlewares"
+	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/models"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/types"
 	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/httputil"
 )
@@ -95,6 +96,8 @@ func (h *Handler) GetOrders(w http.ResponseWriter, r *http.Request) {
 		render.Render(w, r, httputil.NewError(http.StatusInternalServerError, err))
 		return
 	}
-
+	if orders == nil {
+		orders = []*models.Order{}
+	}
 	render.JSON(w, r, orders)
 }

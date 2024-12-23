@@ -204,7 +204,7 @@ func (r *OrderService) AssignWorkerToOrder(ctx context.Context, orderID, workerI
 		l.Info("order already done")
 		return ErrOrderAlreadyDone
 	}
-	
+
 	worker, err := r.userRepo.GetUserById(ctx, workerID)
 	if err != nil {
 		l.Error(
@@ -213,19 +213,19 @@ func (r *OrderService) AssignWorkerToOrder(ctx context.Context, orderID, workerI
 		)
 		return err
 	}
-	
+
 	if slices.Contains(order.Workers, worker.ID) {
 		l.Info("worker already assigned")
 		return ErrWorkerAlreadyAssigned
 	}
-	
+
 	order.Workers = append(order.Workers, worker.ID)
-	
+
 	if order.Status == models.OrderStatusAccepted {
 		l.Info("order already accepted")
 		return ErrOrderAlreadyAccepted
 	}
-	
+
 	if len(order.Workers) == order.RequiredWorkers {
 		order.StatusLogs = append(order.StatusLogs, models.StatusLog{
 			PrevStatus: order.Status,
@@ -261,10 +261,10 @@ func (r *OrderService) CompleteOrder(ctx context.Context, orderID string) error 
 		return err
 	}
 
-	if order.Status != models.OrderStatusAccepted {
-		l.Info("order not done")
-		return ErrOrderIncorrectStatus
-	}
+	// if order.Status != models.OrderStatusAccepted {
+	// 	l.Info("order not done")
+	// 	return ErrOrderIncorrectStatus
+	// }
 
 	order.StatusLogs = append(order.StatusLogs, models.StatusLog{
 		ID:         bson.NewObjectID(),

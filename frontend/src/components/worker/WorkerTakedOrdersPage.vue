@@ -4,18 +4,20 @@ import PanelContainer from '../../ui/uikit/containers/PanelContainer.vue'
 import HeaderList from '../../ui/uikit/containers/HeaderList.vue'
 import WorkerOrderItem from '../worker/WorkerOrderItem.vue'
 import { onMounted, ref } from 'vue'
-import { getFiltredOrders, getUserInfo, takeOrder } from '../../api/request';
+import { completeOrder, getFiltredOrders, getUserInfo } from '../../api/request';
 import Order from '../../api/models/order'
 import { useUserStore } from '../../store/user'
+
 const orders = ref<Order[]>([]);
 const store = useUserStore();
 
-function fetchAllAvailableOrders() : Promise<void>  {
+function fetchAllMyOrders(): Promise<void> {
   return getFiltredOrders({
-    statuses: [ 'CREATED' ]
+    statuses: [ 'CREATED', 'IN_PROGRESS' ],
+    workers_id: [ store.getUser()?.id ?? '' ],
   }).then((response) => {
     response = response.filter((order) => {
-      return !order.workers?.includes(store.getUser()?.id ?? '');
+      return order.workers?.includes(store.getUser()?.id ?? '');
     });
     orders.value = response
   }).catch((error) => {
@@ -23,7 +25,7 @@ function fetchAllAvailableOrders() : Promise<void>  {
   });
 }
 
-function fetchWorkerId() : Promise<void> {
+function fetchWorkerId(): Promise<void> {
   return getUserInfo('me')
   .then((response) => {
     store.setUser(response);
@@ -33,31 +35,31 @@ function fetchWorkerId() : Promise<void> {
   })
 }
 
-function takeOrderCallback(order_id: string) {
-  takeOrder(order_id).then(() => {
-    fetchAllAvailableOrders();
+function completeOrderCallback(order_id: string) {
+  completeOrder(order_id).then(() => {
+    fetchAllMyOrders();
   });
 }
 
 onMounted(async () => {
-  await fetchWorkerId();
-  await fetchAllAvailableOrders();
+    await fetchWorkerId();
+    await fetchAllMyOrders();
 })
 </script>
 
 <template>
   <MainContainer>
     <HeaderList
-      title="Доступные заказы" 
+      title="Взятые заказы" 
       :items="orders"
       height="100%"
       width="90%"
     >
       <template #items="{ item }">
-        <WorkerOrderItem :order="item" :callback="takeOrderCallback" :type="'TAKE'"/>
+        <WorkerOrderItem :order="item" :callback="completeOrderCallback" :type="'CONFIRM'"/>
       </template>
       <template #empty>
-        <h1>Нет доступных заказов</h1>
+        <h1>У вас нет взятых заказов</h1>
       </template>
     </HeaderList>
   </MainContainer>

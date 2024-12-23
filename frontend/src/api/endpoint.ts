@@ -15,6 +15,8 @@ export const uploadDumpsPath = '/v1/dumps'
 export const exportDumpsPath = '/v1/dumps'
 export const getAllOrdersPath = '/v1/orders'
 export const updateOrdersPath = (id: string) => `/v1/orders/${id}`
+export const takeOrderPath = (id: string) => `/v1/orders/${id}/take`
+export const completeOrderPath = (id: string) => `/v1/orders/${id}/complete`
 export const createOrderPath = '/v1/orders'
 export const getAllServicesPath = '/v1/services'
 export const getServicesPath = (id: string) => `/v1/services/${id}`

@@ -1,13 +1,19 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
 import Order from '../../api/models/order'
-import ActionButton from '../../ui/uikit/ActionButton.vue';
-import { updateOrder } from '../../api/request'
+import ActionButton from '../../ui/uikit/ActionButton.vue'
 
-const emit = defineEmits(['update-orders']);
+const currentDate = ref<Date>(new Date());
+
+setInterval(() => {
+  currentDate.value = new Date();
+}, 1000 * 60);
+
 
 const props = defineProps<{
   order: Order;
+  type: string;
+  callback: (id: string) => void;
   workerId?: string
 }>();
 
@@ -23,19 +29,8 @@ function formatDate(): string {
   return `${date.getDate()}.${mounth}.${date.getFullYear()} ${date.getHours()}:${minutes}`
 }
 
-async  function takeOrder() {
-    const updatedOrder = {
-        ...props.order,
-        status: 'INPROGRESS',
-        workers: [...(props.order.workers ?? []), props.workerId]
-    };
-    await updateOrder(updatedOrder as Order)
-    .then(_ => {
-        emit('update-orders')
-        console.log('Worker get order');
-    }).catch((error) => {
-        console.log('Worker get order error:', error);
-    })
+async function btnClick() {
+  props.callback(props.order.id ?? '');
 }
 
 </script>
@@ -45,12 +40,20 @@ async  function takeOrder() {
     <p>{{ formatDate() }}</p>
     <p>{{ formatAddress() }}, </p>
     <div class="order-price">
-      <p>{{ props.order.price }}$</p>
-      <ActionButton 
-        text="+"
+      <p>{{ props.order.price }} ₽</p>
+      <ActionButton
+        v-if="props.type === 'TAKE'" 
+        text="Взять заказ"
         type="add"
         color="#394cc2"
-      @click="takeOrder">
+      @click="btnClick">
+    </ActionButton>
+    <ActionButton
+        v-if="props.type === 'CONFIRM' && (props.order.status === 'CREATED' || props.order.status === 'IN_PROGRESS') && currentDate >= new Date(props.order.date_time)" 
+        text="Завершить заказ"
+        type="add"
+        color="#394cc2"
+      @click="btnClick">
     </ActionButton>
     </div>
   </div>
