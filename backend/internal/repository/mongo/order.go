@@ -11,6 +11,7 @@ import (
 	"github.com/moevm/nosql2h24-cleaning/cleaning/pkg/mongo/search"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type OrderRepo struct {
@@ -97,8 +98,10 @@ func (r *OrderRepo) GetUserOrders(ctx context.Context, userID string) ([]*models
 	}
 
 	filter := bson.D{{Key: "user_id", Value: _id}}
+	filterOpts := options.Find()
+	filterOpts.SetSort(bson.D{{Key: "date_time", Value: -1}})
 
-	cur, err := r.collection.Find(ctx, filter)
+	cur, err := r.collection.Find(ctx, filter, filterOpts)
 	if err != nil {
 		return nil, err
 	}
@@ -160,6 +163,12 @@ func (r *OrderRepo) GetOrders(ctx context.Context, query types.OrderFilters) ([]
 		bson.D{{
 			Key:   "$match",
 			Value: filter.ToBson(),
+		}},
+		bson.D{{
+			Key: "$sort",
+			Value: bson.D{
+				{Key: "date_time", Value: -1},
+			},
 		}},
 	})
 	if err != nil {

@@ -9,6 +9,7 @@ import (
 	"github.com/moevm/nosql2h24-cleaning/cleaning/internal/repository"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type ServiceRepo struct {
@@ -92,7 +93,10 @@ func (r *ServiceRepo) GetService(ctx context.Context, id string) (*models.Servic
 func (r *ServiceRepo) GetServices(ctx context.Context) ([]*models.Service, error) {
 	filter := bson.D{}
 
-	cursor, err := r.collection.Find(ctx, filter)
+	findOpts := options.Find()
+	findOpts.SetSort(bson.D{{Key: "created_at", Value: -1}})
+
+	cursor, err := r.collection.Find(ctx, filter, findOpts)
 	if err != nil {
 		return nil, err
 	}
