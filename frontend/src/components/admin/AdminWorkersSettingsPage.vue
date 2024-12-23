@@ -12,6 +12,29 @@ import WorkerItem from '../../ui/uikit/items/WorkerItem.vue'
 import { filterWorkers } from '../../api/request'
 import { FilterWorkers } from '../../api/models/filterWorkers'
 
+const isCorrectCreateForm = ref<boolean>(false);
+const rules = {
+  required: (value: any) => {
+    if (
+      newWorker.value.name &&
+      newWorker.value.surname &&
+      newWorker.value.phone_number &&
+      newWorker.value.password
+    ) {
+      isCorrectCreateForm.value = true;
+    } else {
+      isCorrectCreateForm.value = false;
+    }
+    return !!value || 'Поле является обязательным'
+  },
+  email: (value: any) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailRegex.test(value)) {
+      isCorrectCreateForm.value = false;
+    }
+    return emailRegex.test(value) || 'Введите корректный email'
+  },
+}
 
 const maxOrdersWorker = ref<number | null>(null);
 const maxOrders = computed(() => maxOrdersWorker.value ?? 0);
@@ -93,9 +116,9 @@ async function fetchWorkersList() {
       created_at: user.created_at,
       updated_at: user.updated_at
     }));
-
+    console.log('Workers:', workers.value);
     if (maxOrdersWorker.value === null) {
-      maxOrdersWorker.value = Math.max(...workers.value.map(worker => worker.orders_count));
+      maxOrdersWorker.value = Math.max(...workers.value.map(worker => isNaN(worker.orders_count) ? 0 : worker.orders_count));
     }
   } catch (error) {
     console.error("Failed to fetch workers list:", error);
@@ -135,7 +158,9 @@ async function handleCreateWorkerUser() {
 }
 
 function handleSearch(): void {
-  toggleDropdown()
+  if (isOpen.value) {
+    isOpen.value = false;
+  }
   const filterParams = { ...filterWorker.value };
   if (filterParams.created_at_begin) {
     filterParams.created_at_begin = formatToRFC3339(filterParams.created_at_begin, false);
@@ -166,7 +191,6 @@ function handleSearch(): void {
 }
 
 function clearFilters() {
-  fetchWorkersList();
   filterWorker.value = {
     name: '',
     surname: '',
@@ -179,6 +203,7 @@ function clearFilters() {
     created_at_end: '',
   };
   ordersRange.value = [0, maxOrders.value];
+  fetchWorkersList();
 }
 
 onMounted(() => {
@@ -208,7 +233,7 @@ onMounted(() => {
             <h3>Фильтры</h3>
             <ActionButton
               text="Очистить"
-              type="clear"
+              type="button"
               color="#394cc2"
               @click.stop="clearFilters"
             ></ActionButton>
@@ -288,12 +313,14 @@ onMounted(() => {
           placeholder="Введите имя"
           type="text"
           label="Имя"
+          :rules="[rules.required]"
         ></InputTextField>
         <InputTextField
           v-model="newWorker.surname"
           placeholder="Введите фамилию"
           type="text"
           label="Фамилия"
+          :rules="[rules.required]"
         ></InputTextField>
         <InputTextField
           v-model="newWorker.patronymic"
@@ -306,18 +333,21 @@ onMounted(() => {
           placeholder="Введите телефон"
           type="phonenumber"
           label="Номер телефона"
+          :rules="[rules.required]"
         ></InputTextField>
         <InputTextField
           v-model="newWorker.email"
           placeholder="Введите почту"
           type="email"
           label="Почта"
+          :rules="[rules.required, rules.email]"
         ></InputTextField>
         <InputTextField
           v-model="newWorker.password"
           placeholder="Введите пароль"
           type="password"
           label="Пароль"
+          :rules="[rules.required]"
         ></InputTextField>
       </template>
       <template #footer>
@@ -334,6 +364,7 @@ onMounted(() => {
           variant="flat"
           color="#394cc2"
           @click="handleCreateWorkerUser"
+          :disabled="!isCorrectCreateForm"
         ></ActionButton>
       </template>
     </Dialog>

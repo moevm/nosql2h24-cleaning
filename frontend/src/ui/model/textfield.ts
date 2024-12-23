@@ -3,7 +3,8 @@ type TextField = {
   class?: string,
   placeholder?: string,
   type?: string,
-  label: string
+  label: string,
+  rules?: any,
 }
 
 export default TextField;
