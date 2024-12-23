@@ -26,7 +26,7 @@ import {
   createOrderPath,
   getServicesPath,
   takeOrderPath,
-  completeOrderPath
+  completeOrderPath,
   createServicePath,
   updateServicePath
 } from './endpoint'
