@@ -44,8 +44,17 @@ function goBack() {
   <div v-if="order" class="order-detail">
     <h1>Детали заказа</h1>
     <p>Заказ по адресу: {{ order!.address.city }}, {{ order!.address.street }}, дом {{ order!.address.building }}, подъезд {{ order!.address.entrance }}, этаж {{ order!.address.floor }}, квартира {{ order!.address.door_number }}</p>
+    
+    <p>Информация о помещении: </p>
+    <ul>
+      <li>Площадь: {{ order!.area }} м²</li>
+      <li>Количество комнат: {{ order!.number_of_rooms }}</li>
+      <li>Количество санузлов: {{ order!.number_of_bathrooms }}</li>
+      <li>Загрязненность: {{ order!.pollution }}</li>
+    </ul>
     <p>На дату: {{ formatDate(order!.date_time.toISOString()) }}</p>
-    <p>Цена: {{ order!.price }}₽</p>
+    <p>Статус заказа: {{ order!.status }}</p>
+    <p>Цена: {{ order!.price }} ₽</p>
     <p>Количество работников: {{ order!.required_workers }}</p>
     <p>Услуги:</p>
     <p v-for="service in services" :key="service.id">- {{ service.name }}</p>
@@ -69,5 +78,11 @@ function goBack() {
 }
 p {
   font-size: 28px;
+}
+ul {
+	margin: 0 0 0 30px;
+}
+ul li {
+  font-size: 24px;
 }
 </style>
