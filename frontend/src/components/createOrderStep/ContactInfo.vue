@@ -64,7 +64,6 @@ onMounted(() => {
   .catch((error) => {
     console.error("Error get worker info:", error)
   })
-  
 })
 </script>
 
