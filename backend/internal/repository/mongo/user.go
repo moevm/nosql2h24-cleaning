@@ -129,7 +129,10 @@ func (r *UserRepo) GetUsers(ctx context.Context, filters types.UserFilters) ([]*
 	// worker filters
 	filter.AddNumberRange("orders_count", filters.OrdersCount)
 
-	cursor, err := r.collection.Find(ctx, filter.ToBson())
+	findOpts := options.Find()
+	findOpts.SetSort(bson.D{{Key: "created_at", Value: -1}})
+
+	cursor, err := r.collection.Find(ctx, filter.ToBson(), findOpts)
 	if err != nil {
 		return nil, err
 	}
