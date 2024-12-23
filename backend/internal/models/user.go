@@ -27,7 +27,7 @@ type User struct {
 	UserCredentials `bson:",inline"`
 	UserInfo        `bson:",inline"`
 	Addresses       []*AddressWithTimestamp `json:"addresses,omitempty" bson:"addresses,omitempty"`
-	OrdersCount     int                     `json:"orders_count,omitempty" bson:"orders_count,omitempty"`
+	OrdersCount     int                     `json:"orders_count,omitempty" bson:"orders_count"`
 	UserType        string                  `json:"user_type" bson:"user_type"`
 	Timestamp       `json:",inline" bson:",inline"`
 }

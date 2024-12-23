@@ -28,16 +28,16 @@ function openDialog(type: string): void {
 		case 'EXPORT':
 			isDialogExportVisible.value = true
 			break;
-		case 'FILTERS':
-			isDialogFiltersVisible.value = true
-			break;
+		// case 'FILTERS':
+		// 	isDialogFiltersVisible.value = true
+		// 	break;
 	}
 }
 
 function closeDialog(): void {
   isDialogImportVisible.value = false
 	isDialogExportVisible.value = false
-	isDialogFiltersVisible.value = false
+	// isDialogFiltersVisible.value = false
 }
 
 function handleCancelAndReset() {
@@ -156,12 +156,12 @@ function fetchExportData() {
       height="10%"
       width="95%"
     >
-      <ActionButton
+      <!-- <ActionButton
         text="Фильтры"
         type="add"
         color="#394cc2"
         @click="openDialog('FILTERS')"
-      ></ActionButton>
+      ></ActionButton> -->
       <ActionButton
         text="Импорт"
         type="add"
@@ -246,7 +246,7 @@ function fetchExportData() {
         ></ActionButton>
       </template>
     </Dialog>
-		<Dialog
+		<!-- <Dialog
       title="Фильтры"
       :visible="isDialogFiltersVisible"
       dialogMaxWidth="30%"
@@ -255,7 +255,7 @@ function fetchExportData() {
       <template #body>
         <p>Work in progress</p>
       </template>
-    </Dialog>
+    </Dialog> -->
   </MainContainer>
 </template>
 

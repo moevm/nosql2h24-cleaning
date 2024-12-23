@@ -6,7 +6,8 @@ const props = withDefaults(defineProps<TextField>(), {
   id: undefined,
   class: undefined,
   placeholder: undefined,
-  type: undefined
+  type: undefined,
+  rules: undefined,
 })
 </script>
 
@@ -19,6 +20,7 @@ const props = withDefaults(defineProps<TextField>(), {
     rounded="xl"
     :type="props.type"
     :label="props.label"
+    :rules="props.rules"
     clearable
   >
     <slot

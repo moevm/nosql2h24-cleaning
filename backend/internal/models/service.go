@@ -12,7 +12,7 @@ type Service struct {
 	Price           int           `json:"price" bson:"price" validate:"required"`
 	WorkersQuantity int           `json:"workers_quantity" bson:"workers_quantity" validate:"required"`
 	Description     string        `json:"description" bson:"description"`
-	Consumables     []Consumable  `json:"consumables,omitempty" bson:"consumables,omitempty" validate:"required"`
+	Consumables     []Consumable  `json:"consumables,omitempty" bson:"consumables,omitempty"`
 	CreatedAt       time.Time     `json:"created_at" bson:"created_at"`
 	UpdatedAt       time.Time     `json:"updated_at,omitempty" bson:"updated_at,omitempty"`
 }
